@@ -1414,9 +1414,9 @@
 
                     <!-- Palpites -->
                     <div class="form-group">
-                        <label>Seus Palpites * <span style="font-weight:400;text-transform:none;color:var(--cinza-texto);font-size:0.8rem;">(preencha os 3 jogos da fase de grupos)</span></label>
+                        <label>Seus Palpites * <span style="font-weight:400;text-transform:none;color:var(--cinza-texto);font-size:0.8rem;">(preencha o 1º jogo — os demais serão liberados)</span></label>
                         <div class="palpites-container" id="palpitesContainer"></div>
-                        <div class="field-error" id="erroPalpites">Preencha os 3 jogos da fase de grupos antes de enviar</div>
+                        <div class="field-error" id="erroPalpites">Preencha o 1º jogo (Brasil × Marrocos) antes de enviar</div>
                     </div>
 
                     <button type="button" class="submit-btn" id="submitBtn" onclick="enviarPalpites()">
@@ -1594,13 +1594,13 @@
         // ============================================
         function renderizarPalpites() {
             const container = document.getElementById('palpitesContainer');
-            const palpitesAtivos = JOGOS.slice(0, 3); // só fase de grupos
-            const palpitesBloqueados = JOGOS.slice(3); // mata-mata
+            const palpitesAtivos = JOGOS.slice(0, 1); // só o 1º jogo liberado
+            const palpitesBloqueados = JOGOS.slice(1); // resto bloqueado
 
             let html = '';
 
             // Jogos ativos (fase de grupos)
-            html += `<div style="margin-bottom:12px;font-size:0.85rem;color:var(--verde);font-weight:700;">✅ FASE DE GRUPOS — Palpites disponíveis</div>`;
+            html += `<div style="margin-bottom:12px;font-size:0.85rem;color:var(--verde);font-weight:700;">✅ 1º JOGO — Palpite disponível</div>`;
             html += palpitesAtivos.map(jogo => {
                 return `
                     <div class="bet-match" id="bet-${jogo.id}" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1623,7 +1623,7 @@
             }).join('');
 
             // Jogos bloqueados (mata-mata)
-            html += `<div style="margin-top:20px;margin-bottom:12px;padding-top:16px;border-top:2px dashed var(--cinza);font-size:0.85rem;color:var(--cinza-texto);font-weight:600;">🔒 FASE MATA-MATA — Bloqueado até o Brasil avançar</div>`;
+            html += `<div style="margin-top:20px;margin-bottom:12px;padding-top:16px;border-top:2px dashed var(--cinza);font-size:0.85rem;color:var(--cinza-texto);font-weight:600;">🔒 PRÓXIMOS JOGOS — Bloqueado (libere pelo admin)</div>`;
             html += palpitesBloqueados.map(jogo => {
                 return `
                     <div class="bet-match" style="opacity:0.5;background:var(--cinza-light);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1830,8 +1830,8 @@
                 document.getElementById('erroEmpresa').classList.remove('show');
             }
 
-            // Palpites - apenas fase de grupos (3 primeiros)
-            const jogosGrupo = JOGOS.slice(0, 3);
+            // Palpites - apenas o 1º jogo
+            const jogosGrupo = JOGOS.slice(0, 1);
             const todosPreenchidos = jogosGrupo.every(jogo => {
                 const brasil = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_brasil"]`);
                 const adv = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_adversario"]`);
