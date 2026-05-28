@@ -84,7 +84,7 @@
            ============================================ */
         header {
             background: var(--primary);
-            padding: 40px 0 50px;
+            padding: 35px 0 45px;
             text-align: center;
             position: relative;
         }
@@ -103,9 +103,9 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-        .brand-logo svg { height: 40px; width: auto; }
+        .brand-logo img { height: 45px; width: auto; }
         .brand-logo .brand-divider {
             width: 1px;
             height: 40px;
@@ -228,9 +228,6 @@
             color: var(--primary);
         }
 
-        /* ============================================
-           SEÇÕES
-           ============================================ */
         .section { padding: 60px 0; position: relative; z-index: 2; }
         .section-title {
             font-family: 'Inter', sans-serif;
@@ -249,17 +246,9 @@
             margin-bottom: 30px;
             font-size: 0.95rem;
         }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.7s ease-out;
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease-out; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* ============================================
-           COMO FUNCIONA
-           ============================================ */
         .como-funciona {
             background: var(--white);
             border-radius: var(--radius-card);
@@ -274,8 +263,7 @@
         }
         .passo { text-align: center; }
         .passo-numero {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             background: var(--primary);
             color: var(--secondary);
             border-radius: 50%;
@@ -294,11 +282,7 @@
             color: var(--primary);
             margin-bottom: 8px;
         }
-        .passo-descricao {
-            color: var(--gray-3);
-            font-size: 0.9rem;
-        }
-
+        .passo-descricao { color: var(--gray-3); font-size: 0.9rem; }
         @media (min-width: 768px) {
             .passos { position: relative; }
             .passo::after {
@@ -313,15 +297,8 @@
             .passo:last-child::after { display: none; }
         }
 
-        /* ============================================
-           PREMIAÇÕES
-           ============================================ */
-        .premiacoes-section {
-            background: var(--secondary);
-            padding: 60px 0;
-        }
+        .premiacoes-section { background: var(--secondary); padding: 60px 0; }
         .premiacoes-section .section-title { color: var(--primary); }
-
         .cards-premios {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -337,56 +314,21 @@
             border: 2px solid transparent;
             position: relative;
         }
-        .card-premio:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-        .card-premio.destaque {
-            border-color: var(--primary);
-            transform: scale(1.03);
-        }
-        .card-premio.destaque:hover {
-            transform: scale(1.03) translateY(-5px);
-        }
+        .card-premio:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .card-premio.destaque { border-color: var(--primary); transform: scale(1.03); }
+        .card-premio.destaque:hover { transform: scale(1.03) translateY(-5px); }
         .card-premio .badge-destaque {
-            position: absolute;
-            top: -3px;
-            right: 20px;
-            background: var(--red);
-            color: var(--white);
-            padding: 4px 14px;
-            border-radius: 0 0 8px 8px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            position: absolute; top: -3px; right: 20px;
+            background: var(--red); color: var(--white);
+            padding: 4px 14px; border-radius: 0 0 8px 8px;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .premio-posicao {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
+        .premio-posicao { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
         .premio-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; }
-        .premio-valor {
-            font-family: 'Inter', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: var(--green);
-            margin-bottom: 5px;
-        }
+        .premio-valor { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--green); margin-bottom: 5px; }
         .premio-tipo { color: var(--gray-3); font-size: 0.9rem; }
 
-        /* ============================================
-           JOGOS DO BRASIL
-           ============================================ */
-        .jogos-section {
-            background: var(--white);
-            padding: 60px 0;
-        }
-        .jogos-section .section-title { color: var(--primary); }
-
+        .jogos-section { background: var(--white); padding: 60px 0; }
         .jogos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -405,459 +347,121 @@
             position: relative;
             overflow: hidden;
         }
-        .jogo-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
+        .jogo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
         .jogo-card.realizado { opacity: 0.6; filter: grayscale(0.3); }
         .jogo-card .resultado-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: var(--secondary);
-            color: var(--primary);
-            font-size: 0.5rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 6px;
-            text-transform: uppercase;
+            position: absolute; top: 5px; right: 5px;
+            background: var(--secondary); color: var(--primary);
+            font-size: 0.5rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;
         }
-        .jogo-rodada {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            opacity: 0.8;
-            margin-bottom: 8px;
-            letter-spacing: 0.3px;
-        }
-        .jogo-times {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin: 6px 0;
-        }
-        .jogo-time-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 50px;
-        }
-        .jogo-time-flag img {
-            width: 30px;
-            height: auto;
-            border-radius: 2px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        .jogo-time-nome {
-            font-size: 0.5rem;
-            font-weight: 500;
-            margin-top: 3px;
-            opacity: 0.9;
-            white-space: nowrap;
-            max-width: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .jogo-vs {
-            font-size: 0.6rem;
-            font-weight: 700;
-            opacity: 0.6;
-        }
-        .jogo-data {
-            font-size: 0.65rem;
-            opacity: 0.7;
-            margin-top: 4px;
-        }
-        .jogo-placar {
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-top: 5px;
-            background: rgba(255,255,255,0.15);
-            padding: 2px 10px;
-            border-radius: 4px;
-            display: inline-block;
-        }
+        .jogo-rodada { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; opacity: 0.8; margin-bottom: 8px; letter-spacing: 0.3px; }
+        .jogo-times { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 6px 0; }
+        .jogo-time-col { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+        .jogo-time-flag img { width: 30px; height: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .jogo-time-nome { font-size: 0.5rem; font-weight: 500; margin-top: 3px; opacity: 0.9; white-space: nowrap; max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
+        .jogo-vs { font-size: 0.6rem; font-weight: 700; opacity: 0.6; }
+        .jogo-data { font-size: 0.65rem; opacity: 0.7; margin-top: 4px; }
+        .jogo-placar { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; margin-top: 5px; background: rgba(255,255,255,0.15); padding: 2px 10px; border-radius: 4px; display: inline-block; }
 
-        /* ============================================
-           RANKING
-           ============================================ */
-        .ranking-section {
-            background: var(--primary);
-            padding: 60px 0;
-        }
-        .ranking-container {
-            background: var(--white);
-            border-radius: var(--radius-card);
-            padding: 30px;
-            box-shadow: var(--shadow-lg);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .ranking-vazio {
-            text-align: center;
-            padding: 35px 20px;
-            color: var(--gray-3);
-        }
+        .ranking-section { background: var(--primary); padding: 60px 0; }
+        .ranking-container { background: var(--white); border-radius: var(--radius-card); padding: 30px; box-shadow: var(--shadow-lg); max-width: 800px; margin: 0 auto; }
+        .ranking-vazio { text-align: center; padding: 35px 20px; color: var(--gray-3); }
         .ranking-vazio .emoji { font-size: 2.5rem; margin-bottom: 12px; display: block; }
         .ranking-tabela { width: 100%; border-collapse: collapse; }
         .ranking-tabela th {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 10px 8px;
-            text-align: left;
-            border-bottom: 3px solid var(--secondary);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+            color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 10px 8px; text-align: left; border-bottom: 3px solid var(--secondary);
         }
         .ranking-tabela th:last-child, .ranking-tabela td:last-child { text-align: center; }
-        .ranking-tabela td {
-            padding: 10px 8px;
-            border-bottom: 1px solid var(--gray-2);
-            font-size: 0.9rem;
-        }
+        .ranking-tabela td { padding: 10px 8px; border-bottom: 1px solid var(--gray-2); font-size: 0.9rem; }
         .ranking-tabela tr:hover td { background: rgba(0,58,112,0.03); }
-        .ranking-tabela .posicao {
-            font-weight: 700;
-            font-size: 1rem;
-            width: 35px;
-        }
+        .ranking-tabela .posicao { font-weight: 700; font-size: 1rem; width: 35px; }
         .ranking-tabela .posicao-1 { color: #FFD700; }
         .ranking-tabela .posicao-2 { color: #C0C0C0; }
         .ranking-tabela .posicao-3 { color: #CD7F32; }
         .ranking-tabela .nome-participante { font-weight: 600; }
-        .ranking-tabela .pontos {
-            font-weight: 800;
-            color: var(--green);
-            font-size: 1rem;
-        }
+        .ranking-tabela .pontos { font-weight: 800; color: var(--green); font-size: 1rem; }
         .ranking-tabela .acertos { font-size: 0.8rem; color: var(--gray-3); }
 
-        /* ============================================
-           REGULAMENTO
-           ============================================ */
-        .regulamento-section {
-            background: var(--gray-1);
-            padding: 60px 0;
-        }
-        .regulamento-content {
-            background: var(--white);
-            border-radius: var(--radius-card);
-            padding: 35px;
-            box-shadow: var(--shadow-sm);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .regulamento-content h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-top: 20px;
-            margin-bottom: 8px;
-        }
+        .regulamento-section { background: var(--gray-1); padding: 60px 0; }
+        .regulamento-content { background: var(--white); border-radius: var(--radius-card); padding: 35px; box-shadow: var(--shadow-sm); max-width: 800px; margin: 0 auto; }
+        .regulamento-content h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 20px; margin-bottom: 8px; }
         .regulamento-content h3:first-child { margin-top: 0; }
-        .regulamento-content p, .regulamento-content li {
-            color: var(--gray-3);
-            font-size: 0.9rem;
-            line-height: 1.8;
-        }
+        .regulamento-content p, .regulamento-content li { color: var(--gray-3); font-size: 0.9rem; line-height: 1.8; }
         .regulamento-content ul { padding-left: 20px; margin: 8px 0; }
         .regulamento-content li { margin-bottom: 5px; }
         .regulamento-content li::marker { color: var(--secondary); }
 
-        /* ============================================
-           FORMULÁRIO
-           ============================================ */
-        .form-section {
-            background: var(--primary);
-            padding: 60px 0;
-        }
+        .form-section { background: var(--primary); padding: 60px 0; }
         .form-section .section-title { color: var(--secondary); }
+        .form-container { background: var(--white); border-radius: var(--radius-card); padding: 40px; max-width: 620px; margin: 0 auto; box-shadow: var(--shadow-lg); }
+        .badge { display: inline-block; background: var(--primary); color: var(--white); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
 
-        .form-container {
-            background: var(--white);
-            border-radius: var(--radius-card);
-            padding: 40px;
-            max-width: 620px;
-            margin: 0 auto;
-            box-shadow: var(--shadow-lg);
-        }
-        .badge {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--white);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .toggle-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid var(--gray-2);
-            border-radius: var(--radius);
-            background: transparent;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            font-family: 'Inter', sans-serif;
-        }
-        .toggle-btn.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-        }
+        .toggle-group { display: flex; gap: 8px; margin-bottom: 20px; }
+        .toggle-btn { flex: 1; padding: 10px; border: 2px solid var(--gray-2); border-radius: var(--radius); background: transparent; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem; font-family: 'Inter', sans-serif; }
+        .toggle-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
 
         .form-group { margin-bottom: 18px; }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--primary);
-            font-size: 0.85rem;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--gray-2);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-family: 'Montserrat', sans-serif;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,58,112,0.1);
-        }
-        .form-group input.error {
-            border-color: var(--red);
-            box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
-        }
-        .form-group .field-error {
-            color: var(--red);
-            font-size: 0.75rem;
-            margin-top: 3px;
-            display: none;
-        }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--primary); font-size: 0.85rem; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 14px; border: 2px solid var(--gray-2); border-radius: var(--radius); font-size: 0.95rem; font-family: 'Montserrat', sans-serif; transition: all 0.3s ease; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,58,112,0.1); }
+        .form-group input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,70,0.1); }
+        .form-group .field-error { color: var(--red); font-size: 0.75rem; margin-top: 3px; display: none; }
         .form-group .field-error.show { display: block; }
 
-        .error-message {
-            display: none;
-            background: var(--red);
-            color: var(--white);
-            padding: 12px;
-            border-radius: var(--radius);
-            margin-bottom: 18px;
-            font-size: 0.9rem;
-        }
+        .error-message { display: none; background: var(--red); color: var(--white); padding: 12px; border-radius: var(--radius); margin-bottom: 18px; font-size: 0.9rem; }
         .error-message.show { display: block; }
-
-        .success-message {
-            display: none;
-            background: var(--primary);
-            color: var(--white);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-bottom: 18px;
-            text-align: center;
-        }
+        .success-message { display: none; background: var(--primary); color: var(--white); padding: 25px; border-radius: var(--radius); margin-bottom: 18px; text-align: center; }
         .success-message.show { display: block; }
         .success-message .emoji-big { font-size: 2.5rem; display: block; margin-bottom: 8px; }
-        .success-message h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.3rem;
-            margin-bottom: 6px;
-        }
+        .success-message h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; margin-bottom: 6px; }
         .success-message p { margin-bottom: 5px; opacity: 0.9; }
 
         .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: var(--radius);
-            font-size: 1.1rem;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            width: 100%; padding: 14px;
+            background: var(--primary); color: var(--white);
+            border: none; border-radius: var(--radius);
+            font-size: 1.1rem; font-weight: 700; font-family: 'Inter', sans-serif;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            transition: all 0.3s ease; margin-top: 10px;
             box-shadow: 0 8px 25px rgba(0,58,112,0.2);
             position: relative;
         }
-        .submit-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0,58,112,0.3);
-            background: var(--primary-light);
-        }
+        .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,58,112,0.3); background: var(--primary-light); }
         .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .submit-btn .spinner {
-            display: none;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid var(--white);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
+        .submit-btn .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--white); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
         .submit-btn.loading .btn-text { display: none; }
         .submit-btn.loading .spinner { display: block; }
-
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .btn-secundario {
-            display: inline-block;
-            padding: 10px 25px;
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            margin-top: 12px;
-        }
-        .btn-secundario:hover {
-            background: var(--white);
-            color: var(--primary);
-        }
+        .btn-secundario { display: inline-block; padding: 10px 25px; background: transparent; color: var(--white); border: 2px solid var(--white); border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease; margin-top: 12px; }
+        .btn-secundario:hover { background: var(--white); color: var(--primary); }
 
-        /* ============================================
-           PALPITES
-           ============================================ */
-        .palpites-container {
-            background: var(--gray-1);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .bet-match {
-            background: var(--white);
-            padding: 12px 14px;
-            border-radius: var(--radius);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
+        .palpites-container { background: var(--gray-1); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+        .bet-match { background: var(--white); padding: 12px 14px; border-radius: var(--radius); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: all 0.3s ease; }
         .bet-match:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
         .bet-match.filled { border-left: 4px solid var(--green); }
-        .match-name {
-            flex: 1;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.85rem;
-            min-width: 70px;
-        }
+        .match-name { flex: 1; font-weight: 600; color: var(--primary); font-size: 0.85rem; min-width: 70px; }
         .match-flags { display: flex; align-items: center; gap: 5px; font-size: 1.1rem; }
         .match-flags img { width: 24px; height: auto; border-radius: 2px; }
         .score-inputs { display: flex; gap: 6px; align-items: center; }
-        .score-inputs input {
-            width: 45px !important;
-            padding: 6px !important;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1rem;
-            border: 2px solid var(--primary) !important;
-            border-radius: 6px;
-        }
-        .score-separator {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
+        .score-inputs input { width: 45px !important; padding: 6px !important; text-align: center; font-weight: 700; font-size: 1rem; border: 2px solid var(--primary) !important; border-radius: 6px; }
+        .score-separator { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
-        footer {
-            background: var(--black);
-            color: var(--white);
-            text-align: center;
-            padding: 40px 20px 25px;
-            border-top: 4px solid var(--secondary);
-        }
+        footer { background: var(--black); color: var(--white); text-align: center; padding: 40px 20px 25px; border-top: 4px solid var(--secondary); }
         footer p { font-size: 0.9rem; margin-bottom: 8px; opacity: 0.85; }
-        footer .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin: 18px 0;
-            flex-wrap: wrap;
-        }
-        footer .footer-links a {
-            color: var(--secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: opacity 0.3s;
-        }
+        footer .footer-links { display: flex; justify-content: center; gap: 16px; margin: 18px 0; flex-wrap: wrap; }
+        footer .footer-links a { color: var(--secondary); text-decoration: none; font-size: 0.85rem; transition: opacity 0.3s; }
         footer .footer-links a:hover { opacity: 0.7; text-decoration: underline; }
+        .footer-brand { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .footer-brand img { height: 30px; width: auto; }
+        .footer-brand span { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; color: var(--secondary); }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        .footer-brand svg { height: 28px; width: auto; }
-        .footer-brand span {
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--secondary);
-        }
-
-        /* ============================================
-           TOAST
-           ============================================ */
-        .toast {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: var(--black);
-            color: var(--white);
-            padding: 14px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            transform: translateX(120%);
-            transition: transform 0.4s ease;
-            max-width: 380px;
-            border-left: 4px solid var(--green);
-            font-size: 0.9rem;
-        }
+        .toast { position: fixed; bottom: 25px; right: 25px; background: var(--black); color: var(--white); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow-lg); z-index: 1000; transform: translateX(120%); transition: transform 0.4s ease; max-width: 380px; border-left: 4px solid var(--green); font-size: 0.9rem; }
         .toast.show { transform: translateX(0); }
         .toast.error { border-left-color: var(--red); }
 
-        /* ============================================
-           RESPONSIVO
-           ============================================ */
         @media (max-width: 768px) {
             .header-content h1 { font-size: 2rem; }
             .section-title { font-size: 1.6rem !important; }
@@ -869,7 +473,6 @@
             .passo::after { display: none !important; }
             .cards-premios { grid-template-columns: 1fr; }
             .card-premio.destaque { transform: none; }
-            .card-premio.destaque:hover { transform: translateY(-5px); }
             .bet-match { flex-direction: column; align-items: flex-start; gap: 6px; }
             .match-flags { align-self: center; }
             .score-inputs { width: 100%; justify-content: center; }
@@ -879,7 +482,6 @@
             .ranking-tabela th, .ranking-tabela td { padding: 6px 4px; font-size: 0.75rem; }
             .toast { left: 15px; right: 15px; bottom: 15px; max-width: none; }
         }
-
         @media (max-width: 480px) {
             .brand-logo { flex-direction: column; gap: 8px; }
             .brand-logo .brand-divider { display: none; }
@@ -894,7 +496,7 @@
 </head>
 <body>
 
-    <!-- TOP BAR (estilo Planeta Energia) -->
+    <!-- TOP BAR -->
     <div class="top-bar">
         <div class="container">
             <span>⚡ DISTRIBUIDORA DE MATERIAIS ELÉTRICOS</span>
@@ -906,11 +508,7 @@
     <header>
         <div class="container">
             <div class="brand-logo">
-                <svg viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;">
-                    <rect width="100" height="30" fill="transparent"/>
-                    <text x="0" y="22" font-family="'Inter', sans-serif" font-weight="800" font-size="20" fill="#fbd70e">PLANETA</text>
-                    <text x="58" y="22" font-family="'Inter', sans-serif" font-weight="300" font-size="20" fill="white">ENERGIA</text>
-                </svg>
+                <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:45px;width:auto;">
                 <div class="brand-divider"></div>
                 <span class="brand-text">🏆 Bolão Copa 2026</span>
             </div>
@@ -1062,23 +660,18 @@
             <div class="regulamento-content reveal">
                 <h3>📋 Como participar</h3>
                 <p>O bolão é válido para <strong>clientes Master Plan</strong>. Cada CPF/CNPJ pode participar <strong>uma única vez</strong>.</p>
-
                 <h3>⚽ Pontuação</h3>
                 <ul>
                     <li><strong>Acerto do placar exato:</strong> 5 pontos</li>
                     <li><strong>Acerto do vencedor ou empate:</strong> 3 pontos</li>
                     <li><strong>Erro completo:</strong> 0 pontos</li>
                 </ul>
-
                 <h3>🏆 Desempate</h3>
                 <p>Em caso de empate, vence quem tiver mais <strong>placares exatos</strong>. Persistindo o empate, a data de inscrição mais antiga define o vencedor.</p>
-
                 <h3>📅 Período</h3>
                 <p>Os palpites devem ser enviados <strong>antes do início do primeiro jogo do Brasil</strong> na Copa do Mundo 2026.</p>
-
                 <h3>🎁 Prêmios</h3>
                 <p>Os prêmios serão entregues em forma de <strong>vale-compras</strong> na loja Master Plan, válidos por 30 dias após o término da Copa.</p>
-
                 <h3>⚠️ Disposições Gerais</h3>
                 <p>Casos omissos serão resolvidos pela organização. A participação no bolão implica aceitação total deste regulamento.</p>
             </div>
@@ -1091,9 +684,7 @@
             <h2 class="section-title">🎯 Faça Seus Palpites</h2>
             <div class="form-container reveal">
                 <div class="badge">📢 Cadastro único por CPF/CNPJ</div>
-
                 <div class="error-message" id="errorMessage"></div>
-
                 <div class="success-message" id="successMessage">
                     <span class="emoji-big">🎉</span>
                     <h3>Parabéns!</h3>
@@ -1101,48 +692,40 @@
                     <p style="font-size:0.8rem;margin-top:8px;opacity:0.8;">Boa sorte na Copa do Mundo 2026! 🇧🇷🏆</p>
                     <button class="btn-secundario" onclick="resetarFormulario()">📝 Novo Cadastro</button>
                 </div>
-
                 <form id="cadastroForm" novalidate>
                     <div class="toggle-group" role="group" aria-label="Tipo de documento">
                         <button type="button" class="toggle-btn active" data-type="cpf" aria-pressed="true">🧑 CPF</button>
                         <button type="button" class="toggle-btn" data-type="cnpj" aria-pressed="false">🏢 CNPJ</button>
                     </div>
-
                     <div class="form-group">
                         <label for="nome">Nome Completo *</label>
                         <input type="text" id="nome" name="nome" placeholder="João Silva" required autocomplete="name">
                         <div class="field-error" id="erroNome">Por favor, preencha seu nome</div>
                     </div>
-
                     <div class="form-group">
                         <label for="documento" id="labelDocumento">CPF *</label>
                         <input type="text" id="documento" name="documento" placeholder="000.000.000-00" required maxlength="18" autocomplete="off">
                         <div class="field-error" id="erroDocumento">Documento inválido</div>
                     </div>
-
                     <div class="form-group" id="empresaGroup" style="display:none;">
                         <label for="empresa">Nome da Empresa *</label>
                         <input type="text" id="empresa" name="empresa" placeholder="Sua Empresa LTDA" autocomplete="organization">
                         <div class="field-error" id="erroEmpresa">Preencha o nome da empresa</div>
                     </div>
-
                     <div class="form-group">
                         <label for="telefone">Telefone *</label>
                         <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required maxlength="15" autocomplete="tel">
                         <div class="field-error" id="erroTelefone">Telefone inválido</div>
                     </div>
-
                     <div class="form-group">
                         <label>Seus Palpites * <span style="font-weight:400;text-transform:none;color:var(--gray-3);font-size:0.75rem;">(preencha o 1º jogo — os demais serão liberados)</span></label>
                         <div class="palpites-container" id="palpitesContainer"></div>
                         <div class="field-error" id="erroPalpites">Preencha o 1º jogo (Brasil × Marrocos) antes de enviar</div>
                     </div>
-
                     <button type="button" class="submit-btn" id="submitBtn" onclick="enviarPalpites()">
                         <span class="btn-text">🚀 Enviar Palpites</span>
                         <span class="spinner"></span>
                     </button>
-
                     <input type="hidden" id="tipoDocumento" value="cpf">
                 </form>
             </div>
@@ -1152,10 +735,7 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-brand">
-            <svg viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;">
-                <text x="0" y="18" font-family="'Inter', sans-serif" font-weight="800" font-size="16" fill="#fbd70e">PLANETA</text>
-                <text x="48" y="18" font-family="'Inter', sans-serif" font-weight="300" font-size="16" fill="white">ENERGIA</text>
-            </svg>
+            <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:30px;width:auto;">
             <span>× Bolão Copa 2026</span>
         </div>
         <div class="footer-links">
@@ -1173,13 +753,9 @@
         </p>
     </footer>
 
-    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============================================
-        // CONFIGURAÇÃO DOS JOGOS
-        // ============================================
         function flagImg(code, alt) {
             return `<img src="https://flagcdn.com/w80/${code.toLowerCase()}.png" alt="${alt}" style="width:30px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
         }
@@ -1194,15 +770,9 @@
             { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
         ];
 
-        // ============================================
-        // STATE
-        // ============================================
         let tipoDocumento = 'cpf';
         let enviando = false;
 
-        // ============================================
-        // INICIALIZAÇÃO
-        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
             renderizarJogos();
             renderizarPalpites();
@@ -1214,118 +784,78 @@
             setupRevealAnimations();
         });
 
-        // ============================================
-        // ANIMAÇÕES
-        // ============================================
         function setupRevealAnimations() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } });
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // ============================================
-        // COUNTDOWN
-        // ============================================
         function iniciarCountdown() {
             const primeiroJogo = new Date('2026-06-13T22:00:00-03:00');
             function atualizar() {
                 const agora = new Date();
                 const diff = Math.max(0, primeiroJogo - agora);
-                const d = Math.floor(diff / (1000*60*60*24));
-                const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-                const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-                const s = Math.floor((diff % (1000*60)) / 1000);
-                document.getElementById('countdown-dias').textContent = String(d).padStart(2,'0');
-                document.getElementById('countdown-horas').textContent = String(h).padStart(2,'0');
-                document.getElementById('countdown-minutos').textContent = String(m).padStart(2,'0');
-                document.getElementById('countdown-segundos').textContent = String(s).padStart(2,'0');
+                document.getElementById('countdown-dias').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
+                document.getElementById('countdown-horas').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+                document.getElementById('countdown-minutos').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
+                document.getElementById('countdown-segundos').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
             }
             atualizar();
             setInterval(atualizar, 1000);
         }
 
-        // ============================================
-        // JOGOS (cards)
-        // ============================================
         function renderizarJogos() {
             const grid = document.getElementById('jogosGrid');
             const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
             grid.innerHTML = JOGOS.map(j => {
                 const res = resultados[j.id];
-                const realizado = res ? 'realizado' : '';
-                const badge = res ? '<span class="resultado-badge">✅ Realizado</span>' : '';
-                const placar = res ? `<div class="jogo-placar">${res.casa} × ${res.fora}</div>` : '';
                 const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
-                return `
-                    <div class="jogo-card ${realizado}">
-                        ${badge}
-                        <div class="jogo-rodada">${j.rodada}</div>
-                        <div class="jogo-times">
-                            <div class="jogo-time-col">
-                                <div class="jogo-time-flag">${flagImg(j.flagCasa, j.paisCasa)}</div>
-                                <div class="jogo-time-nome">${j.paisCasa}</div>
-                            </div>
-                            <div class="jogo-vs">VS</div>
-                            <div class="jogo-time-col">
-                                <div class="jogo-time-flag">${flagForaHtml}</div>
-                                <div class="jogo-time-nome">${j.paisFora}</div>
-                            </div>
+                return `<div class="jogo-card ${res ? 'realizado' : ''}">
+                    ${res ? '<span class="resultado-badge">✅ Realizado</span>' : ''}
+                    <div class="jogo-rodada">${j.rodada}</div>
+                    <div class="jogo-times">
+                        <div class="jogo-time-col">
+                            <div class="jogo-time-flag">${flagImg(j.flagCasa, j.paisCasa)}</div>
+                            <div class="jogo-time-nome">${j.paisCasa}</div>
                         </div>
-                        <div class="jogo-data">📅 ${j.data}</div>
-                        ${placar}
+                        <div class="jogo-vs">VS</div>
+                        <div class="jogo-time-col">
+                            <div class="jogo-time-flag">${flagForaHtml}</div>
+                            <div class="jogo-time-nome">${j.paisFora}</div>
+                        </div>
                     </div>
-                `;
+                    <div class="jogo-data">📅 ${j.data}</div>
+                    ${res ? `<div class="jogo-placar">${res.casa} × ${res.fora}</div>` : ''}
+                </div>`;
             }).join('');
         }
 
-        // ============================================
-        // PALPITES (formulário)
-        // ============================================
         function renderizarPalpites() {
             const container = document.getElementById('palpitesContainer');
             const liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
             container.innerHTML = JOGOS.map(j => {
                 const ativo = liberados.includes(j.id);
                 const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
-                return `
-                    <div class="bet-match ${ativo ? '' : 'disabled'}" style="${ativo ? '' : 'opacity:0.4;pointer-events:none;'}">
-                        <div class="match-flags">
-                            ${flagImg(j.flagCasa, j.paisCasa)}
-                            <span style="font-size:0.7rem;font-weight:600;">×</span>
-                            ${flagForaHtml}
-                        </div>
-                        <div class="match-name">
-                            ${j.paisCasa} × ${j.paisFora}
-                            <div style="font-weight:400;font-size:0.7rem;color:var(--gray-3);">${j.rodada}</div>
-                        </div>
-                        <div class="score-inputs">
-                            <input type="number" min="0" max="20" class="palpite-casa" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
-                            <span class="score-separator">×</span>
-                            <input type="number" min="0" max="20" class="palpite-fora" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
-                        </div>
-                        <div style="font-size:0.6rem;color:var(--gray-3);white-space:nowrap;">
-                            ${ativo ? '' : '🔒 Bloqueado'}
-                        </div>
+                return `<div class="bet-match" style="${ativo ? '' : 'opacity:0.4;pointer-events:none;'}">
+                    <div class="match-flags">${flagImg(j.flagCasa, j.paisCasa)}<span style="font-size:0.7rem;font-weight:600;">×</span>${flagForaHtml}</div>
+                    <div class="match-name">${j.paisCasa} × ${j.paisFora}<div style="font-weight:400;font-size:0.7rem;color:var(--gray-3);">${j.rodada}</div></div>
+                    <div class="score-inputs">
+                        <input type="number" min="0" max="20" class="palpite-casa" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
+                        <span class="score-separator">×</span>
+                        <input type="number" min="0" max="20" class="palpite-fora" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
                     </div>
-                `;
+                    <div style="font-size:0.6rem;color:var(--gray-3);white-space:nowrap;">${ativo ? '' : '🔒 Bloqueado'}</div>
+                </div>`;
             }).join('');
         }
 
-        // ============================================
-        // TOGGLE CPF/CNPJ
-        // ============================================
         function setupToggle() {
             const botoes = document.querySelectorAll('.toggle-btn');
             botoes.forEach(btn => {
                 btn.addEventListener('click', function() {
                     botoes.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-                    this.classList.add('active');
-                    this.setAttribute('aria-pressed','true');
+                    this.classList.add('active'); this.setAttribute('aria-pressed','true');
                     tipoDocumento = this.dataset.type;
                     document.getElementById('tipoDocumento').value = tipoDocumento;
                     document.getElementById('labelDocumento').textContent = tipoDocumento.toUpperCase() + ' *';
@@ -1337,72 +867,45 @@
             });
         }
 
-        // ============================================
-        // MÁSCARAS
-        // ============================================
         function setupMascaras() {
             const docInput = document.getElementById('documento');
             docInput.addEventListener('input', function() {
                 let val = this.value.replace(/\D/g,'');
                 if (tipoDocumento === 'cpf') {
                     if (val.length > 11) val = val.slice(0,11);
-                    let mascara = '';
-                    for (let i = 0; i < val.length; i++) {
-                        if (i === 3 || i === 6) mascara += '.';
-                        if (i === 9) mascara += '-';
-                        mascara += val[i];
-                    }
-                    this.value = mascara;
+                    let m = '';
+                    for (let i = 0; i < val.length; i++) { if (i === 3 || i === 6) m += '.'; if (i === 9) m += '-'; m += val[i]; }
+                    this.value = m;
                 } else {
                     if (val.length > 14) val = val.slice(0,14);
-                    let mascara = '';
-                    for (let i = 0; i < val.length; i++) {
-                        if (i === 2 || i === 5) mascara += '.';
-                        if (i === 8) mascara += '/';
-                        if (i === 12) mascara += '-';
-                        mascara += val[i];
-                    }
-                    this.value = mascara;
+                    let m = '';
+                    for (let i = 0; i < val.length; i++) { if (i === 2 || i === 5) m += '.'; if (i === 8) m += '/'; if (i === 12) m += '-'; m += val[i]; }
+                    this.value = m;
                 }
             });
-
             const telInput = document.getElementById('telefone');
             telInput.addEventListener('input', function() {
                 let val = this.value.replace(/\D/g,'');
                 if (val.length > 11) val = val.slice(0,11);
-                let mascara = '';
-                for (let i = 0; i < val.length; i++) {
-                    if (i === 0) mascara += '(';
-                    if (i === 2) mascara += ') ';
-                    if (i === 7) mascara += '-';
-                    mascara += val[i];
-                }
-                this.value = mascara;
+                let m = '';
+                for (let i = 0; i < val.length; i++) { if (i === 0) m += '('; if (i === 2) m += ') '; if (i === 7) m += '-'; m += val[i]; }
+                this.value = m;
             });
         }
 
-        // ============================================
-        // VALIDAÇÃO
-        // ============================================
         function setupValidacao() {
             ['nome','documento','telefone'].forEach(id => {
                 document.getElementById(id).addEventListener('blur', function() {
                     const erroId = 'erro' + id.charAt(0).toUpperCase() + id.slice(1);
-                    if (!this.value.trim()) {
-                        this.classList.add('error');
-                        document.getElementById(erroId).classList.add('show');
-                    } else {
-                        this.classList.remove('error');
-                        document.getElementById(erroId).classList.remove('show');
-                    }
+                    if (!this.value.trim()) { this.classList.add('error'); document.getElementById(erroId).classList.add('show'); }
+                    else { this.classList.remove('error'); document.getElementById(erroId).classList.remove('show'); }
                 });
             });
         }
 
         function validarDocumento(val) {
             const digitos = val.replace(/\D/g,'');
-            if (tipoDocumento === 'cpf') return digitos.length === 11;
-            return digitos.length === 14;
+            return tipoDocumento === 'cpf' ? digitos.length === 11 : digitos.length === 14;
         }
 
         function validarFormulario() {
@@ -1411,56 +914,35 @@
             const doc = document.getElementById('documento').value.trim();
             const tel = document.getElementById('telefone').value.trim();
             const empresa = document.getElementById('empresa').value.trim();
-
             if (!nome) { document.getElementById('erroNome').classList.add('show'); document.getElementById('nome').classList.add('error'); valido = false; }
             else { document.getElementById('erroNome').classList.remove('show'); document.getElementById('nome').classList.remove('error'); }
-
             if (!doc || !validarDocumento(doc)) { document.getElementById('erroDocumento').classList.add('show'); document.getElementById('documento').classList.add('error'); valido = false; }
             else { document.getElementById('erroDocumento').classList.remove('show'); document.getElementById('documento').classList.remove('error'); }
-
             if (!tel || tel.replace(/\D/g,'').length < 10) { document.getElementById('erroTelefone').classList.add('show'); document.getElementById('telefone').classList.add('error'); valido = false; }
             else { document.getElementById('erroTelefone').classList.remove('show'); document.getElementById('telefone').classList.remove('error'); }
-
             if (tipoDocumento === 'cnpj' && !empresa) { document.getElementById('erroEmpresa').classList.add('show'); document.getElementById('empresa').classList.add('error'); valido = false; }
             else { document.getElementById('erroEmpresa').classList.remove('show'); document.getElementById('empresa').classList.remove('error'); }
-
-            // Verificar palpite do 1º jogo
             const casa1 = document.querySelector('.palpite-casa[data-jogo="1"]');
             const fora1 = document.querySelector('.palpite-fora[data-jogo="1"]');
-            if (!casa1 || !fora1 || casa1.value === '' || fora1.value === '') {
-                document.getElementById('erroPalpites').classList.add('show');
-                valido = false;
-            } else {
-                document.getElementById('erroPalpites').classList.remove('show');
-            }
-
+            if (!casa1 || !fora1 || casa1.value === '' || fora1.value === '') { document.getElementById('erroPalpites').classList.add('show'); valido = false; }
+            else { document.getElementById('erroPalpites').classList.remove('show'); }
             return valido;
         }
 
-        // ============================================
-        // ENVIO
-        // ============================================
         function enviarPalpites() {
             if (enviando) return;
             document.getElementById('errorMessage').classList.remove('show');
             document.getElementById('erroPalpites').classList.remove('show');
-
             if (!validarFormulario()) return;
-
             enviando = true;
             const btn = document.getElementById('submitBtn');
-            btn.classList.add('loading');
-            btn.disabled = true;
-
+            btn.classList.add('loading'); btn.disabled = true;
             const palpites = [];
             document.querySelectorAll('.palpite-casa').forEach(input => {
                 const jogoId = parseInt(input.dataset.jogo);
                 const fora = document.querySelector(`.palpite-fora[data-jogo="${jogoId}"]`);
-                if (input.value !== '' && fora && fora.value !== '') {
-                    palpites.push({ jogoId, casa: parseInt(input.value), fora: parseInt(fora.value) });
-                }
+                if (input.value !== '' && fora && fora.value !== '') { palpites.push({ jogoId, casa: parseInt(input.value), fora: parseInt(fora.value) }); }
             });
-
             const dados = {
                 nome: document.getElementById('nome').value.trim(),
                 documento: document.getElementById('documento').value.trim(),
@@ -1470,17 +952,11 @@
                 palpites,
                 timestamp: new Date().toISOString()
             };
-
-            // Simular envio
             setTimeout(() => {
                 const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
                 participantes.push({ ...dados, pontos: 0, acertosExatos: 0 });
                 localStorage.setItem('bolao_participantes', JSON.stringify(participantes));
-
-                btn.classList.remove('loading');
-                btn.disabled = false;
-                enviando = false;
-
+                btn.classList.remove('loading'); btn.disabled = false; enviando = false;
                 document.getElementById('cadastroForm').style.display = 'none';
                 document.getElementById('successMessage').classList.add('show');
                 atualizarRanking();
@@ -1496,52 +972,26 @@
             document.querySelectorAll('.error').forEach(e => e.classList.remove('error'));
         }
 
-        // ============================================
-        // RANKING
-        // ============================================
         function atualizarRanking() {
             const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
             const vazio = document.getElementById('rankingVazio');
             const wrapper = document.getElementById('rankingTabelaWrapper');
             const body = document.getElementById('rankingBody');
-
-            if (participantes.length === 0) {
-                vazio.style.display = 'block';
-                wrapper.style.display = 'none';
-                return;
-            }
-
-            vazio.style.display = 'none';
-            wrapper.style.display = 'block';
-
+            if (participantes.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
+            vazio.style.display = 'none'; wrapper.style.display = 'block';
             const ordenados = participantes.sort((a,b) => (b.pontos||0) - (a.pontos||0));
             body.innerHTML = ordenados.map((p, i) => {
                 const posClass = i < 3 ? `posicao-${i+1}` : '';
-                return `
-                    <tr>
-                        <td class="posicao ${posClass}">${i+1}º</td>
-                        <td class="nome-participante">${p.nome}</td>
-                        <td class="acertos">${p.palpites?.length || 0} palpites</td>
-                        <td class="pontos">${p.pontos || 0} pts</td>
-                    </tr>
-                `;
+                return `<tr><td class="posicao ${posClass}">${i+1}º</td><td class="nome-participante">${p.nome}</td><td class="acertos">${p.palpites?.length || 0} palpites</td><td class="pontos">${p.pontos || 0} pts</td></tr>`;
             }).join('');
         }
 
-        // ============================================
-        // TOAST
-        // ============================================
         function mostrarToast(msg, tipo = '') {
             const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.className = 'toast ' + tipo;
+            toast.textContent = msg; toast.className = 'toast ' + tipo;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
-
-        // ============================================
-        // EXPORT para admin/consulta
-        // ============================================
         window.atualizarRanking = atualizarRanking;
         window.mostrarToast = mostrarToast;
     </script>

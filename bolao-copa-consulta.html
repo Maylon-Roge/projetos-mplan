@@ -44,6 +44,8 @@
             margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.12);
         }
+        .header-card .brand-logo { margin-bottom: 12px; }
+        .header-card .brand-logo img { height: 38px; width: auto; }
         .header-card .brand {
             font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
@@ -66,173 +68,63 @@
             padding: 30px;
             box-shadow: var(--shadow-md);
         }
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-box input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid var(--gray-2);
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-family: 'Montserrat', sans-serif;
-            transition: all 0.3s;
+            flex: 1; padding: 12px 16px; border: 2px solid var(--gray-2);
+            border-radius: var(--radius); font-size: 0.95rem;
+            font-family: 'Montserrat', sans-serif; transition: all 0.3s;
         }
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,58,112,0.1);
-        }
+        .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,58,112,0.1); }
         .search-box button {
-            padding: 12px 28px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: var(--radius);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            white-space: nowrap;
+            padding: 12px 28px; background: var(--primary); color: var(--white);
+            border: none; border-radius: var(--radius);
+            font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            transition: all 0.3s; white-space: nowrap;
         }
-        .search-box button:hover {
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-
-        .info-text {
-            text-align: center;
-            color: var(--gray-3);
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
+        .search-box button:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .info-text { text-align: center; color: var(--gray-3); font-size: 0.85rem; margin-bottom: 5px; }
         .info-text strong { color: var(--primary); }
-
-        .error-msg {
-            display: none;
-            background: var(--red);
-            color: var(--white);
-            padding: 12px;
-            border-radius: var(--radius);
-            margin-bottom: 18px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
+        .error-msg { display: none; background: var(--red); color: var(--white); padding: 12px; border-radius: var(--radius); margin-bottom: 18px; text-align: center; font-size: 0.9rem; }
         .error-msg.show { display: block; }
         .result-area { display: none; }
         .result-area.show { display: block; }
 
-        .participant-info {
-            background: var(--gray-1);
-            border-radius: var(--radius);
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-        .participant-info h2 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .participant-info .meta {
-            color: var(--gray-3);
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
+        .participant-info { background: var(--gray-1); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+        .participant-info h2 { font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .participant-info .meta { color: var(--gray-3); font-size: 0.85rem; margin-top: 4px; }
 
         .game-result {
-            background: var(--gray-1);
-            border-radius: var(--radius);
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s;
+            background: var(--gray-1); border-radius: var(--radius); padding: 14px 16px;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 12px; transition: all 0.3s;
         }
         .game-result:hover { box-shadow: var(--shadow-sm); }
-        .game-result .flags {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-            min-width: 70px;
-        }
+        .game-result .flags { display: flex; gap: 4px; align-items: center; min-width: 70px; }
         .game-result .flags img { width: 28px; height: auto; border-radius: 2px; }
         .game-result .flags .vs { font-size: 0.55rem; opacity: 0.5; padding: 0 2px; font-weight: 600; }
         .game-result .info { flex: 1; }
         .game-result .info .rodada { font-weight: 700; color: var(--primary); font-size: 0.85rem; }
         .game-result .info .paises { font-size: 0.75rem; color: var(--gray-3); }
         .game-result .info .data { font-size: 0.7rem; color: var(--gray-3); margin-top: 2px; }
-        
-        .game-result .placares {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .game-result .placares .palpite {
-            text-align: center;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background: var(--white);
-            min-width: 50px;
-        }
+        .game-result .placares { display: flex; gap: 10px; align-items: center; }
+        .game-result .placares .palpite { text-align: center; padding: 5px 10px; border-radius: 6px; background: var(--white); min-width: 50px; }
         .game-result .placares .palpite .label { font-size: 0.55rem; text-transform: uppercase; color: var(--gray-3); letter-spacing: 0.3px; }
         .game-result .placares .palpite .valor { font-size: 1.1rem; font-weight: 700; font-family: 'Inter', sans-serif; }
         .game-result .placares .palpite .valor.acerto-placar { color: var(--green); }
         .game-result .placares .palpite .valor.acerto-vencedor { color: #b8860b; }
         .game-result .placares .palpite .valor.erro { color: var(--red); }
         .game-result .placares .separador { font-size: 1.1rem; font-weight: 600; color: var(--gray-3); }
-        
-        .game-result .status-badge {
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
+        .game-result .status-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; white-space: nowrap; }
         .game-result .status-badge.aguardando { background: #fff3cd; color: #856404; }
         .game-result .status-badge.acerto-placar { background: #d4edda; color: #155724; }
         .game-result .status-badge.acerto-vencedor { background: #fff3cd; color: #856404; }
         .game-result .status-badge.erro { background: #f8d7da; color: #721c24; }
 
-        .resumo-card {
-            background: var(--primary);
-            color: var(--white);
-            border-radius: var(--radius);
-            padding: 18px;
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            text-align: center;
-        }
-        .resumo-card .item .numero {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--secondary);
-        }
-        .resumo-card .item .label {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .resumo-card { background: var(--primary); color: var(--white); border-radius: var(--radius); padding: 18px; margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; text-align: center; }
+        .resumo-card .item .numero { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--secondary); }
+        .resumo-card .item .label { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 18px;
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.3s;
-        }
+        .back-link { display: inline-block; margin-top: 18px; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
         .back-link:hover { color: var(--secondary); }
 
         @media (max-width: 600px) {
@@ -252,6 +144,7 @@
 <body>
     <div class="container">
         <div class="header-card">
+            <div class="brand-logo"><img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:38px;width:auto;"></div>
             <div class="brand">⚡ PLANETA ENERGIA × BOLÃO COPA 2026</div>
             <h1>🔍 Consultar Palpites</h1>
             <p>Digite seu CPF ou CNPJ para ver seus palpites</p>
@@ -263,25 +156,14 @@
                 <button onclick="consultar()">🔍 Consultar</button>
             </div>
             <p class="info-text">Digite o <strong>CPF</strong> ou <strong>CNPJ</strong> que você usou no cadastro para ver seus palpites</p>
-            
             <div class="error-msg" id="errorMsg"></div>
-
             <div class="result-area" id="resultArea">
                 <div class="participant-info" id="participantInfo"></div>
                 <div id="palpitesList"></div>
                 <div class="resumo-card" id="resumoCard">
-                    <div class="item">
-                        <div class="numero" id="totalJogos">0</div>
-                        <div class="label">Jogos</div>
-                    </div>
-                    <div class="item">
-                        <div class="numero" id="acertosCount" style="color: #4ade80;">0</div>
-                        <div class="label">Acertos</div>
-                    </div>
-                    <div class="item">
-                        <div class="numero" id="pontosCount" style="color: var(--secondary);">0</div>
-                        <div class="label">Pontos</div>
-                    </div>
+                    <div class="item"><div class="numero" id="totalJogos">0</div><div class="label">Jogos</div></div>
+                    <div class="item"><div class="numero" id="acertosCount" style="color: #4ade80;">0</div><div class="label">Acertos</div></div>
+                    <div class="item"><div class="numero" id="pontosCount" style="color: var(--secondary);">0</div><div class="label">Pontos</div></div>
                 </div>
             </div>
         </div>
@@ -307,9 +189,7 @@
             { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir' },
         ];
 
-        document.getElementById('documentoInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') consultar();
-        });
+        document.getElementById('documentoInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') consultar(); });
 
         function consultar() {
             const doc = document.getElementById('documentoInput').value.replace(/\D/g, '');
@@ -317,15 +197,9 @@
                 mostrarErro('Digite um CPF (11 dígitos) ou CNPJ (14 dígitos) válido');
                 return;
             }
-
             const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
             const participante = participantes.find(p => p.documento === doc);
-
-            if (!participante) {
-                mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?');
-                return;
-            }
-
+            if (!participante) { mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?'); return; }
             document.getElementById('errorMsg').classList.remove('show');
             document.getElementById('resultArea').classList.add('show');
             mostrarDados(participante);
@@ -343,109 +217,34 @@
             const docMascarado = p.documento.length === 11
                 ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
                 : p.documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
-            
-            document.getElementById('participantInfo').innerHTML = `
-                <h2>👤 ${p.nome}</h2>
-                <div class="meta">
-                    📄 ${p.tipoDocumento.toUpperCase()}: ${docMascarado}
-                    ${p.empresa ? `&nbsp;|&nbsp; 🏢 ${p.empresa}` : ''}
-                    &nbsp;|&nbsp; 📅 ${p.data || 'N/A'}
-                </div>
-            `;
+            document.getElementById('participantInfo').innerHTML = `<h2>👤 ${p.nome}</h2><div class="meta">📄 ${p.tipoDocumento.toUpperCase()}: ${docMascarado}${p.empresa ? ' | 🏢 '+p.empresa : ''} | 📅 ${p.data || 'N/A'}</div>`;
 
             const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
-            let totalAcertos = 0;
-            let totalPontos = 0;
-            let totalJogos = 0;
-
+            let totalAcertos = 0, totalPontos = 0, totalJogos = 0;
             const html = JOGOS.map(jogo => {
                 const palpite = p.palpites ? p.palpites[jogo.id] : null;
                 const resultado = resultados[jogo.id];
                 const temResultado = resultado && resultado.gols_casa !== undefined;
-
                 const golsCasaPalpite = palpite ? (palpite.gols_brasil !== undefined ? palpite.gols_brasil : palpite.gols_casa) : null;
                 const golsForaPalpite = palpite ? (palpite.gols_adversario !== undefined ? palpite.gols_adversario : palpite.gols_fora) : null;
-
-                let statusClasse = 'aguardando';
-                let statusTexto = '⏳ Aguardando';
-                let classeCasa = '';
-                let classeFora = '';
-
+                let statusClasse = 'aguardando', statusTexto = '⏳ Aguardando', classeCasa = '', classeFora = '';
                 const brasilEhCasa = jogo.paisCasa === 'Brasil';
                 const golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.gols_casa : resultado.gols_fora) : null;
                 const golsAdvReal = temResultado ? (brasilEhCasa ? resultado.gols_fora : resultado.gols_casa) : null;
-
                 if (temResultado && golsCasaPalpite !== null && golsForaPalpite !== null) {
                     totalJogos++;
-                    const golsBrasilPalpite = golsCasaPalpite;
-                    const golsAdvPalpite = golsForaPalpite;
+                    const golsBrasilPalpite = golsCasaPalpite, golsAdvPalpite = golsForaPalpite;
                     const acertouPlacar = golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal;
-                    const vitoriaBrasilReal = golsBrasilReal > golsAdvReal;
-                    const derrotaBrasilReal = golsBrasilReal < golsAdvReal;
-                    const empateReal = golsBrasilReal === golsAdvReal;
-                    const vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite;
-                    const derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite;
-                    const empatePalpite = golsBrasilPalpite === golsAdvPalpite;
-                    const acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) ||
-                                           (derrotaBrasilReal && derrotaBrasilPalpite) ||
-                                           (empateReal && empatePalpite);
-
-                    if (acertouPlacar) {
-                        statusClasse = 'acerto-placar';
-                        statusTexto = '✅ Placar Exato! (+5pts)';
-                        classeCasa = 'acerto-placar';
-                        classeFora = 'acerto-placar';
-                        totalAcertos++;
-                        totalPontos += 5;
-                    } else if (acertouVencedor) {
-                        statusClasse = 'acerto-vencedor';
-                        statusTexto = '🎯 Vencedor! (+3pts)';
-                        classeCasa = 'acerto-vencedor';
-                        classeFora = 'acerto-vencedor';
-                        totalAcertos++;
-                        totalPontos += 3;
-                    } else {
-                        statusClasse = 'erro';
-                        statusTexto = '❌ Erro (0pts)';
-                        classeCasa = 'erro';
-                        classeFora = 'erro';
-                    }
+                    const vitoriaBrasilReal = golsBrasilReal > golsAdvReal, derrotaBrasilReal = golsBrasilReal < golsAdvReal, empateReal = golsBrasilReal === golsAdvReal;
+                    const vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite, derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite, empatePalpite = golsBrasilPalpite === golsAdvPalpite;
+                    const acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) || (derrotaBrasilReal && derrotaBrasilPalpite) || (empateReal && empatePalpite);
+                    if (acertouPlacar) { statusClasse='acerto-placar'; statusTexto='✅ Placar Exato! (+5pts)'; classeCasa='acerto-placar'; classeFora='acerto-placar'; totalAcertos++; totalPontos+=5; }
+                    else if (acertouVencedor) { statusClasse='acerto-vencedor'; statusTexto='🎯 Vencedor! (+3pts)'; classeCasa='acerto-vencedor'; classeFora='acerto-vencedor'; totalAcertos++; totalPontos+=3; }
+                    else { statusClasse='erro'; statusTexto='❌ Erro (0pts)'; classeCasa='erro'; classeFora='erro'; }
                 }
-
                 const temPalpite = golsCasaPalpite !== null && golsForaPalpite !== null;
-
-                return `
-                    <div class="game-result">
-                        <div class="flags" style="display:flex;align-items:center;gap:5px;">
-                            ${flagImg(jogo.flagCasa, jogo.paisCasa)}
-                            <span class="vs">vs</span>
-                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.1rem;">❓</span>'}
-                        </div>
-                        <div class="info">
-                            <div class="rodada">${jogo.rodada}</div>
-                            <div class="paises">${jogo.paisCasa} × ${jogo.paisFora}</div>
-                            <div class="data">📅 ${jogo.data} &nbsp;📍 ${jogo.local}</div>
-                        </div>
-                        <div class="placares">
-                            <div class="palpite">
-                                <div class="label">Seu palpite</div>
-                                <div class="valor ${temResultado ? classeCasa : ''}">
-                                    ${temPalpite ? (golsCasaPalpite + ' × ' + golsForaPalpite) : '—'}
-                                </div>
-                            </div>
-                            ${temResultado ? `
-                            <div class="separador">|</div>
-                            <div class="palpite" style="background:var(--primary);color:var(--white);">
-                                <div class="label" style="color:rgba(255,255,255,0.7);">Real</div>
-                                <div class="valor" style="color:var(--secondary);">${resultado.gols_casa} × ${resultado.gols_fora}</div>
-                            </div>
-                            ` : ''}
-                        </div>
-                        <span class="status-badge ${statusClasse}">${statusTexto}</span>
-                    </div>
-                `;
+                return `<div class="game-result"><div class="flags">${flagImg(jogo.flagCasa, jogo.paisCasa)}<span class="vs">vs</span>${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.1rem;">❓</span>'}</div><div class="info"><div class="rodada">${jogo.rodada}</div><div class="paises">${jogo.paisCasa} × ${jogo.paisFora}</div><div class="data">📅 ${jogo.data} &nbsp;📍 ${jogo.local}</div></div><div class="placares"><div class="palpite"><div class="label">Seu palpite</div><div class="valor ${temResultado ? classeCasa : ''}">${temPalpite ? (golsCasaPalpite + ' × ' + golsForaPalpite) : '—'}</div></div>${temResultado ? `<div class="separador">|</div><div class="palpite" style="background:var(--primary);color:var(--white);"><div class="label" style="color:rgba(255,255,255,0.7);">Real</div><div class="valor" style="color:var(--secondary);">${resultado.gols_casa} × ${resultado.gols_fora}</div></div>` : ''}</div><span class="status-badge ${statusClasse}">${statusTexto}</span></div>`;
             }).join('');
-
             document.getElementById('palpitesList').innerHTML = html;
             document.getElementById('totalJogos').textContent = JOGOS.length;
             document.getElementById('acertosCount').textContent = totalAcertos;
