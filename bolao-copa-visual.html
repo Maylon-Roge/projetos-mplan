@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Virtual Copa do Mundo 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-escuro: #003399;
+            --azul-claro: #004dd9;
+            --amarelo: #FFD000;
+            --verde: #00A651;
+            --preto: #000a1f;
+            --branco: #ffffff;
+            --cinza-light: #f5f5f5;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--azul-escuro);
+            color: var(--preto);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           BACKGROUND & DECORATIVE ELEMENTS
+           ============================================ */
+        .background-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .decoration {
+            position: absolute;
+            opacity: 0.08;
+            font-size: 200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration:nth-child(1) {
+            top: -50px;
+            right: -50px;
+            animation-delay: 0s;
+        }
+
+        .decoration:nth-child(2) {
+            bottom: 100px;
+            left: -100px;
+            animation-delay: 2s;
+        }
+
+        .decoration:nth-child(3) {
+            top: 50%;
+            right: 10%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(30px) rotate(5deg); }
+        }
+
+        /* ============================================
+           CONTAINER & LAYOUT
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           HEADER & HERO
+           ============================================ */
+        header {
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 5px solid var(--amarelo);
+            animation: slideDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 208, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 166, 81, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .mascote {
+            font-size: 80px;
+            margin-bottom: 15px;
+            animation: bounce 0.8s ease-out;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.3) translateY(-50px); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--branco);
+            font-weight: 300;
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--amarelo);
+            color: var(--azul-escuro);
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 208, 0, 0.3);
+            animation: slideUp 0.8s ease-out 0.3s both;
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 208, 0, 0.5);
+            background: #ffe500;
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           SEÇÃO COMO FUNCIONA
+           ============================================ */
+        .section {
+            padding: 60px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .como-funciona {
+            background: var(--branco);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .passos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 0;
+        }
+
+        .passo {
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .passo:nth-child(1) { animation-delay: 0.3s; }
+        .passo:nth-child(2) { animation-delay: 0.4s; }
+        .passo:nth-child(3) { animation-delay: 0.5s; }
+        .passo:nth-child(4) { animation-delay: 0.6s; }
+
+        .passo-numero {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--amarelo), #ffb800);
+            color: var(--azul-escuro);
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 10px 25px rgba(255, 208, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .passo:nth-child(2) .passo-numero { animation-delay: 0.3s; }
+        .passo:nth-child(3) .passo-numero { animation-delay: 0.6s; }
+        .passo:nth-child(4) .passo-numero { animation-delay: 0.9s; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .passo-titulo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .passo-descricao {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Setas entre passos */
+        @media (min-width: 768px) {
+            .passos {
+                position: relative;
+            }
+
+            .passo::after {
+                content: '→';
+                position: absolute;
+                right: -30px;
+                top: 30px;
+                font-size: 2rem;
+                color: var(--amarelo);
+                font-weight: bold;
+            }
+
+            .passo:last-child::after {
+                display: none;
+            }
+        }
+
+        /* ============================================
+           SEÇÃO PREMIAÇÕES
+           ============================================ */
+        .premiacoes-section {
+            background: linear-gradient(135deg, var(--amarelo) 0%, #ffb800 100%);
+            padding: 60px 0;
+        }
+
+        .premiacoes-section .section-title {
+            color: var(--azul-escuro);
+        }
+
+        .cards-premios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card-premio {
+            background: var(--branco);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(0);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.8s ease-out both;
+            border: 4px solid var(--azul-escuro);
+        }
+
+        .card-premio:nth-child(1) { animation-delay: 0.3s; }
+        .card-premio:nth-child(2) { animation-delay: 0.4s; }
+        .card-premio:nth-child(3) { animation-delay: 0.5s; }
+
+        .card-premio:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .premio-posicao {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .premio-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .premio-valor {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--verde);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .premio-tipo {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           SEÇÃO JOGOS
+           ============================================ */
+        .jogos-section {
+            background: var(--branco);
+            padding: 60px 0;
+        }
+
+        .jogos-section .section-title {
+            color: var(--azul-escuro);
+        }
+
+        .jogos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .jogo-card {
+            background: linear-gradient(135deg, var(--verde) 0%, #009640 100%);
+            color: var(--branco);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 166, 81, 0.2);
+            animation: fadeInUp 0.8s ease-out both;
+            transition: all 0.3s ease;
+        }
+
+        .jogo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 166, 81, 0.3);
+        }
+
+        .jogo-rodada {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .jogo-times {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 10px 0;
+            gap: 8px;
+        }
+
+        .jogo-time {
+            font-size: 1.8rem;
+        }
+
+        .jogo-vs {
+            font-size: 0.7rem;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .jogo-data {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* ============================================
+           SEÇÃO FORM
+           ============================================ */
+        .form-section {
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            padding: 60px 0;
+        }
+
+        .form-section .section-title {
+            color: var(--amarelo);
+        }
+
+        .form-container {
+            background: var(--branco);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--verde);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        .toggle-btn.active {
+            background: var(--verde);
+            color: var(--branco);
+            border-color: var(--verde);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--verde);
+            box-shadow: 0 0 0 4px rgba(0, 166, 81, 0.1);
+            background-color: #f9fff8;
+        }
+
+        .error-message {
+            display: none;
+            background: #ff6b6b;
+            color: var(--branco);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            animation: shake 0.3s ease-out;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--verde), #009640);
+            color: var(--branco);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--verde), #009640);
+            color: var(--branco);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Bebas Neue', cursive;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 10px 30px rgba(0, 166, 81, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 166, 81, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--preto);
+            color: var(--branco);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 5px solid var(--amarelo);
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        /* ============================================
+           PALPITES SECTION
+           ============================================ */
+        .palpites-container {
+            background: var(--cinza-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .bet-match {
+            background: var(--branco);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .bet-match:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .match-name {
+            flex: 1;
+            font-weight: 700;
+            color: var(--azul-escuro);
+            font-size: 0.95rem;
+        }
+
+        .score-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .score-inputs input {
+            width: 50px;
+            padding: 8px !important;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 2px solid var(--verde) !important;
+            border-radius: 8px;
+        }
+
+        .score-separator {
+            font-weight: 800;
+            color: var(--verde);
+            font-size: 1.3rem;
+        }
+
+        /* ============================================
+           RESPONSIVO
+           ============================================ */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem !important;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .passos {
+                grid-template-columns: 1fr;
+            }
+
+            .passo::after {
+                display: none !important;
+            }
+
+            .cards-premios {
+                grid-template-columns: 1fr;
+            }
+
+            .bet-match {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .score-inputs {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .jogos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .mascote {
+                font-size: 60px;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-decoration">
+        <div class="decoration">⚽</div>
+        <div class="decoration">🏆</div>
+        <div class="decoration">💡</div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="mascote">💡</div>
+                <h1 class="logo">Bolão Copa</h1>
+                <p class="tagline">Faça seus palpites e ganhe descontos exclusivos!</p>
+                <button class="cta-button" onclick="document.querySelector('.form-section').scrollIntoView();">
+                    Quero Participar!
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">⚡ Como Funciona?</h2>
+            <div class="como-funciona">
+                <div class="passos">
+                    <div class="passo">
+                        <div class="passo-numero">1</div>
+                        <h3 class="passo-titulo">Faça Seu Cadastro</h3>
+                        <p class="passo-descricao">Preencha seus dados e entre no bolão</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">2</div>
+                        <h3 class="passo-titulo">Faça Seus Palpites</h3>
+                        <p class="passo-descricao">Escolha os placares dos jogos do Brasil</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">3</div>
+                        <h3 class="passo-titulo">Some Pontos</h3>
+                        <p class="passo-descricao">Acerte os placares e ganhe pontos</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">4</div>
+                        <h3 class="passo-titulo">Ganhe Desconto</h3>
+                        <p class="passo-descricao">Use seu código na próxima compra</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREMIAÇÕES -->
+    <section class="premiacoes-section">
+        <div class="container">
+            <h2 class="section-title">🏆 Premiações</h2>
+            <div class="cards-premios">
+                <div class="card-premio">
+                    <div class="premio-posicao">1º Lugar</div>
+                    <span class="premio-emoji">🥇</span>
+                    <div class="premio-valor">R$ 500</div>
+                    <div class="premio-tipo">Vale Compras</div>
+                </div>
+                <div class="card-premio">
+                    <div class="premio-posicao">2º Lugar</div>
+                    <span class="premio-emoji">🥈</span>
+                    <div class="premio-valor">R$ 300</div>
+                    <div class="premio-tipo">Vale Compras</div>
+                </div>
+                <div class="card-premio">
+                    <div class="premio-posicao">3º Lugar</div>
+                    <span class="premio-emoji">🥉</span>
+                    <div class="premio-valor">R$ 200</div>
+                    <div class="premio-tipo">Vale Compras</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOGOS DO BRASIL -->
+    <section class="jogos-section">
+        <div class="container">
+            <h2 class="section-title">⚽ Jogos do Brasil</h2>
+            <div class="jogos-grid" id="jogosGrid"></div>
+        </div>
+    </section>
+
+    <!-- FORM CADASTRO -->
+    <section class="form-section">
+        <div class="container">
+            <h2 class="section-title">🎯 Faça Seu Cadastro</h2>
+            <div class="form-container">
+                <div class="badge">Cadastro único por CPF/CNPJ</div>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage">
+                    <h3>✓ Parabéns!</h3>
+                    <p>Seus palpites foram registrados com sucesso!</p>
+                </div>
+
+                <form id="cadastroForm">
+                    <!-- Toggle CPF/CNPJ -->
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-btn active" data-type="cpf">CPF</button>
+                        <button type="button" class="toggle-btn" data-type="cnpj">CNPJ</button>
+                    </div>
+
+                    <!-- Nome -->
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" placeholder="João Silva" required>
+                    </div>
+
+                    <!-- CPF/CNPJ -->
+                    <div class="form-group">
+                        <label for="documento" id="labelDocumento">CPF *</label>
+                        <input type="text" id="documento" name="documento" placeholder="000.000.000-00" required maxlength="18">
+                    </div>
+
+                    <!-- Empresa -->
+                    <div class="form-group" id="empresaGroup" style="display: none;">
+                        <label for="empresa">Nome da Empresa *</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Sua Empresa LTDA">
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="form-group">
+                        <label for="telefone">Telefone *</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required maxlength="15">
+                    </div>
+
+                    <!-- Palpites -->
+                    <div class="form-group">
+                        <label>Seus Palpites *</label>
+                        <div class="palpites-container" id="palpitesContainer"></div>
+                    </div>
+
+                    <button type="button" class="submit-btn" onclick="enviarPalpites()">
+                        Enviar Palpites
+                    </button>
+
+                    <input type="hidden" id="tipoDocumento" value="cpf">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>💡 <strong>Dica:</strong> Quanto mais placares você acertar, maior o seu desconto!</p>
+        <p>Você pode participar apenas uma vez com o mesmo CPF/CNPJ</p>
+        <p style="margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">© 2026 - Bolão Virtual Copa do Mundo</p>
+    </footer>
+
+    <script>
+        // Configuração dos Jogos
+        const JOGOS = [
+            { id: 1, rodada: '1ª Rodada', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 2, rodada: '2ª Rodada', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 3, rodada: '3ª Rodada', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 4, rodada: 'Oitavas', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 5, rodada: 'Quartas', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 6, rodada: 'Semifinal', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+            { id: 7, rodada: 'Final', brasil: '🇧🇷', adversario: '?', data: 'Data a definir' },
+        ];
+
+        let tipoDocumento = 'cpf';
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarJogos();
+            renderizarPalpites();
+            setupToggle();
+            setupMascaras();
+            setupValidacao();
+        });
+
+        // Renderizar cards de jogos
+        function renderizarJogos() {
+            const container = document.getElementById('jogosGrid');
+            container.innerHTML = JOGOS.map((jogo, idx) => `
+                <div class="jogo-card" style="animation-delay: ${idx * 0.1}s">
+                    <div class="jogo-rodada">${jogo.rodada}</div>
+                    <div class="jogo-times">
+                        <span class="jogo-time">${jogo.brasil}</span>
+                        <span class="jogo-vs">vs</span>
+                        <span class="jogo-time">${jogo.adversario}</span>
+                    </div>
+                    <div class="jogo-data">${jogo.data}</div>
+                </div>
+            `).join('');
+        }
+
+        // Renderizar campos de palpites
+        function renderizarPalpites() {
+            const container = document.getElementById('palpitesContainer');
+            container.innerHTML = JOGOS.map(jogo => `
+                <div class="bet-match">
+                    <div class="match-name">${jogo.rodada}</div>
+                    <div class="score-inputs">
+                        <input type="number" class="score-input" data-jogo-id="${jogo.id}" data-tipo="gols_brasil" min="0" max="9" placeholder="0">
+                        <span class="score-separator">×</span>
+                        <input type="number" class="score-input" data-jogo-id="${jogo.id}" data-tipo="gols_adversario" min="0" max="9" placeholder="0">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Setup Toggle CPF/CNPJ
+        function setupToggle() {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    tipoDocumento = this.dataset.type;
+                    document.getElementById('tipoDocumento').value = tipoDocumento;
+                    
+                    const docInput = document.getElementById('documento');
+                    const labelDoc = document.getElementById('labelDocumento');
+                    const empresaGroup = document.getElementById('empresaGroup');
+                    
+                    if (tipoDocumento === 'cnpj') {
+                        docInput.placeholder = '00.000.000/0000-00';
+                        docInput.maxLength = '18';
+                        labelDoc.textContent = 'CNPJ *';
+                        empresaGroup.style.display = 'block';
+                    } else {
+                        docInput.placeholder = '000.000.000-00';
+                        docInput.maxLength = '14';
+                        labelDoc.textContent = 'CPF *';
+                        empresaGroup.style.display = 'none';
+                    }
+                    
+                    docInput.value = '';
+                    limparErro();
+                });
+            });
+        }
+
+        // Máscaras de entrada
+        function setupMascaras() {
+            const docInput = document.getElementById('documento');
+            const telInput = document.getElementById('telefone');
+
+            docInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                
+                if (tipoDocumento === 'cpf') {
+                    if (value.length > 11) value = value.slice(0, 11);
+                    this.value = value.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{2})/, '$1-$2');
+                } else {
+                    if (value.length > 14) value = value.slice(0, 14);
+                    this.value = value.replace(/(\d{2})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1/$2').replace(/(\d{4})(\d)/, '$1-$2');
+                }
+            });
+
+            telInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+                this.value = value.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2');
+            });
+        }
+
+        // Validação
+        function setupValidacao() {
+            document.getElementById('documento').addEventListener('blur', validarDocumento);
+        }
+
+        function validarDocumento() {
+            const docInput = document.getElementById('documento');
+            const value = docInput.value.replace(/\D/g, '');
+
+            if (tipoDocumento === 'cpf' && value.length === 11) {
+                if (validarCPF(value)) {
+                    docInput.style.borderColor = 'var(--verde)';
+                    if (verificarCPFJaUtilizado(value)) {
+                        mostrarErro('Este CPF já foi utilizado para participar!');
+                    }
+                }
+            } else if (tipoDocumento === 'cnpj' && value.length === 14) {
+                if (validarCNPJ(value)) {
+                    docInput.style.borderColor = 'var(--verde)';
+                    if (verificarCPFJaUtilizado(value)) {
+                        mostrarErro('Este CNPJ já foi utilizado para participar!');
+                    }
+                }
+            }
+        }
+
+        function validarCPF(cpf) {
+            if (cpf.length !== 11) return false;
+            let sum = 0, remainder;
+            if (cpf === '00000000000') return false;
+            
+            for (let i = 1; i <= 9; i++) {
+                sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            }
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+            
+            sum = 0;
+            for (let i = 1; i <= 10; i++) {
+                sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            }
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+            
+            return true;
+        }
+
+        function validarCNPJ(cnpj) {
+            if (cnpj.length !== 14) return false;
+            let size = cnpj.length - 2;
+            let numbers = cnpj.substring(0, size);
+            let digits = cnpj.substring(size);
+            let sum = 0, pos = size - 7;
+            
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            let result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+            if (result !== parseInt(digits.charAt(0))) return false;
+            
+            size = size - 1;
+            numbers = cnpj.substring(0, size);
+            sum = 0;
+            pos = size - 7;
+            
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+            if (result !== parseInt(digits.charAt(1))) return false;
+            
+            return true;
+        }
+
+        function verificarCPFJaUtilizado(documento) {
+            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            return participantes.some(p => p.documento === documento);
+        }
+
+        function enviarPalpites() {
+            const nome = document.getElementById('nome').value.trim();
+            const documento = document.getElementById('documento').value.replace(/\D/g, '');
+            const telefone = document.getElementById('telefone').value;
+            const empresa = document.getElementById('empresa').value.trim();
+
+            if (!nome) {
+                mostrarErro('Por favor, preencha o nome');
+                return;
+            }
+
+            if (!documento || (tipoDocumento === 'cpf' && documento.length !== 11) || (tipoDocumento === 'cnpj' && documento.length !== 14)) {
+                mostrarErro('Documento inválido');
+                return;
+            }
+
+            if (!telefone) {
+                mostrarErro('Por favor, preencha o telefone');
+                return;
+            }
+
+            if (tipoDocumento === 'cnpj' && !empresa) {
+                mostrarErro('Por favor, preencha o nome da empresa');
+                return;
+            }
+
+            if (verificarCPFJaUtilizado(documento)) {
+                mostrarErro('Este ' + (tipoDocumento === 'cpf' ? 'CPF' : 'CNPJ') + ' já foi utilizado!');
+                return;
+            }
+
+            const palpites = {};
+            document.querySelectorAll('.score-input').forEach(input => {
+                const jogoId = input.dataset.jogoId;
+                const tipo = input.dataset.tipo;
+                if (!palpites[jogoId]) palpites[jogoId] = {};
+                palpites[jogoId][tipo] = parseInt(input.value) || 0;
+            });
+
+            // Salvar dados
+            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            participantes.push({
+                nome, documento, telefone,
+                empresa: tipoDocumento === 'cnpj' ? empresa : null,
+                tipoDocumento, palpites,
+                data: new Date().toLocaleString('pt-BR')
+            });
+            localStorage.setItem('bolao_participantes', JSON.stringify(participantes));
+
+            document.getElementById('successMessage').classList.add('show');
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('cadastroForm').style.opacity = '0.6';
+            document.getElementById('cadastroForm').style.pointerEvents = 'none';
+
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function mostrarErro(mensagem) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = '⚠️ ' + mensagem;
+            errorEl.classList.add('show');
+            document.getElementById('successMessage').classList.remove('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        function limparErro() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
