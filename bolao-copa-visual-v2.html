@@ -1594,8 +1594,10 @@
         // ============================================
         function renderizarPalpites() {
             const container = document.getElementById('palpitesContainer');
-            const palpitesAtivos = JOGOS.slice(0, 1); // só o 1º jogo liberado
-            const palpitesBloqueados = JOGOS.slice(1); // resto bloqueado
+            // Jogos liberados pelo admin
+            const jogosLiberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
+            const palpitesAtivos = JOGOS.filter(j => jogosLiberados.includes(j.id));
+            const palpitesBloqueados = JOGOS.filter(j => !jogosLiberados.includes(j.id));
 
             let html = '';
 
@@ -1830,9 +1832,10 @@
                 document.getElementById('erroEmpresa').classList.remove('show');
             }
 
-            // Palpites - apenas o 1º jogo
-            const jogosGrupo = JOGOS.slice(0, 1);
-            const todosPreenchidos = jogosGrupo.every(jogo => {
+            // Palpites - verificar jogos liberados
+            const jogosLiberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
+            const jogosParaValidar = JOGOS.filter(j => jogosLiberados.includes(j.id));
+            const todosPreenchidos = jogosParaValidar.every(jogo => {
                 const brasil = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_brasil"]`);
                 const adv = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_adversario"]`);
                 return brasil && adv && brasil.value !== '' && adv.value !== '';

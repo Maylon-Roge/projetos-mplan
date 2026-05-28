@@ -1183,10 +1183,14 @@ function renderizarJogos() {
         html += '    <button class="btn btn-primary btn-sm" onclick="salvarResultado(' + jogo.id + ')">💾 Salvar</button>';
         html += '    <div class="game-status">';
         if (temResultado) {
-            html += '      <span class="badge badge-green">✅ Realizado</span>';
+            html += '      <span class="badge badge-green"> Realizado</span>';
         } else {
-            html += '      <span class="badge badge-gray">⏳ Pendente</span>';
+            html += '      <span class="badge badge-gray"> Pendente</span>';
         }
+        // Toggle liberar palpite
+        var lib = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || "[1]");
+        var estaLib = lib.indexOf(jogo.id) >= 0;
+        html += '      <button class="btn btn-sm ' + (estaLib ? "btn-warning" : "btn-outline") + '" onclick="toggleLiberarJogo(' + jogo.id + ')" style="margin-left:8px;">' + (estaLib ? " Liberado" : " Bloqueado") + '</button>';
         html += '    </div>';
         html += '  </div>';
         html += '</div>';
@@ -1200,12 +1204,12 @@ function salvarResultado(jogoId) {
     const golsFora = parseInt(document.getElementById('golsFora_' + jogoId).value);
 
     if (isNaN(golsCasa) || isNaN(golsFora)) {
-        mostrarToast('⚠️ Preencha ambos os campos de gols!', 'error');
+        mostrarToast('Aviso: Preencha ambos os campos de gols!', 'error');
         return;
     }
 
     if (golsCasa < 0 || golsFora < 0) {
-        mostrarToast('⚠️ Os valores não podem ser negativos!', 'error');
+        mostrarToast('Aviso: Os valores nao podem ser negativos!', 'error');
         return;
     }
 
@@ -1213,7 +1217,21 @@ function salvarResultado(jogoId) {
     resultados[jogoId] = { gols_casa: golsCasa, gols_fora: golsFora };
     salvarResultados(resultados);
     renderizarJogos();
-    mostrarToast('✅ Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')', 'success');
+    mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')', 'success');
+}
+
+function toggleLiberarJogo(jogoId) {
+    const liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
+    const idx = liberados.indexOf(jogoId);
+    if (idx >= 0) {
+        liberados.splice(idx, 1);
+        mostrarToast('Jogo ' + jogoId + ' bloqueado para palpites', 'info');
+    } else {
+        liberados.push(jogoId);
+        mostrarToast('Jogo ' + jogoId + ' liberado para palpites!', 'success');
+    }
+    localStorage.setItem('bolao_jogos_liberados', JSON.stringify(liberados));
+    renderizarJogos();
 }
 
 // ============================================
