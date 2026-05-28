@@ -567,8 +567,8 @@
 
         .jogo-time-flag {
             font-size: 2.6rem;
-            line-height: 1;
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+            line-height: 1.2;
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'EmojiOne Color', sans-serif;
         }
 
         .jogo-time-nome {
@@ -1600,7 +1600,7 @@
             html += palpitesAtivos.map(jogo => {
                 return `
                     <div class="bet-match" id="bet-${jogo.id}">
-                        <div class="match-flags" style="display:flex;align-items:center;gap:6px;font-size:2rem;min-width:100px;">
+                        <div class="match-flags" style="display:flex;align-items:center;gap:6px;font-size:2.2rem;min-width:110px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1.2;">
                             <span>${jogo.bandeiraCasa}</span>
                             <span style="font-size:0.7rem;opacity:0.5;">vs</span>
                             <span>${jogo.bandeiraFora}</span>
@@ -1623,9 +1623,9 @@
             html += palpitesBloqueados.map(jogo => {
                 return `
                     <div class="bet-match" style="opacity:0.5;background:var(--cinza-light);">
-                        <div class="match-flags">
+                        <div class="match-flags" style="display:flex;align-items:center;gap:6px;font-size:1.5rem;min-width:80px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;">
                             <span>${jogo.bandeiraCasa}</span>
-                            <span style="font-size:0.7rem;opacity:0.6;">vs</span>
+                            <span style="font-size:0.6rem;opacity:0.5;">vs</span>
                             <span>${jogo.bandeiraFora}</span>
                         </div>
                         <div class="match-name">${jogo.rodada}<br><span style="font-weight:400;font-size:0.75rem;color:var(--cinza-texto);">${jogo.data}</span></div>
