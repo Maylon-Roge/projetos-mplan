@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Copa do Mundo 2026 🏆 - Master Plan</title>
+    <meta name="description" content="Participe do Bolão Virtual da Copa do Mundo 2026. Faça seus palpites, acumule pontos e concorra a prêmios incríveis!">
+    <meta name="keywords" content="bolão, copa do mundo, 2026, palpites, futebol, Brasil">
+    
+    <!-- Open Graph / WhatsApp / Redes Sociais -->
+    <meta property="og:title" content="Bolão Copa do Mundo 2026 🏆">
+    <meta property="og:description" content="Faça seus palpites nos jogos do Brasil e concorra a R$ 500 em vale-compras!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://maylon-roge.github.io/projetos-mplan/bolao-copa-visual-v2.html">
+    <meta property="og:image" content="https://maylon-roge.github.io/projetos-mplan/assets/bolao-og.jpg">
+    <meta name="theme-color" content="#003399">
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-escuro: #003399;
+            --azul-claro: #004dd9;
+            --amarelo: #FFD000;
+            --verde: #00A651;
+            --vermelho: #E63946;
+            --preto: #000a1f;
+            --branco: #ffffff;
+            --cinza-light: #f5f5f5;
+            --cinza: #e0e0e0;
+            --cinza-texto: #666;
+            --sombra-suave: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --sombra-media: 0 20px 60px rgba(0, 0, 0, 0.2);
+            --sombra-forte: 0 30px 60px rgba(0, 0, 0, 0.3);
+            --raio: 12px;
+            --raio-card: 20px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--azul-escuro);
+            color: var(--preto);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           BACKGROUND & DECORATIVE ELEMENTS
+           ============================================ */
+        .background-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .decoration {
+            position: absolute;
+            opacity: 0.06;
+            font-size: 200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration:nth-child(1) { top: -50px; right: -50px; animation-delay: 0s; }
+        .decoration:nth-child(2) { bottom: 100px; left: -100px; animation-delay: 2s; }
+        .decoration:nth-child(3) { top: 50%; right: 10%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(30px) rotate(5deg); }
+        }
+
+        /* ============================================
+           CONTAINER & LAYOUT
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           HEADER & HERO
+           ============================================ */
+        header {
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            padding: 50px 0;
+            text-align: center;
+            border-bottom: 5px solid var(--amarelo);
+            animation: slideDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 208, 0, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 166, 81, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .mascote {
+            font-size: 90px;
+            margin-bottom: 15px;
+            animation: bounce 0.8s ease-out;
+            display: inline-block;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0.3) translateY(-50px); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--branco);
+            font-weight: 300;
+            margin-bottom: 10px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .countdown-container {
+            animation: slideUp 0.8s ease-out 0.25s both;
+            margin-bottom: 25px;
+        }
+
+        .countdown-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .countdown-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 10px 16px;
+            min-width: 65px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .countdown-number {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--amarelo);
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-text {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--amarelo);
+            color: var(--azul-escuro);
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 208, 0, 0.3);
+            animation: slideUp 0.8s ease-out 0.3s both;
+            font-family: 'Bebas Neue', cursive;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 208, 0, 0.5);
+            background: #ffe500;
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           NAVEGAÇÃO RÁPIDA
+           ============================================ */
+        .nav-rapida {
+            background: var(--preto);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-rapida .container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: var(--branco);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            background: var(--amarelo);
+            color: var(--azul-escuro);
+        }
+
+        /* ============================================
+           SEÇÕES
+           ============================================ */
+        .section {
+            padding: 70px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.8rem;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .section-title-branco {
+            color: var(--branco);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--cinza-texto);
+            margin-top: -30px;
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           COMO FUNCIONA
+           ============================================ */
+        .como-funciona {
+            background: var(--branco);
+            border-radius: var(--raio-card);
+            padding: 50px;
+            box-shadow: var(--sombra-media);
+        }
+
+        .passos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            position: relative;
+        }
+
+        .passo {
+            text-align: center;
+        }
+
+        .passo-numero {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--amarelo), #ffb800);
+            color: var(--azul-escuro);
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 10px 25px rgba(255, 208, 0, 0.3);
+        }
+
+        .passo-titulo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .passo-descricao {
+            color: var(--cinza-texto);
+            font-size: 0.95rem;
+        }
+
+        @media (min-width: 768px) {
+            .passos {
+                position: relative;
+            }
+            .passo::after {
+                content: '→';
+                position: absolute;
+                right: -30px;
+                top: 30px;
+                font-size: 2rem;
+                color: var(--amarelo);
+                font-weight: bold;
+            }
+            .passo:last-child::after { display: none; }
+        }
+
+        /* ============================================
+           PREMIAÇÕES
+           ============================================ */
+        .premiacoes-section {
+            background: linear-gradient(135deg, var(--amarelo) 0%, #ffb800 100%);
+            padding: 70px 0;
+        }
+
+        .premiacoes-section .section-title {
+            color: var(--azul-escuro);
+        }
+
+        .cards-premios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card-premio {
+            background: var(--branco);
+            border-radius: 15px;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: var(--sombra-suave);
+            transform: translateY(0);
+            transition: all 0.4s ease;
+            border: 4px solid var(--azul-escuro);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-premio::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--amarelo), var(--verde));
+        }
+
+        .card-premio:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-premio.destaque {
+            border-color: var(--amarelo);
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 208, 0, 0.3);
+        }
+
+        .card-premio.destaque:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .card-premio .badge-destaque {
+            position: absolute;
+            top: -3px;
+            right: 20px;
+            background: var(--vermelho);
+            color: var(--branco);
+            padding: 4px 16px;
+            border-radius: 0 0 8px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .premio-posicao {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .premio-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .premio-valor {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--verde);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .premio-tipo {
+            color: var(--cinza-texto);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           JOGOS DO BRASIL
+           ============================================ */
+        .jogos-section {
+            background: var(--branco);
+            padding: 70px 0;
+        }
+
+        .jogos-section .section-title {
+            color: var(--azul-escuro);
+        }
+
+        .jogos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .jogo-card {
+            background: linear-gradient(135deg, var(--verde) 0%, #009640 100%);
+            color: var(--branco);
+            padding: 20px 15px;
+            border-radius: var(--raio);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 166, 81, 0.2);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .jogo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 166, 81, 0.3);
+        }
+
+        .jogo-card.realizado {
+            opacity: 0.7;
+            filter: grayscale(0.3);
+        }
+
+        .jogo-rodada {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 0.9rem;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .jogo-times {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 10px 0;
+            gap: 8px;
+        }
+
+        .jogo-time {
+            font-size: 1.8rem;
+        }
+
+        .jogo-vs {
+            font-size: 0.7rem;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        .jogo-data {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .jogo-placar {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.2rem;
+            margin-top: 6px;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* ============================================
+           RANKING
+           ============================================ */
+        .ranking-section {
+            background: linear-gradient(135deg, var(--preto) 0%, #001a3a 100%);
+            padding: 70px 0;
+        }
+
+        .ranking-container {
+            background: var(--branco);
+            border-radius: var(--raio-card);
+            padding: 30px;
+            box-shadow: var(--sombra-forte);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ranking-vazio {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--cinza-texto);
+        }
+
+        .ranking-vazio .emoji {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .ranking-tabela {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ranking-tabela th {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 3px solid var(--amarelo);
+        }
+
+        .ranking-tabela th:last-child,
+        .ranking-tabela td:last-child {
+            text-align: center;
+        }
+
+        .ranking-tabela td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--cinza);
+            font-size: 0.95rem;
+        }
+
+        .ranking-tabela tr:hover td {
+            background: rgba(0, 51, 153, 0.03);
+        }
+
+        .ranking-tabela .posicao {
+            font-weight: 800;
+            font-size: 1.1rem;
+            width: 40px;
+        }
+
+        .ranking-tabela .posicao-1 { color: #FFD700; }
+        .ranking-tabela .posicao-2 { color: #C0C0C0; }
+        .ranking-tabela .posicao-3 { color: #CD7F32; }
+
+        .ranking-tabela .nome-participante {
+            font-weight: 600;
+        }
+
+        .ranking-tabela .pontos {
+            font-weight: 800;
+            color: var(--verde);
+            font-size: 1.1rem;
+        }
+
+        .ranking-tabela .acertos {
+            font-size: 0.85rem;
+            color: var(--cinza-texto);
+        }
+
+        /* ============================================
+           REGULAMENTO
+           ============================================ */
+        .regulamento-section {
+            background: var(--cinza-light);
+            padding: 70px 0;
+        }
+
+        .regulamento-section .section-title {
+            color: var(--azul-escuro);
+        }
+
+        .regulamento-content {
+            background: var(--branco);
+            border-radius: var(--raio-card);
+            padding: 40px;
+            box-shadow: var(--sombra-suave);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .regulamento-content h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.4rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .regulamento-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .regulamento-content p,
+        .regulamento-content li {
+            color: var(--cinza-texto);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .regulamento-content ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .regulamento-content li {
+            margin-bottom: 6px;
+        }
+
+        .regulamento-content li::marker {
+            color: var(--amarelo);
+        }
+
+        /* ============================================
+           FORMULÁRIO
+           ============================================ */
+        .form-section {
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            padding: 70px 0;
+        }
+
+        .form-section .section-title {
+            color: var(--amarelo);
+        }
+
+        .form-container {
+            background: var(--branco);
+            border-radius: var(--raio-card);
+            padding: 45px;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: var(--sombra-forte);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--verde);
+            color: var(--branco);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 3px solid var(--cinza);
+            border-radius: 10px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        .toggle-btn.active {
+            background: var(--verde);
+            color: var(--branco);
+            border-color: var(--verde);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--cinza);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--verde);
+            box-shadow: 0 0 0 4px rgba(0, 166, 81, 0.1);
+            background-color: #f9fff8;
+        }
+
+        .form-group input.error {
+            border-color: var(--vermelho);
+            box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.1);
+        }
+
+        .form-group .field-error {
+            color: var(--vermelho);
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-group .field-error.show {
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            background: var(--vermelho);
+            color: var(--branco);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            animation: shake 0.3s ease-out;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--verde), #009640);
+            color: var(--branco);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message .emoji-big {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .success-message h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .success-message p {
+            margin-bottom: 6px;
+            opacity: 0.9;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--verde), #009640);
+            color: var(--branco);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            font-family: 'Bebas Neue', cursive;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 10px 30px rgba(0, 166, 81, 0.2);
+            position: relative;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 166, 81, 0.3);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .submit-btn .spinner {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid var(--branco);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        .submit-btn.loading .btn-text { display: none; }
+        .submit-btn.loading .spinner { display: block; }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-secundario {
+            display: inline-block;
+            padding: 12px 30px;
+            background: transparent;
+            color: var(--branco);
+            border: 2px solid var(--branco);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Bebas Neue', cursive;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-secundario:hover {
+            background: var(--branco);
+            color: var(--azul-escuro);
+        }
+
+        /* ============================================
+           PALPITES
+           ============================================ */
+        .palpites-container {
+            background: var(--cinza-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .bet-match {
+            background: var(--branco);
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .bet-match:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .bet-match.filled {
+            border-left: 4px solid var(--verde);
+        }
+
+        .match-name {
+            flex: 1;
+            font-weight: 700;
+            color: var(--azul-escuro);
+            font-size: 0.9rem;
+            min-width: 80px;
+        }
+
+        .match-flags {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.2rem;
+        }
+
+        .score-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .score-inputs input {
+            width: 50px;
+            padding: 8px !important;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 2px solid var(--verde) !important;
+            border-radius: 8px;
+        }
+
+        .score-separator {
+            font-weight: 800;
+            color: var(--verde);
+            font-size: 1.3rem;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--preto);
+            color: var(--branco);
+            text-align: center;
+            padding: 50px 20px 30px;
+            border-top: 5px solid var(--amarelo);
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: var(--amarelo);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        footer .footer-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* ============================================
+           TOAST / NOTIFICAÇÃO
+           ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--preto);
+            color: var(--branco);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-media);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            max-width: 400px;
+            border-left: 5px solid var(--verde);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--vermelho);
+        }
+
+        /* ============================================
+           RESPONSIVO
+           ============================================ */
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5rem; }
+            .section-title { font-size: 2rem !important; }
+            .form-container { padding: 25px; }
+            .como-funciona { padding: 30px; }
+            .regulamento-content { padding: 25px; }
+
+            .passos { grid-template-columns: 1fr; }
+            .passo::after { display: none !important; }
+
+            .cards-premios { grid-template-columns: 1fr; }
+            .card-premio.destaque { transform: none; }
+            .card-premio.destaque:hover { transform: translateY(-10px); }
+
+            .bet-match {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .match-flags { align-self: center; }
+
+            .score-inputs {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .jogos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .nav-rapida .container {
+                gap: 5px;
+            }
+
+            .nav-link {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .ranking-tabela { font-size: 0.85rem; }
+            .ranking-tabela th,
+            .ranking-tabela td { padding: 8px 6px; }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.8rem; }
+            .mascote { font-size: 60px; }
+            .tagline { font-size: 1rem; }
+            .section { padding: 45px 0; }
+            .countdown { gap: 8px; }
+            .countdown-item { min-width: 55px; padding: 8px 10px; }
+            .countdown-number { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-decoration">
+        <div class="decoration">🇧🇷</div>
+        <div class="decoration">🏆</div>
+        <div class="decoration">⚽</div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="mascote">🏆</div>
+                <h1 class="logo">Bolão Copa 2026</h1>
+                <p class="tagline">Faça seus palpites nos jogos do Brasil e ganhe descontos exclusivos!</p>
+                
+                <div class="countdown-container">
+                    <div class="countdown-label">⏱ Próximo jogo do Brasil em</div>
+                    <div class="countdown" id="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="countdown-dias">--</span>
+                            <span class="countdown-text">Dias</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="countdown-horas">--</span>
+                            <span class="countdown-text">Horas</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="countdown-minutos">--</span>
+                            <span class="countdown-text">Min</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="countdown-segundos">--</span>
+                            <span class="countdown-text">Seg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="cta-button" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
+                    Quero Participar!
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGAÇÃO RÁPIDA -->
+    <nav class="nav-rapida" aria-label="Navegação rápida">
+        <div class="container">
+            <a href="#comoFunciona" class="nav-link">⚡ Como Funciona</a>
+            <a href="#premiacoes" class="nav-link">🏆 Prêmios</a>
+            <a href="#jogos" class="nav-link">⚽ Jogos</a>
+            <a href="#ranking" class="nav-link">📊 Ranking</a>
+            <a href="#regulamento" class="nav-link">📜 Regras</a>
+            <a href="#formSection" class="nav-link">🎯 Cadastro</a>
+        </div>
+    </nav>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section" id="comoFunciona">
+        <div class="container">
+            <h2 class="section-title">⚡ Como Funciona?</h2>
+            <div class="como-funciona reveal">
+                <div class="passos">
+                    <div class="passo">
+                        <div class="passo-numero">1</div>
+                        <h3 class="passo-titulo">Cadastre-se</h3>
+                        <p class="passo-descricao">Preencha seus dados e escolha CPF ou CNPJ</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">2</div>
+                        <h3 class="passo-titulo">Faça Palpites</h3>
+                        <p class="passo-descricao">Acerte os placares dos jogos do Brasil na Copa</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">3</div>
+                        <h3 class="passo-titulo">Acumule Pontos</h3>
+                        <p class="passo-descricao">Cada acerto vale pontos. Quem acerta mais, ganha</p>
+                    </div>
+                    <div class="passo">
+                        <div class="passo-numero">4</div>
+                        <h3 class="passo-titulo">Ganhe Prêmios</h3>
+                        <p class="passo-descricao">Os melhores colocados levam vale-compras!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREMIAÇÕES -->
+    <section class="premiacoes-section" id="premiacoes">
+        <div class="container">
+            <h2 class="section-title">🏆 Premiações</h2>
+            <div class="cards-premios">
+                <div class="card-premio">
+                    <div class="premio-posicao">2º Lugar</div>
+                    <span class="premio-emoji">🥈</span>
+                    <div class="premio-valor">R$ 300</div>
+                    <div class="premio-tipo">em Vale-Compras</div>
+                </div>
+                <div class="card-premio destaque">
+                    <span class="badge-destaque">🎯 Melhor</span>
+                    <div class="premio-posicao">1º Lugar</div>
+                    <span class="premio-emoji">🥇</span>
+                    <div class="premio-valor" style="font-size:3rem;">R$ 500</div>
+                    <div class="premio-tipo">em Vale-Compras</div>
+                </div>
+                <div class="card-premio">
+                    <div class="premio-posicao">3º Lugar</div>
+                    <span class="premio-emoji">🥉</span>
+                    <div class="premio-valor">R$ 200</div>
+                    <div class="premio-tipo">em Vale-Compras</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOGOS DO BRASIL -->
+    <section class="jogos-section" id="jogos">
+        <div class="container">
+            <h2 class="section-title">⚽ Jogos do Brasil na Copa 2026</h2>
+            <p class="section-subtitle">Toque em cada jogo para ver detalhes</p>
+            <div class="jogos-grid" id="jogosGrid"></div>
+        </div>
+    </section>
+
+    <!-- RANKING -->
+    <section class="ranking-section" id="ranking">
+        <div class="container">
+            <h2 class="section-title section-title-branco">📊 Ranking do Bolão</h2>
+            <div class="ranking-container reveal" id="rankingContainer">
+                <div class="ranking-vazio" id="rankingVazio">
+                    <span class="emoji">📋</span>
+                    <p><strong>Ninguém participou ainda!</strong></p>
+                    <p style="margin-top:8px;">Seja o primeiro a fazer seus palpites!</p>
+                </div>
+                <div id="rankingTabelaWrapper" style="display:none;">
+                    <table class="ranking-tabela">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Participante</th>
+                                <th>Palpites</th>
+                                <th>Pontos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGULAMENTO -->
+    <section class="regulamento-section" id="regulamento">
+        <div class="container">
+            <h2 class="section-title">📜 Regulamento</h2>
+            <div class="regulamento-content reveal">
+                <h3>📋 Como participar</h3>
+                <p>O bolão é válido para <strong>clientes Master Plan</strong>. Cada CPF/CNPJ pode participar <strong>uma única vez</strong>.</p>
+
+                <h3>⚽ Pontuação</h3>
+                <ul>
+                    <li><strong>Acerto do placar exato:</strong> 5 pontos</li>
+                    <li><strong>Acerto do vencedor ou empate:</strong> 3 pontos</li>
+                    <li><strong>Erro completo:</strong> 0 pontos</li>
+                </ul>
+
+                <h3>🏆 Desempate</h3>
+                <p>Em caso de empate, vence quem tiver mais <strong>placares exatos</strong>. Persistindo o empate, a data de inscrição mais antiga define o vencedor.</p>
+
+                <h3>📅 Período</h3>
+                <p>Os palpites devem ser enviados <strong>antes do início do primeiro jogo do Brasil</strong> na Copa do Mundo 2026. Palpites enviados após o início do torneio não serão considerados.</p>
+
+                <h3>🎁 Prêmios</h3>
+                <p>Os prêmios serão entregues em forma de <strong>vale-compras</strong> na loja Master Plan, válidos por 30 dias após o término da Copa.</p>
+
+                <h3>⚠️ Disposições Gerais</h3>
+                <p>Casos omissos serão resolvidos pela organização. A participação no bolão implica aceitação total deste regulamento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMULÁRIO -->
+    <section class="form-section" id="formSection">
+        <div class="container">
+            <h2 class="section-title">🎯 Faça Seus Palpites</h2>
+            <div class="form-container reveal">
+                <div class="badge">📢 Cadastro único por CPF/CNPJ</div>
+
+                <div class="error-message" id="errorMessage"></div>
+
+                <div class="success-message" id="successMessage">
+                    <span class="emoji-big">🎉</span>
+                    <h3>Parabéns!</h3>
+                    <p>Seus palpites foram registrados com sucesso!</p>
+                    <p style="font-size:0.85rem;margin-top:10px;opacity:0.8;">Boa sorte na Copa do Mundo 2026! 🇧🇷🏆</p>
+                    <button class="btn-secundario" onclick="resetarFormulario()">📝 Novo Cadastro</button>
+                </div>
+
+                <form id="cadastroForm" novalidate>
+                    <!-- Toggle CPF/CNPJ -->
+                    <div class="toggle-group" role="group" aria-label="Tipo de documento">
+                        <button type="button" class="toggle-btn active" data-type="cpf" aria-pressed="true">🧑 CPF</button>
+                        <button type="button" class="toggle-btn" data-type="cnpj" aria-pressed="false">🏢 CNPJ</button>
+                    </div>
+
+                    <!-- Nome -->
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" placeholder="João Silva" required autocomplete="name">
+                        <div class="field-error" id="erroNome">Por favor, preencha seu nome</div>
+                    </div>
+
+                    <!-- CPF/CNPJ -->
+                    <div class="form-group">
+                        <label for="documento" id="labelDocumento">CPF *</label>
+                        <input type="text" id="documento" name="documento" placeholder="000.000.000-00" required maxlength="18" autocomplete="off">
+                        <div class="field-error" id="erroDocumento">Documento inválido</div>
+                    </div>
+
+                    <!-- Empresa -->
+                    <div class="form-group" id="empresaGroup" style="display:none;">
+                        <label for="empresa">Nome da Empresa *</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Sua Empresa LTDA" autocomplete="organization">
+                        <div class="field-error" id="erroEmpresa">Preencha o nome da empresa</div>
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="form-group">
+                        <label for="telefone">Telefone *</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required maxlength="15" autocomplete="tel">
+                        <div class="field-error" id="erroTelefone">Telefone inválido</div>
+                    </div>
+
+                    <!-- Palpites -->
+                    <div class="form-group">
+                        <label>Seus Palpites * <span style="font-weight:400;text-transform:none;color:var(--cinza-texto);font-size:0.8rem;">(preencha todos)</span></label>
+                        <div class="palpites-container" id="palpitesContainer"></div>
+                        <div class="field-error" id="erroPalpites">Preencha todos os palpites antes de enviar</div>
+                    </div>
+
+                    <button type="button" class="submit-btn" id="submitBtn" onclick="enviarPalpites()">
+                        <span class="btn-text">🚀 Enviar Palpites</span>
+                        <span class="spinner"></span>
+                    </button>
+
+                    <input type="hidden" id="tipoDocumento" value="cpf">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="#comoFunciona">⚡ Como Funciona</a>
+            <a href="#premiacoes">🏆 Prêmios</a>
+            <a href="#regulamento">📜 Regulamento</a>
+            <a href="#formSection">🎯 Participar</a>
+        </div>
+        <p>💡 <strong>Dica:</strong> Quanto mais placares você acertar, maior a pontuação!</p>
+        <p>⚠️ Cada CPF/CNPJ pode participar apenas uma vez</p>
+        <p style="margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">
+            &copy; 2026 - Bolão Virtual Copa do Mundo 🏆 | Master Plan
+        </p>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============================================
+        // CONFIGURAÇÃO DOS JOGOS (EDITÁVEL)
+        // ============================================
+        const JOGOS = [
+            { id: 1, rodada: '1ª Rodada', brasil: '🇧🇷', adversario: '🇨🇲', nomeAdversario: 'Camarões',   data: '15/06/2026 16:00', local: 'Nova York' },
+            { id: 2, rodada: '2ª Rodada', brasil: '🇧🇷', adversario: '🇵🇹', nomeAdversario: 'Portugal',    data: '20/06/2026 13:00', local: 'Miami' },
+            { id: 3, rodada: '3ª Rodada', brasil: '🇧🇷', adversario: '🇳🇿', nomeAdversario: 'Nova Zelândia', data: '25/06/2026 21:00', local: 'Los Angeles' },
+            { id: 4, rodada: 'Oitavas',   brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
+            { id: 5, rodada: 'Quartas',   brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
+            { id: 6, rodada: 'Semifinal', brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
+            { id: 7, rodada: 'Final',     brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
+        ];
+
+        // ============================================
+        // STATE
+        // ============================================
+        let tipoDocumento = 'cpf';
+        let enviando = false;
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarJogos();
+            renderizarPalpites();
+            setupToggle();
+            setupMascaras();
+            setupValidacao();
+            atualizarRanking();
+            iniciarCountdown();
+            setupRevealAnimations();
+        });
+
+        // ============================================
+        // ANIMAÇÕES COM INTERSECTION OBSERVER
+        // ============================================
+        function setupRevealAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ============================================
+        // COUNTDOWN
+        // ============================================
+        function iniciarCountdown() {
+            // Pega o primeiro jogo com data definida, ou usa uma data futura
+            const primeiroJogo = JOGOS.find(j => j.data !== 'Data a definir');
+            if (!primeiroJogo) {
+                document.getElementById('countdown').innerHTML =
+                    '<span style="color:rgba(255,255,255,0.6);font-size:0.9rem;">Aguardando definição dos jogos</span>';
+                return;
+            }
+
+            const [dia, mes, ano] = primeiroJogo.data.split(' ')[0].split('/');
+            const [hora, min] = primeiroJogo.data.split(' ')[1].split(':');
+            const dataAlvo = new Date(parseInt(ano), parseInt(mes)-1, parseInt(dia), parseInt(hora), parseInt(min));
+
+            function tick() {
+                const agora = new Date();
+                const diff = dataAlvo - agora;
+
+                if (diff <= 0) {
+                    document.getElementById('countdown-dias').textContent = '00';
+                    document.getElementById('countdown-horas').textContent = '00';
+                    document.getElementById('countdown-minutos').textContent = '00';
+                    document.getElementById('countdown-segundos').textContent = '00';
+                    return;
+                }
+
+                const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-dias').textContent = String(dias).padStart(2, '0');
+                document.getElementById('countdown-horas').textContent = String(horas).padStart(2, '0');
+                document.getElementById('countdown-minutos').textContent = String(minutos).padStart(2, '0');
+                document.getElementById('countdown-segundos').textContent = String(segundos).padStart(2, '0');
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        }
+
+        // ============================================
+        // RENDERIZAR JOGOS
+        // ============================================
+        function renderizarJogos() {
+            const container = document.getElementById('jogosGrid');
+            container.innerHTML = JOGOS.map(jogo => {
+                const isPlaceholder = jogo.adversario === '?';
+                return `
+                    <div class="jogo-card ${isPlaceholder ? '' : ''}">
+                        <div class="jogo-rodada">${jogo.rodada}</div>
+                        <div class="jogo-times">
+                            <span class="jogo-time">${jogo.brasil}</span>
+                            <span class="jogo-vs">vs</span>
+                            <span class="jogo-time">${jogo.adversario}</span>
+                        </div>
+                        ${!isPlaceholder ? `<div class="jogo-placar">${jogo.nomeAdversario}</div>` : ''}
+                        <div class="jogo-data">📅 ${jogo.data}</div>
+                        ${jogo.local !== 'A definir' ? `<div class="jogo-data">📍 ${jogo.local}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // RENDERIZAR PALPITES
+        // ============================================
+        function renderizarPalpites() {
+            const container = document.getElementById('palpitesContainer');
+            container.innerHTML = JOGOS.map(jogo => {
+                const nomeAdv = jogo.nomeAdversario || 'Adversário';
+                return `
+                    <div class="bet-match" id="bet-${jogo.id}">
+                        <div class="match-flags">
+                            <span>${jogo.brasil}</span>
+                            <span style="font-size:0.7rem;opacity:0.6;">vs</span>
+                            <span>${jogo.adversario}</span>
+                        </div>
+                        <div class="match-name">${jogo.rodada}<br><span style="font-weight:400;font-size:0.75rem;color:var(--cinza-texto);">${nomeAdv}</span></div>
+                        <div class="score-inputs">
+                            <input type="number" class="score-input" data-jogo-id="${jogo.id}" data-tipo="gols_brasil" min="0" max="9" placeholder="0" oninput="marcarPreenchido(${jogo.id})">
+                            <span class="score-separator">×</span>
+                            <input type="number" class="score-input" data-jogo-id="${jogo.id}" data-tipo="gols_adversario" min="0" max="9" placeholder="0" oninput="marcarPreenchido(${jogo.id})">
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function marcarPreenchido(jogoId) {
+            const inputBrasil = document.querySelector(`.score-input[data-jogo-id="${jogoId}"][data-tipo="gols_brasil"]`);
+            const inputAdv = document.querySelector(`.score-input[data-jogo-id="${jogoId}"][data-tipo="gols_adversario"]`);
+            const betMatch = document.getElementById(`bet-${jogoId}`);
+            if (inputBrasil.value !== '' && inputAdv.value !== '') {
+                betMatch.classList.add('filled');
+            } else {
+                betMatch.classList.remove('filled');
+            }
+            document.getElementById('erroPalpites').classList.remove('show');
+        }
+
+        // ============================================
+        // TOGGLE CPF/CNPJ
+        // ============================================
+        function setupToggle() {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-pressed', 'true');
+
+                    tipoDocumento = this.dataset.type;
+                    document.getElementById('tipoDocumento').value = tipoDocumento;
+
+                    const docInput = document.getElementById('documento');
+                    const labelDoc = document.getElementById('labelDocumento');
+                    const empresaGroup = document.getElementById('empresaGroup');
+
+                    if (tipoDocumento === 'cnpj') {
+                        docInput.placeholder = '00.000.000/0000-00';
+                        docInput.maxLength = '18';
+                        labelDoc.textContent = 'CNPJ *';
+                        empresaGroup.style.display = 'block';
+                    } else {
+                        docInput.placeholder = '000.000.000-00';
+                        docInput.maxLength = '14';
+                        labelDoc.textContent = 'CPF *';
+                        empresaGroup.style.display = 'none';
+                    }
+
+                    docInput.value = '';
+                    limparErro();
+                });
+            });
+        }
+
+        // ============================================
+        // MÁSCARAS
+        // ============================================
+        function setupMascaras() {
+            const docInput = document.getElementById('documento');
+            const telInput = document.getElementById('telefone');
+
+            docInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (tipoDocumento === 'cpf') {
+                    if (value.length > 11) value = value.slice(0, 11);
+                    this.value = value
+                        .replace(/(\d{3})(\d)/, '$1.$2')
+                        .replace(/(\d{3})(\d)/, '$1.$2')
+                        .replace(/(\d{3})(\d{2})/, '$1-$2');
+                } else {
+                    if (value.length > 14) value = value.slice(0, 14);
+                    this.value = value
+                        .replace(/(\d{2})(\d)/, '$1.$2')
+                        .replace(/(\d{3})(\d)/, '$1.$2')
+                        .replace(/(\d{3})(\d)/, '$1/$2')
+                        .replace(/(\d{4})(\d)/, '$1-$2');
+                }
+            });
+
+            telInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+                this.value = value
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{5})(\d)/, '$1-$2');
+            });
+        }
+
+        // ============================================
+        // VALIDAÇÃO
+        // ============================================
+        function setupValidacao() {
+            document.getElementById('documento').addEventListener('blur', validarDocumento);
+            document.getElementById('nome').addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    this.classList.remove('error');
+                    document.getElementById('erroNome').classList.remove('show');
+                }
+            });
+            document.getElementById('telefone').addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    this.classList.remove('error');
+                    document.getElementById('erroTelefone').classList.remove('show');
+                }
+            });
+        }
+
+        function validarDocumento() {
+            const docInput = document.getElementById('documento');
+            const value = docInput.value.replace(/\D/g, '');
+
+            if (tipoDocumento === 'cpf' && value.length === 11) {
+                if (validarCPF(value)) {
+                    docInput.style.borderColor = 'var(--verde)';
+                    docInput.classList.remove('error');
+                    document.getElementById('erroDocumento').classList.remove('show');
+                    if (verificarDocumentoJaUtilizado(value)) {
+                        mostrarErro('⚠️ Este CPF já foi utilizado para participar!');
+                    }
+                } else {
+                    docInput.style.borderColor = 'var(--vermelho)';
+                    docInput.classList.add('error');
+                    document.getElementById('erroDocumento').textContent = 'CPF inválido';
+                    document.getElementById('erroDocumento').classList.add('show');
+                }
+            } else if (tipoDocumento === 'cnpj' && value.length === 14) {
+                if (validarCNPJ(value)) {
+                    docInput.style.borderColor = 'var(--verde)';
+                    docInput.classList.remove('error');
+                    document.getElementById('erroDocumento').classList.remove('show');
+                    if (verificarDocumentoJaUtilizado(value)) {
+                        mostrarErro('⚠️ Este CNPJ já foi utilizado para participar!');
+                    }
+                } else {
+                    docInput.style.borderColor = 'var(--vermelho)';
+                    docInput.classList.add('error');
+                    document.getElementById('erroDocumento').textContent = 'CNPJ inválido';
+                    document.getElementById('erroDocumento').classList.add('show');
+                }
+            }
+        }
+
+        function validarCPF(cpf) {
+            if (cpf.length !== 11) return false;
+            if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+            let sum = 0, remainder;
+            for (let i = 1; i <= 9; i++) sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+
+            sum = 0;
+            for (let i = 1; i <= 10; i++) sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            remainder = (sum * 10) % 11;
+            if (remainder === 10 || remainder === 11) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+
+            return true;
+        }
+
+        function validarCNPJ(cnpj) {
+            if (cnpj.length !== 14) return false;
+            if (/^(\d)\1{13}$/.test(cnpj)) return false;
+
+            let size = cnpj.length - 2;
+            let numbers = cnpj.substring(0, size);
+            let digits = cnpj.substring(size);
+            let sum = 0, pos = size - 7;
+
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+
+            let result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+            if (result !== parseInt(digits.charAt(0))) return false;
+
+            size = size - 1;
+            numbers = cnpj.substring(0, size);
+            sum = 0;
+            pos = size - 7;
+
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+
+            result = sum % 11 < 2 ? 0 : 11 - sum % 11;
+            if (result !== parseInt(digits.charAt(1))) return false;
+
+            return true;
+        }
+
+        function verificarDocumentoJaUtilizado(documento) {
+            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            return participantes.some(p => p.documento === documento);
+        }
+
+        // ============================================
+        // VALIDAÇÃO DO FORMULÁRIO
+        // ============================================
+        function validarFormulario() {
+            let valido = true;
+            const nome = document.getElementById('nome').value.trim();
+            const documento = document.getElementById('documento').value.replace(/\D/g, '');
+            const telefone = document.getElementById('telefone').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
+
+            // Nome
+            if (!nome) {
+                document.getElementById('nome').classList.add('error');
+                document.getElementById('erroNome').classList.add('show');
+                valido = false;
+            } else {
+                document.getElementById('nome').classList.remove('error');
+                document.getElementById('erroNome').classList.remove('show');
+            }
+
+            // Documento
+            if (!documento || (tipoDocumento === 'cpf' && documento.length !== 11) || (tipoDocumento === 'cnpj' && documento.length !== 14)) {
+                document.getElementById('documento').classList.add('error');
+                document.getElementById('erroDocumento').textContent = 'Documento inválido';
+                document.getElementById('erroDocumento').classList.add('show');
+                valido = false;
+            } else {
+                document.getElementById('documento').classList.remove('error');
+                document.getElementById('erroDocumento').classList.remove('show');
+            }
+
+            // Telefone
+            if (!telefone || telefone.replace(/\D/g, '').length < 10) {
+                document.getElementById('telefone').classList.add('error');
+                document.getElementById('erroTelefone').classList.add('show');
+                valido = false;
+            } else {
+                document.getElementById('telefone').classList.remove('error');
+                document.getElementById('erroTelefone').classList.remove('show');
+            }
+
+            // Empresa (se CNPJ)
+            if (tipoDocumento === 'cnpj' && !empresa) {
+                document.getElementById('empresa').classList.add('error');
+                document.getElementById('erroEmpresa').classList.add('show');
+                valido = false;
+            } else if (tipoDocumento === 'cnpj') {
+                document.getElementById('empresa').classList.remove('error');
+                document.getElementById('erroEmpresa').classList.remove('show');
+            }
+
+            // Palpites - todos preenchidos?
+            const todosPreenchidos = JOGOS.every(jogo => {
+                const brasil = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_brasil"]`);
+                const adv = document.querySelector(`.score-input[data-jogo-id="${jogo.id}"][data-tipo="gols_adversario"]`);
+                return brasil && adv && brasil.value !== '' && adv.value !== '';
+            });
+
+            if (!todosPreenchidos) {
+                document.getElementById('erroPalpites').classList.add('show');
+                valido = false;
+            } else {
+                document.getElementById('erroPalpites').classList.remove('show');
+            }
+
+            return valido;
+        }
+
+        // ============================================
+        // ENVIAR PALPITES
+        // ============================================
+        function enviarPalpites() {
+            if (enviando) return; // Prevenir duplo clique
+
+            if (!validarFormulario()) {
+                document.getElementById('errorMessage').classList.add('show');
+                document.getElementById('successMessage').classList.remove('show');
+                return;
+            }
+
+            const documento = document.getElementById('documento').value.replace(/\D/g, '');
+
+            if (verificarDocumentoJaUtilizado(documento)) {
+                mostrarErro('⚠️ Este ' + (tipoDocumento === 'cpf' ? 'CPF' : 'CNPJ') + ' já foi utilizado!');
+                return;
+            }
+
+            // Ativar loading
+            enviando = true;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            document.getElementById('errorMessage').classList.remove('show');
+
+            // Coletar palpites
+            const palpites = {};
+            document.querySelectorAll('.score-input').forEach(input => {
+                const jogoId = input.dataset.jogoId;
+                const tipo = input.dataset.tipo;
+                if (!palpites[jogoId]) palpites[jogoId] = {};
+                palpites[jogoId][tipo] = parseInt(input.value) || 0;
+            });
+
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
+
+            // Simular envio para API
+            const dados = {
+                nome, documento, telefone,
+                empresa: tipoDocumento === 'cnpj' ? empresa : null,
+                tipoDocumento, palpites,
+                data: new Date().toLocaleString('pt-BR')
+            };
+
+            // Simular pequeno delay de rede
+            setTimeout(() => {
+                // Salvar no localStorage
+                const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+                participantes.push(dados);
+                localStorage.setItem('bolao_participantes', JSON.stringify(participantes));
+
+                // Mostrar sucesso
+                enviando = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('cadastroForm').style.opacity = '0.5';
+                document.getElementById('cadastroForm').style.pointerEvents = 'none';
+                document.getElementById('errorMessage').classList.remove('show');
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+
+                // Atualizar ranking
+                atualizarRanking();
+
+                mostrarToast('✅ Palpites registrados com sucesso! Boa sorte! 🏆', 'success');
+            }, 800);
+        }
+
+        // ============================================
+        // RESETAR FORMULÁRIO
+        // ============================================
+        function resetarFormulario() {
+            document.getElementById('successMessage').classList.remove('show');
+            document.getElementById('cadastroForm').style.opacity = '1';
+            document.getElementById('cadastroForm').style.pointerEvents = 'auto';
+            document.getElementById('cadastroForm').reset();
+            document.getElementById('errorMessage').classList.remove('show');
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('show'));
+            document.getElementById('documento').style.borderColor = '';
+            document.querySelectorAll('.bet-match').forEach(el => el.classList.remove('filled'));
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').classList.remove('loading');
+            window.scrollTo({ top: document.getElementById('formSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // ============================================
+        // RANKING
+        // ============================================
+        function atualizarRanking() {
+            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+
+            if (participantes.length === 0) {
+                document.getElementById('rankingVazio').style.display = 'block';
+                document.getElementById('rankingTabelaWrapper').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('rankingVazio').style.display = 'none';
+            document.getElementById('rankingTabelaWrapper').style.display = 'block';
+
+            // Calcular pontuação para cada participante
+            const ranking = participantes.map(p => {
+                let pontos = 0;
+                let totalPalpites = 0;
+
+                if (p.palpites) {
+                    Object.values(p.palpites).forEach(palpite => {
+                        totalPalpites++;
+                        // Pontuação simulada (no bolão real, compararia com placares reais)
+                        // Aqui cada palpite vale 1 ponto base + bônus se for placar diferente de 0x0
+                        const golsBrasil = palpite.gols_brasil || 0;
+                        const golsAdv = palpite.gols_adversario || 0;
+                        pontos += 1; // ponto por participar
+                        if (golsBrasil > golsAdv) pontos += 1; // bônus por acreditar no Brasil
+                    });
+                }
+
+                return {
+                    nome: p.nome,
+                    documento: p.documento,
+                    palpites: totalPalpites,
+                    pontos: pontos
+                };
+            });
+
+            // Ordenar por pontos (decrescente)
+            ranking.sort((a, b) => b.pontos - a.pontos);
+
+            const tbody = document.getElementById('rankingBody');
+            tbody.innerHTML = ranking.map((p, idx) => {
+                const posClass = idx === 0 ? 'posicao-1' : idx === 1 ? 'posicao-2' : idx === 2 ? 'posicao-3' : '';
+                const medalha = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+                return `
+                    <tr>
+                        <td class="posicao ${posClass}">${medalha}</td>
+                        <td class="nome-participante">${p.nome}</td>
+                        <td class="acertos">${p.palpites} palpites</td>
+                        <td class="pontos">${p.pontos} pts</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function mostrarToast(mensagem, tipo) {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensagem;
+            toast.className = 'toast' + (tipo === 'error' ? ' error' : '');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        function mostrarErro(mensagem) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.innerHTML = '⚠️ ' + mensagem;
+            errorEl.classList.add('show');
+            document.getElementById('successMessage').classList.remove('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        function limparErro() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('show'));
+        }
+    </script>
+</body>
+</html>
