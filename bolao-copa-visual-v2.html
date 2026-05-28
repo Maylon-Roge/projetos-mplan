@@ -1411,14 +1411,20 @@
         // ============================================
         // CONFIGURAÇÃO DOS JOGOS (EDITÁVEL)
         // ============================================
+        // 📡 Dados oficiais da FIFA API - Copa do Mundo 2026 - Grupo C
+        // Fonte: https://api.fifa.com/api/v3/calendar/matches?idSeason=285023
         const JOGOS = [
-            { id: 1, rodada: '1ª Rodada', brasil: '🇧🇷', adversario: '🇨🇲', nomeAdversario: 'Camarões',   data: '15/06/2026 16:00', local: 'Nova York' },
-            { id: 2, rodada: '2ª Rodada', brasil: '🇧🇷', adversario: '🇵🇹', nomeAdversario: 'Portugal',    data: '20/06/2026 13:00', local: 'Miami' },
-            { id: 3, rodada: '3ª Rodada', brasil: '🇧🇷', adversario: '🇳🇿', nomeAdversario: 'Nova Zelândia', data: '25/06/2026 21:00', local: 'Los Angeles' },
-            { id: 4, rodada: 'Oitavas',   brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
-            { id: 5, rodada: 'Quartas',   brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
-            { id: 6, rodada: 'Semifinal', brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
-            { id: 7, rodada: 'Final',     brasil: '🇧🇷', adversario: '?',   nomeAdversario: 'A definir',    data: 'Data a definir',     local: 'A definir' },
+            // ⚽ FASE DE GRUPOS - Grupo C
+            { id: 1,  rodada: '1ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'MAR', paisFora: 'Marrocos',     bandeiraFora: '🇲🇦', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
+            { id: 2,  rodada: '2ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'HAI', paisFora: 'Haiti',        bandeiraFora: '🇭🇹', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
+            { id: 3,  rodada: '3ª Rodada - Grupo C', timeCasa: 'SCO', paisCasa: 'Escócia',     bandeiraCasa: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', timeFora: 'BRA', paisFora: 'Brasil',   bandeiraFora: '🇧🇷', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
+
+            // 🏆 MATA-MATA (adversários definidos conforme avanço do Brasil)
+            { id: 4,  rodada: '2ª Fase (32 avos)',   timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir (2º F/G/H)', bandeiraFora: '❓', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
+            { id: 5,  rodada: 'Oitavas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
+            { id: 6,  rodada: 'Quartas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
+            { id: 7,  rodada: 'Semifinal',           timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
+            { id: 8,  rodada: 'Final',               timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
         ];
 
         // ============================================
@@ -1505,16 +1511,16 @@
         function renderizarJogos() {
             const container = document.getElementById('jogosGrid');
             container.innerHTML = JOGOS.map(jogo => {
-                const isPlaceholder = jogo.adversario === '?';
+                const isPlaceholder = jogo.timeFora === '???';
                 return `
                     <div class="jogo-card ${isPlaceholder ? '' : ''}">
                         <div class="jogo-rodada">${jogo.rodada}</div>
                         <div class="jogo-times">
-                            <span class="jogo-time">${jogo.brasil}</span>
+                            <span class="jogo-time">${jogo.bandeiraCasa}</span>
                             <span class="jogo-vs">vs</span>
-                            <span class="jogo-time">${jogo.adversario}</span>
+                            <span class="jogo-time">${jogo.bandeiraFora}</span>
                         </div>
-                        ${!isPlaceholder ? `<div class="jogo-placar">${jogo.nomeAdversario}</div>` : ''}
+                        ${!isPlaceholder ? `<div class="jogo-placar">${jogo.paisCasa} × ${jogo.paisFora}</div>` : ''}
                         <div class="jogo-data">📅 ${jogo.data}</div>
                         ${jogo.local !== 'A definir' ? `<div class="jogo-data">📍 ${jogo.local}</div>` : ''}
                     </div>
@@ -1528,15 +1534,14 @@
         function renderizarPalpites() {
             const container = document.getElementById('palpitesContainer');
             container.innerHTML = JOGOS.map(jogo => {
-                const nomeAdv = jogo.nomeAdversario || 'Adversário';
                 return `
                     <div class="bet-match" id="bet-${jogo.id}">
                         <div class="match-flags">
-                            <span>${jogo.brasil}</span>
+                            <span>${jogo.bandeiraCasa}</span>
                             <span style="font-size:0.7rem;opacity:0.6;">vs</span>
-                            <span>${jogo.adversario}</span>
+                            <span>${jogo.bandeiraFora}</span>
                         </div>
-                        <div class="match-name">${jogo.rodada}<br><span style="font-weight:400;font-size:0.75rem;color:var(--cinza-texto);">${nomeAdv}</span></div>
+                        <div class="match-name">${jogo.rodada}<br><span style="font-weight:400;font-size:0.75rem;color:var(--cinza-texto);">${jogo.paisCasa} × ${jogo.paisFora}</span></div>
                         <div class="score-inputs">
                             <input type="number" class="score-input" data-jogo-id="${jogo.id}" data-tipo="gols_brasil" min="0" max="9" placeholder="0" oninput="marcarPreenchido(${jogo.id})">
                             <span class="score-separator">×</span>
