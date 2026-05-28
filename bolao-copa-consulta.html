@@ -3,192 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔍 Consultar Palpites - Bolão Copa 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>🔍 Consultar Palpites - Bolão Copa 2026 | Planeta Energia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --azul-escuro: #003399;
-            --azul-claro: #004dd9;
-            --amarelo: #FFD000;
-            --verde: #00A651;
-            --vermelho: #E63946;
-            --preto: #000a1f;
-            --branco: #ffffff;
-            --cinza-light: #f5f5f5;
-            --cinza: #e0e0e0;
-            --cinza-texto: #666;
-            --sombra-media: 0 20px 60px rgba(0,0,0,0.15);
-            --raio: 12px;
-            --raio-card: 20px;
+            --primary: #003a70;
+            --primary-light: #004d99;
+            --secondary: #fbd70e;
+            --green: #00a651;
+            --red: #e63946;
+            --white: #ffffff;
+            --gray-1: #f9f9f9;
+            --gray-2: #d5e0e9;
+            --gray-3: #707070;
+            --gray-4: #363636;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.12);
+            --radius: 8px;
+            --radius-card: 16px;
         }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            font-family: 'Montserrat', sans-serif;
+            background: var(--primary);
             min-height: 100vh;
-            color: var(--preto);
+            color: var(--gray-4);
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 40px 15px;
+            padding: 30px 15px;
         }
         .container { max-width: 800px; width: 100%; }
         
         .header-card {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
-            border-radius: var(--raio-card);
-            padding: 35px;
+            border-radius: var(--radius-card);
+            padding: 30px;
             text-align: center;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .header-card .brand {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
         .header-card h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.8rem;
-            color: var(--amarelo);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-family: 'Inter', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--white);
         }
-        .header-card p { color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 1rem; }
+        .header-card p { color: rgba(255,255,255,0.75); margin-top: 6px; font-size: 0.95rem; }
         
         .search-card {
-            background: var(--branco);
-            border-radius: var(--raio-card);
-            padding: 35px;
-            box-shadow: var(--sombra-media);
+            background: var(--white);
+            border-radius: var(--radius-card);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
         }
-        
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .search-box input {
             flex: 1;
-            padding: 14px 18px;
-            border: 2px solid var(--cinza);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-2);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            font-family: 'Montserrat', sans-serif;
             transition: all 0.3s;
         }
         .search-box input:focus {
             outline: none;
-            border-color: var(--verde);
-            box-shadow: 0 0 0 4px rgba(0,166,81,0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,58,112,0.1);
         }
         .search-box button {
-            padding: 14px 30px;
-            background: linear-gradient(135deg, var(--verde), #009640);
-            color: var(--branco);
+            padding: 12px 28px;
+            background: var(--primary);
+            color: var(--white);
             border: none;
-            border-radius: 10px;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.1rem;
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             transition: all 0.3s;
             white-space: nowrap;
         }
-        .search-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,166,81,0.3); }
+        .search-box button:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
 
         .info-text {
             text-align: center;
-            color: var(--cinza-texto);
-            font-size: 0.9rem;
+            color: var(--gray-3);
+            font-size: 0.85rem;
             margin-bottom: 5px;
         }
-        .info-text strong { color: var(--azul-escuro); }
+        .info-text strong { color: var(--primary); }
 
         .error-msg {
             display: none;
-            background: var(--vermelho);
-            color: var(--branco);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: var(--red);
+            color: var(--white);
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 18px;
             text-align: center;
-            animation: shake 0.3s;
+            font-size: 0.9rem;
         }
         .error-msg.show { display: block; }
-        @keyframes shake {
-            0%,100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
         .result-area { display: none; }
         .result-area.show { display: block; }
 
         .participant-info {
-            background: var(--cinza-light);
-            border-radius: var(--raio);
-            padding: 20px;
-            margin-bottom: 25px;
+            background: var(--gray-1);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 20px;
         }
         .participant-info h2 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.5rem;
-            color: var(--azul-escuro);
-            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
         }
         .participant-info .meta {
-            color: var(--cinza-texto);
-            font-size: 0.9rem;
-            margin-top: 5px;
+            color: var(--gray-3);
+            font-size: 0.85rem;
+            margin-top: 4px;
         }
 
         .game-result {
-            background: var(--cinza-light);
-            border-radius: var(--raio);
-            padding: 15px 18px;
-            margin-bottom: 10px;
+            background: var(--gray-1);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             transition: all 0.3s;
         }
-        .game-result:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .game-result:hover { box-shadow: var(--shadow-sm); }
         .game-result .flags {
-            font-size: 1.8rem;
             display: flex;
-            gap: 5px;
+            gap: 4px;
             align-items: center;
-            min-width: 80px;
+            min-width: 70px;
         }
-        .game-result .flags .vs { font-size: 0.6rem; opacity: 0.5; padding: 0 2px; }
+        .game-result .flags img { width: 28px; height: auto; border-radius: 2px; }
+        .game-result .flags .vs { font-size: 0.55rem; opacity: 0.5; padding: 0 2px; font-weight: 600; }
         .game-result .info { flex: 1; }
-        .game-result .info .rodada { font-weight: 700; color: var(--azul-escuro); font-size: 0.9rem; }
-        .game-result .info .paises { font-size: 0.8rem; color: var(--cinza-texto); }
-        .game-result .info .data { font-size: 0.75rem; color: var(--cinza-texto); margin-top: 2px; }
+        .game-result .info .rodada { font-weight: 700; color: var(--primary); font-size: 0.85rem; }
+        .game-result .info .paises { font-size: 0.75rem; color: var(--gray-3); }
+        .game-result .info .data { font-size: 0.7rem; color: var(--gray-3); margin-top: 2px; }
         
         .game-result .placares {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
         .game-result .placares .palpite {
             text-align: center;
-            padding: 6px 12px;
-            border-radius: 8px;
-            background: var(--branco);
-            min-width: 55px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background: var(--white);
+            min-width: 50px;
         }
-        .game-result .placares .palpite .label { font-size: 0.6rem; text-transform: uppercase; color: var(--cinza-texto); letter-spacing: 0.5px; }
-        .game-result .placares .palpite .valor { font-size: 1.3rem; font-weight: 800; font-family: 'Bebas Neue', cursive; }
-        .game-result .placares .palpite .valor.acerto-placar { color: var(--verde); }
-        .game-result .placares .palpite .valor.acerto-vencedor { color: var(--amarelo); }
-        .game-result .placares .palpite .valor.erro { color: var(--vermelho); }
-        .game-result .placares .separador { font-size: 1.3rem; font-weight: 700; color: var(--cinza-texto); }
+        .game-result .placares .palpite .label { font-size: 0.55rem; text-transform: uppercase; color: var(--gray-3); letter-spacing: 0.3px; }
+        .game-result .placares .palpite .valor { font-size: 1.1rem; font-weight: 700; font-family: 'Inter', sans-serif; }
+        .game-result .placares .palpite .valor.acerto-placar { color: var(--green); }
+        .game-result .placares .palpite .valor.acerto-vencedor { color: #b8860b; }
+        .game-result .placares .palpite .valor.erro { color: var(--red); }
+        .game-result .placares .separador { font-size: 1.1rem; font-weight: 600; color: var(--gray-3); }
         
         .game-result .status-badge {
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .game-result .status-badge.aguardando { background: #fff3cd; color: #856404; }
         .game-result .status-badge.acerto-placar { background: #d4edda; color: #155724; }
@@ -196,23 +202,24 @@
         .game-result .status-badge.erro { background: #f8d7da; color: #721c24; }
 
         .resumo-card {
-            background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
-            color: var(--branco);
-            border-radius: var(--raio);
-            padding: 20px;
-            margin-top: 25px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-top: 20px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 12px;
             text-align: center;
         }
         .resumo-card .item .numero {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2rem;
-            color: var(--amarelo);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--secondary);
         }
         .resumo-card .item .label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             opacity: 0.8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -220,33 +227,34 @@
 
         .back-link {
             display: inline-block;
-            margin-top: 20px;
-            color: rgba(255,255,255,0.7);
+            margin-top: 18px;
+            color: rgba(255,255,255,0.6);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: color 0.3s;
         }
-        .back-link:hover { color: var(--amarelo); }
+        .back-link:hover { color: var(--secondary); }
 
         @media (max-width: 600px) {
-            body { padding: 20px 10px; }
-            .header-card h1 { font-size: 2rem; }
-            .header-card { padding: 25px; }
-            .search-card { padding: 20px; }
+            body { padding: 15px 10px; }
+            .header-card h1 { font-size: 1.6rem; }
+            .header-card { padding: 20px; }
+            .search-card { padding: 18px; }
             .search-box { flex-direction: column; }
             .search-box button { width: 100%; }
-            .game-result { flex-wrap: wrap; gap: 8px; }
+            .game-result { flex-wrap: wrap; gap: 6px; }
             .game-result .flags { min-width: auto; }
             .game-result .placares { width: 100%; justify-content: center; }
-            .resumo-card { grid-template-columns: 1fr; gap: 10px; }
+            .resumo-card { grid-template-columns: 1fr; gap: 8px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-card">
+            <div class="brand">⚡ PLANETA ENERGIA × BOLÃO COPA 2026</div>
             <h1>🔍 Consultar Palpites</h1>
-            <p>Bolão Copa do Mundo 2026 🏆</p>
+            <p>Digite seu CPF ou CNPJ para ver seus palpites</p>
         </div>
 
         <div class="search-card">
@@ -271,7 +279,7 @@
                         <div class="label">Acertos</div>
                     </div>
                     <div class="item">
-                        <div class="numero" id="pontosCount" style="color: var(--amarelo);">0</div>
+                        <div class="numero" id="pontosCount" style="color: var(--secondary);">0</div>
                         <div class="label">Pontos</div>
                     </div>
                 </div>
@@ -285,8 +293,8 @@
 
     <script>
         function flagImg(code, alt) {
-            if (!code) return '<span style="font-size:1.5rem;">❓</span>';
-            return `<img src="https://flagcdn.com/w80/${code}.png" alt="${alt}" style="width:32px;height:auto;vertical-align:middle;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,0.2);">`;
+            if (!code) return '<span style="font-size:1.3rem;">❓</span>';
+            return `<img src="https://flagcdn.com/w80/${code}.png" alt="${alt}" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
         }
         const JOGOS = [
             { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
@@ -332,7 +340,6 @@
         }
 
         function mostrarDados(p) {
-            // Info do participante
             const docMascarado = p.documento.length === 11
                 ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
                 : p.documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
@@ -346,7 +353,6 @@
                 </div>
             `;
 
-            // Palpites
             const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
             let totalAcertos = 0;
             let totalPontos = 0;
@@ -365,29 +371,21 @@
                 let classeCasa = '';
                 let classeFora = '';
 
-                // Mapear quem é Brasil no jogo
                 const brasilEhCasa = jogo.paisCasa === 'Brasil';
                 const golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.gols_casa : resultado.gols_fora) : null;
                 const golsAdvReal = temResultado ? (brasilEhCasa ? resultado.gols_fora : resultado.gols_casa) : null;
 
                 if (temResultado && golsCasaPalpite !== null && golsForaPalpite !== null) {
                     totalJogos++;
-                    
-                    // O palpite do Brasil está em gols_brasil/gols_adversario
-                    const golsBrasilPalpite = golsCasaPalpite; // gols_brasil
-                    const golsAdvPalpite = golsForaPalpite; // gols_adversario
-                    
+                    const golsBrasilPalpite = golsCasaPalpite;
+                    const golsAdvPalpite = golsForaPalpite;
                     const acertouPlacar = golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal;
-                    
-                    // Verificar vencedor
                     const vitoriaBrasilReal = golsBrasilReal > golsAdvReal;
                     const derrotaBrasilReal = golsBrasilReal < golsAdvReal;
                     const empateReal = golsBrasilReal === golsAdvReal;
-                    
                     const vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite;
                     const derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite;
                     const empatePalpite = golsBrasilPalpite === golsAdvPalpite;
-                    
                     const acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) ||
                                            (derrotaBrasilReal && derrotaBrasilPalpite) ||
                                            (empateReal && empatePalpite);
@@ -418,10 +416,10 @@
 
                 return `
                     <div class="game-result">
-                        <div class="flags" style="display:flex;align-items:center;gap:6px;">
+                        <div class="flags" style="display:flex;align-items:center;gap:5px;">
                             ${flagImg(jogo.flagCasa, jogo.paisCasa)}
                             <span class="vs">vs</span>
-                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.2rem;">❓</span>'}
+                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.1rem;">❓</span>'}
                         </div>
                         <div class="info">
                             <div class="rodada">${jogo.rodada}</div>
@@ -437,9 +435,9 @@
                             </div>
                             ${temResultado ? `
                             <div class="separador">|</div>
-                            <div class="palpite" style="background:var(--azul-claro);color:var(--branco);">
+                            <div class="palpite" style="background:var(--primary);color:var(--white);">
                                 <div class="label" style="color:rgba(255,255,255,0.7);">Real</div>
-                                <div class="valor" style="color:var(--amarelo);">${resultado.gols_casa} × ${resultado.gols_fora}</div>
+                                <div class="valor" style="color:var(--secondary);">${resultado.gols_casa} × ${resultado.gols_fora}</div>
                             </div>
                             ` : ''}
                         </div>
@@ -452,8 +450,6 @@
             document.getElementById('totalJogos').textContent = JOGOS.length;
             document.getElementById('acertosCount').textContent = totalAcertos;
             document.getElementById('pontosCount').textContent = totalPontos;
-            
-            // Scroll suave para os resultados
             document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     </script>
