@@ -1456,26 +1456,22 @@
         // ============================================
         // 📡 Dados oficiais da FIFA API - Copa do Mundo 2026 - Grupo C
         // Fonte: https://api.fifa.com/api/v3/calendar/matches?idSeason=285023
-        // Flags em Unicode escapes para compatibilidade máxima com Chrome
-        const BANDEIRAS = {
-            BRA: '\u{1F1E7}\u{1F1F7}', // 🇧🇷
-            MAR: '\u{1F1F2}\u{1F1E6}', // 🇲🇦
-            HAI: '\u{1F1ED}\u{1F1F9}', // 🇭🇹
-            SCO: '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}', // 🏴󠁧󠁢󠁳󠁣󠁴󠁿
-            TBD: '\u{2753}',           // ❓
-        };
+        // Bandeiras via flagcdn.com (100% compatível com Chrome)
+        function flagImg(code, alt) {
+            return `<img src="https://flagcdn.com/w80/${code.toLowerCase()}.png" alt="${alt}" class="flag-img" style="width:36px;height:auto;vertical-align:middle;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,0.2);">`;
+        }
         const JOGOS = [
             // ⚽ FASE DE GRUPOS - Grupo C
-            { id: 1,  rodada: '1ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: 'MAR', paisFora: 'Marrocos',     bandeiraFora: BANDEIRAS.MAR, data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
-            { id: 2,  rodada: '2ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: 'HAI', paisFora: 'Haiti',        bandeiraFora: BANDEIRAS.HAI, data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
-            { id: 3,  rodada: '3ª Rodada - Grupo C', timeCasa: 'SCO', paisCasa: 'Escócia',     bandeiraCasa: BANDEIRAS.SCO, timeFora: 'BRA', paisFora: 'Brasil',   bandeiraFora: BANDEIRAS.BRA, data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
+            { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',    flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
+            { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',       flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
+            { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',      flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
 
             // 🏆 MATA-MATA (adversários definidos conforme avanço do Brasil)
-            { id: 4,  rodada: '2ª Fase (32 avos)',   timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: '???', paisFora: 'A definir (2º F/G/H)', bandeiraFora: BANDEIRAS.TBD, data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
-            { id: 5,  rodada: 'Oitavas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: '???', paisFora: 'A definir',            bandeiraFora: BANDEIRAS.TBD, data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
-            { id: 6,  rodada: 'Quartas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: '???', paisFora: 'A definir',            bandeiraFora: BANDEIRAS.TBD, data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
-            { id: 7,  rodada: 'Semifinal',           timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: '???', paisFora: 'A definir',            bandeiraFora: BANDEIRAS.TBD, data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
-            { id: 8,  rodada: 'Final',               timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: BANDEIRAS.BRA, timeFora: '???', paisFora: 'A definir',            bandeiraFora: BANDEIRAS.TBD, data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
+            { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
+            { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
+            { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
+            { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
+            { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
         ];
 
         // ============================================
@@ -1564,7 +1560,7 @@
             // Carregar resultados oficiais (do admin)
             const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
             container.innerHTML = JOGOS.map(jogo => {
-                const isPlaceholder = jogo.timeFora === '???';
+                const isPlaceholder = !jogo.flagFora;
                 const resultado = resultados[jogo.id];
                 const temResultado = resultado && resultado.gols_casa !== undefined && resultado.gols_fora !== undefined;
                 return `
@@ -1573,18 +1569,18 @@
                         <div class="jogo-rodada">${jogo.rodada}</div>
                         <div class="jogo-times">
                             <div class="jogo-time-col">
-                                <span class="jogo-time-flag" title="${jogo.paisCasa}">${jogo.bandeiraCasa}</span>
+                                ${flagImg(jogo.flagCasa, jogo.paisCasa)}
                                 <span class="jogo-time-nome">${jogo.paisCasa}</span>
                             </div>
                             <span class="jogo-vs">vs</span>
                             <div class="jogo-time-col">
-                                <span class="jogo-time-flag" title="${jogo.paisFora}">${jogo.bandeiraFora}</span>
+                                ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.5rem;">❓</span>'}
                                 <span class="jogo-time-nome">${jogo.paisFora}</span>
                             </div>
                         </div>
                         ${temResultado
                             ? `<div class="jogo-placar">${resultado.gols_casa} × ${resultado.gols_fora}</div>`
-                            : `<div class="jogo-placar">${jogo.paisCasa} × ${jogo.paisFora}</div>`
+                            : `<div class="jogo-placar" style="font-size:0.75rem;">${jogo.paisCasa} × ${jogo.paisFora}</div>`
                         }
                         <div class="jogo-data">📅 ${jogo.data}</div>
                         ${jogo.local !== 'A definir' ? `<div class="jogo-data">📍 ${jogo.local}</div>` : ''}
@@ -1607,13 +1603,13 @@
             html += `<div style="margin-bottom:12px;font-size:0.85rem;color:var(--verde);font-weight:700;">✅ FASE DE GRUPOS — Palpites disponíveis</div>`;
             html += palpitesAtivos.map(jogo => {
                 return `
-                    <div class="bet-match" id="bet-${jogo.id}">
-                        <div class="match-flags" style="display:flex;align-items:center;gap:6px;font-size:2.2rem;min-width:110px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1.2;">
-                            <span title="${jogo.paisCasa}">${jogo.bandeiraCasa}</span>
-                            <span style="font-size:0.7rem;opacity:0.5;">vs</span>
-                            <span title="${jogo.paisFora}">${jogo.bandeiraFora}</span>
+                    <div class="bet-match" id="bet-${jogo.id}" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <div style="display:flex;align-items:center;gap:6px;min-width:100px;">
+                            ${flagImg(jogo.flagCasa, jogo.paisCasa)}
+                            <span style="font-weight:700;color:var(--cinza-texto);font-size:0.85rem;">vs</span>
+                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.5rem;">❓</span>'}
                         </div>
-                        <div class="match-name" style="flex:1;">
+                        <div style="flex:1;min-width:140px;">
                             <div style="font-weight:700;color:var(--azul-escuro);font-size:0.85rem;">${jogo.paisCasa} × ${jogo.paisFora}</div>
                             <div style="font-size:0.7rem;color:var(--cinza-texto);">${jogo.rodada}</div>
                         </div>
@@ -1630,13 +1626,16 @@
             html += `<div style="margin-top:20px;margin-bottom:12px;padding-top:16px;border-top:2px dashed var(--cinza);font-size:0.85rem;color:var(--cinza-texto);font-weight:600;">🔒 FASE MATA-MATA — Bloqueado até o Brasil avançar</div>`;
             html += palpitesBloqueados.map(jogo => {
                 return `
-                    <div class="bet-match" style="opacity:0.5;background:var(--cinza-light);">
-                        <div class="match-flags" style="display:flex;align-items:center;gap:6px;font-size:1.5rem;min-width:80px;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;">
-                            <span>${jogo.bandeiraCasa}</span>
-                            <span style="font-size:0.6rem;opacity:0.5;">vs</span>
-                            <span>${jogo.bandeiraFora}</span>
+                    <div class="bet-match" style="opacity:0.5;background:var(--cinza-light);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <div style="display:flex;align-items:center;gap:6px;min-width:80px;">
+                            ${flagImg(jogo.flagCasa, jogo.paisCasa)}
+                            <span style="font-size:0.7rem;opacity:0.5;font-weight:700;">vs</span>
+                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.2rem;">❓</span>'}
                         </div>
-                        <div class="match-name">${jogo.rodada}<br><span style="font-weight:400;font-size:0.75rem;color:var(--cinza-texto);">${jogo.data}</span></div>
+                        <div style="flex:1;">
+                            <div style="font-weight:600;color:var(--cinza-texto);font-size:0.85rem;">${jogo.paisCasa} × ${jogo.paisFora}</div>
+                            <div style="font-size:0.7rem;color:var(--cinza-texto);">${jogo.rodada}</div>
+                        </div>
                         <div style="font-size:0.75rem;color:var(--cinza-texto);font-style:italic;">🔒 Aguardando</div>
                     </div>
                 `;
@@ -1750,92 +1749,30 @@
             });
         }
 
+        // Validação simplificada para teste — só verifica se tem 11 ou 14 dígitos
         function validarDocumento() {
             const docInput = document.getElementById('documento');
             const value = docInput.value.replace(/\D/g, '');
+            const docValido = (tipoDocumento === 'cpf' && value.length === 11) ||
+                             (tipoDocumento === 'cnpj' && value.length === 14);
 
-            if (tipoDocumento === 'cpf' && value.length === 11) {
-                if (validarCPF(value)) {
-                    docInput.style.borderColor = 'var(--verde)';
-                    docInput.classList.remove('error');
-                    document.getElementById('erroDocumento').classList.remove('show');
-                    if (verificarDocumentoJaUtilizado(value)) {
-                        mostrarErro('⚠️ Este CPF já foi utilizado para participar!');
-                    }
-                } else {
-                    docInput.style.borderColor = 'var(--vermelho)';
-                    docInput.classList.add('error');
-                    document.getElementById('erroDocumento').textContent = 'CPF inválido';
-                    document.getElementById('erroDocumento').classList.add('show');
+            if (docValido) {
+                docInput.style.borderColor = 'var(--verde)';
+                docInput.classList.remove('error');
+                document.getElementById('erroDocumento').classList.remove('show');
+                if (verificarDocumentoJaUtilizado(value)) {
+                    mostrarErro('⚠️ Este ' + (tipoDocumento === 'cpf' ? 'CPF' : 'CNPJ') + ' já foi utilizado para participar!');
                 }
-            } else if (tipoDocumento === 'cnpj' && value.length === 14) {
-                if (validarCNPJ(value)) {
-                    docInput.style.borderColor = 'var(--verde)';
-                    docInput.classList.remove('error');
-                    document.getElementById('erroDocumento').classList.remove('show');
-                    if (verificarDocumentoJaUtilizado(value)) {
-                        mostrarErro('⚠️ Este CNPJ já foi utilizado para participar!');
-                    }
-                } else {
-                    docInput.style.borderColor = 'var(--vermelho)';
-                    docInput.classList.add('error');
-                    document.getElementById('erroDocumento').textContent = 'CNPJ inválido';
-                    document.getElementById('erroDocumento').classList.add('show');
-                }
+            } else if (value.length > 0) {
+                docInput.style.borderColor = 'var(--vermelho)';
+                docInput.classList.add('error');
+                document.getElementById('erroDocumento').textContent = 'Deve ter ' + (tipoDocumento === 'cpf' ? '11' : '14') + ' dígitos';
+                document.getElementById('erroDocumento').classList.add('show');
             }
         }
 
-        function validarCPF(cpf) {
-            if (cpf.length !== 11) return false;
-            if (/^(\d)\1{10}$/.test(cpf)) return false;
-
-            let sum = 0, remainder;
-            for (let i = 1; i <= 9; i++) sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-            remainder = (sum * 10) % 11;
-            if (remainder === 10 || remainder === 11) remainder = 0;
-            if (remainder !== parseInt(cpf.substring(9, 10))) return false;
-
-            sum = 0;
-            for (let i = 1; i <= 10; i++) sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-            remainder = (sum * 10) % 11;
-            if (remainder === 10 || remainder === 11) remainder = 0;
-            if (remainder !== parseInt(cpf.substring(10, 11))) return false;
-
-            return true;
-        }
-
-        function validarCNPJ(cnpj) {
-            if (cnpj.length !== 14) return false;
-            if (/^(\d)\1{13}$/.test(cnpj)) return false;
-
-            let size = cnpj.length - 2;
-            let numbers = cnpj.substring(0, size);
-            let digits = cnpj.substring(size);
-            let sum = 0, pos = size - 7;
-
-            for (let i = size; i >= 1; i--) {
-                sum += numbers.charAt(size - i) * pos--;
-                if (pos < 2) pos = 9;
-            }
-
-            let result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-            if (result !== parseInt(digits.charAt(0))) return false;
-
-            size = size - 1;
-            numbers = cnpj.substring(0, size);
-            sum = 0;
-            pos = size - 7;
-
-            for (let i = size; i >= 1; i--) {
-                sum += numbers.charAt(size - i) * pos--;
-                if (pos < 2) pos = 9;
-            }
-
-            result = sum % 11 < 2 ? 0 : 11 - sum % 11;
-            if (result !== parseInt(digits.charAt(1))) return false;
-
-            return true;
-        }
+        function validarCPF(cpf) { return cpf.length === 11 && !/^(\d)\1{10}$/.test(cpf); }
+        function validarCNPJ(cnpj) { return cnpj.length === 14 && !/^(\d)\1{13}$/.test(cnpj); }
 
         function verificarDocumentoJaUtilizado(documento) {
             const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
