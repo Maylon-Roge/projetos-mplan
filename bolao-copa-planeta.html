@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Copa 2026 - Planeta Energia</title>
+    <meta name="description" content="Participe do Bolão da Copa do Mundo 2026 da Planeta Energia! Faça seus palpites e concorra a prêmios.">
+    <meta property="og:title" content="Bolão Copa 2026 - Planeta Energia">
+    <meta property="og:description" content="Faça seus palpites nos jogos do Brasil e concorra a vale-compras!">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #003a70;
+            --primary-dark: #002D7A;
+            --secondary: #fbd70e;
+            --secondary-hover: #e8c500;
+            --white: #ffffff;
+            --black: #16161d;
+            --gray-1: #f9f9f9;
+            --gray-2: #d5e0e9;
+            --gray-3: #707070;
+            --gray-4: #363636;
+            --green: #20B038;
+            --red: #CE1312;
+            --font-title: 'Inter', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+        html { scroll-behavior: smooth; font-size: 62.5%; }
+        body {
+            font-family: var(--font-body);
+            font-size: 1.4rem;
+            color: var(--gray-4);
+            background: var(--gray-1);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            background: var(--secondary);
+            padding: 0.6rem 5%;
+            text-align: center;
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 0.3px;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--primary);
+            padding: 2rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .header-logo .logo-icon {
+            width: 4.5rem;
+            height: 4.5rem;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .header-logo .logo-text {
+            color: var(--white);
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+        .header-logo .logo-text small {
+            font-weight: 300;
+            font-size: 1rem;
+            display: block;
+            opacity: 0.8;
+        }
+
+        /* NAV */
+        .nav-bar {
+            background: var(--secondary);
+            padding: 0 5%;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .nav-bar a {
+            color: var(--primary);
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1.2rem 1.6rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .nav-bar a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .nav-bar a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        .nav-bar a:hover::after { width: 60%; }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #002D7A 100%);
+            padding: 5rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '🏆';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.06;
+            top: -30px;
+            right: -30px;
+            transform: rotate(15deg);
+        }
+        .hero::after {
+            content: '⚽';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.05;
+            bottom: -40px;
+            left: -20px;
+        }
+        .hero-icon {
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 1s ease-out;
+        }
+        @keyframes bounce {
+            0% { transform: scale(0.3) translateY(-50px); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .hero h1 {
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .hero-btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            font-family: var(--font-title);
+            font-weight: 800;
+            font-size: 1.3rem;
+            padding: 1.4rem 3.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(251,215,14,0.35);
+        }
+
+        /* COUNTDOWN */
+        .countdown-wrap {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .countdown-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 0.8rem 1.4rem;
+            min-width: 6rem;
+            text-align: center;
+        }
+        .countdown-num {
+            font-family: var(--font-title);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: block;
+            line-height: 1;
+        }
+        .countdown-label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* SECTIONS */
+        .section { padding: 5rem 5%; }
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 3rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary);
+            margin: 1rem auto 0;
+        }
+        .section-title.-white { color: var(--white); }
+        .section-title.-white::after { background: var(--secondary); }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* COMO FUNCIONA */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .step-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+            border-top: 3px solid var(--secondary);
+            transition: transform 0.3s;
+        }
+        .step-card:hover { transform: translateY(-4px); }
+        .step-num {
+            width: 5rem;
+            height: 5rem;
+            background: var(--secondary);
+            color: var(--primary);
+            border-radius: 50%;
+            font-family: var(--font-title);
+            font-size: 2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+        }
+        .step-card h3 {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+        .step-card p { font-size: 1.2rem; color: var(--gray-3); }
+
+        /* PREMIOS */
+        .premios-section { background: var(--primary); }
+        .premios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        .premio-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-bottom: 4px solid var(--secondary);
+            transition: transform 0.3s;
+        }
+        .premio-card:hover { transform: translateY(-8px); }
+        .premio-card.-destaque {
+            border: 3px solid var(--secondary);
+            transform: scale(1.05);
+        }
+        .premio-card.-destaque:hover { transform: scale(1.05) translateY(-6px); }
+        .premio-card .posicao {
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+        .premio-card .emoji-big { font-size: 4rem; display: block; margin-bottom: 0.8rem; }
+        .premio-card .valor {
+            font-family: var(--font-title);
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--green);
+        }
+        .premio-card .tipo { font-size: 1.2rem; color: var(--gray-3); margin-top: 0.4rem; }
+
+        /* GAMES */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.2rem;
+        }
+        .game-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.8rem 1.2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border: 1px solid var(--gray-2);
+            transition: all 0.3s;
+        }
+        .game-card:hover { box-shadow: 0 4px 20px rgba(0,58,112,0.12); }
+        .game-card .rodada {
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .game-card .flags-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+        }
+        .game-card .flags-row img { width: 36px; height: auto; border-radius: 3px; }
+        .game-card .flags-row .vs { font-size: 0.7rem; font-weight: 700; color: var(--gray-3); }
+        .game-card .pais-nome { font-size: 0.65rem; font-weight: 600; color: var(--gray-4); }
+        .game-card .game-info {
+            font-size: 0.7rem;
+            color: var(--gray-3);
+            margin-top: 0.6rem;
+        }
+        .game-card .placar {
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--green);
+            margin-top: 0.5rem;
+            background: var(--gray-1);
+            padding: 0.3rem 1rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* FORM */
+        .form-section { background: var(--gray-1); }
+        .form-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 3.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-2);
+        }
+        .form-card .badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+        }
+        .toggle-group { display: flex; gap: 0.8rem; margin-bottom: 2rem; }
+        .toggle-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--gray-2);
+            border-radius: 6px;
+            background: var(--white);
+            cursor: pointer;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            color: var(--gray-4);
+        }
+        .toggle-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        .form-group { margin-bottom: 1.6rem; }
+        .form-group label {
+            display: block;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1.2rem 1.4rem;
+            border: 2px solid var(--gray-2);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 1.3rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,58,112,0.1);
+            outline: none;
+        }
+        .form-group input.error { border-color: var(--red); }
+        .field-error {
+            color: var(--red);
+            font-size: 1rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+        .field-error.show { display: block; }
+
+        .error-msg {
+            display: none;
+            background: var(--red);
+            color: var(--white);
+            padding: 1.2rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        .error-msg.show { display: block; }
+        .success-msg {
+            display: none;
+            background: var(--green);
+            color: var(--white);
+            padding: 2.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .success-msg.show { display: block; }
+        .success-msg .big { font-size: 3rem; display: block; margin-bottom: 0.8rem; }
+        .success-msg h3 { font-family: var(--font-title); font-size: 1.6rem; margin-bottom: 0.5rem; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.4rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-title);
+            font-weight: 800;
+            font-size: 1.4rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        .submit-btn:hover { background: #002D7A; transform: translateY(-1px); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .submit-btn .spinner {
+            display: none;
+            width: 2rem; height: 2rem;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid var(--white);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+        .submit-btn.loading .btn-text { display: none; }
+        .submit-btn.loading .spinner { display: block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+            border-radius: 6px;
+            font-family: var(--font-title);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover { background: var(--white); color: var(--primary); }
+
+        /* PALPITES */
+        .palpites-box {
+            background: var(--gray-1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .bet-row {
+            background: var(--white);
+            border-radius: 6px;
+            padding: 1.2rem 1.4rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            transition: all 0.3s;
+        }
+        .bet-row:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .bet-row.filled { border-left: 4px solid var(--green); }
+        .bet-row .flags { display: flex; align-items: center; gap: 0.6rem; min-width: 9rem; }
+        .bet-row .flags img { width: 32px; height: auto; border-radius: 3px; }
+        .bet-row .flags .vs { font-weight: 700; color: var(--gray-3); font-size: 0.8rem; }
+        .bet-row .info { flex: 1; min-width: 12rem; }
+        .bet-row .info .pais { font-weight: 700; color: var(--primary); font-size: 1.2rem; }
+        .bet-row .info .rodada { font-size: 0.75rem; color: var(--gray-3); }
+        .bet-row .inputs { display: flex; gap: 0.6rem; align-items: center; }
+        .bet-row .inputs input {
+            width: 4.5rem; padding: 0.8rem !important;
+            text-align: center; font-weight: 800;
+            font-size: 1.4rem !important;
+            border: 2px solid var(--primary) !important;
+            border-radius: 6px !important;
+        }
+        .bet-row .inputs .sep { font-weight: 800; color: var(--primary); font-size: 1.4rem; }
+
+        /* RANKING */
+        .ranking-section { background: var(--primary); }
+        .ranking-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .ranking-empty { text-align: center; padding: 3rem; color: var(--gray-3); }
+        .ranking-empty .big { font-size: 3rem; display: block; margin-bottom: 1rem; }
+        .ranking-table { width: 100%; border-collapse: collapse; }
+        .ranking-table th {
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            padding: 1rem 0.8rem;
+            text-align: left;
+            border-bottom: 3px solid var(--secondary);
+        }
+        .ranking-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--gray-2);
+            font-size: 1.2rem;
+        }
+        .ranking-table .pos { font-weight: 800; width: 3rem; }
+        .ranking-table .pos-1 { color: #FFD700; }
+        .ranking-table .pos-2 { color: #C0C0C0; }
+        .ranking-table .pos-3 { color: #CD7F32; }
+        .ranking-table .pts { font-weight: 800; color: var(--green); }
+
+        /* REGULAMENTO */
+        .reg-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+        }
+        .reg-card h3 {
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-top: 2rem;
+            margin-bottom: 0.6rem;
+        }
+        .reg-card h3:first-child { margin-top: 0; }
+        .reg-card p, .reg-card li { font-size: 1.2rem; color: var(--gray-4); line-height: 1.7; }
+        .reg-card ul { padding-left: 2rem; margin: 0.8rem 0; }
+        .reg-card li { margin-bottom: 0.4rem; }
+        .reg-card li::marker { color: var(--secondary); }
+
+        /* FOOTER */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 5% 2rem;
+            border-top: 4px solid var(--secondary);
+        }
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        footer .footer-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-family: var(--font-title);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        footer .footer-links a:hover { opacity: 0.8; }
+        footer p { font-size: 1.1rem; opacity: 0.7; margin-bottom: 0.4rem; }
+        .footer-logo {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: var(--white);
+            padding: 1.2rem 2rem;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.4s;
+            max-width: 35rem;
+            font-size: 1.2rem;
+            border-left: 4px solid var(--secondary);
+        }
+        .toast.show { transform: translateX(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.4rem; }
+            .section-title { font-size: 1.8rem; }
+            .form-card { padding: 2rem; }
+            .games-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+            .premios-grid { grid-template-columns: 1fr; }
+            .premio-card.-destaque { transform: none; }
+            .top-bar { font-size: 1rem; }
+            .bet-row .inputs input { width: 3.8rem; font-size: 1.2rem !important; }
+            .countdown-wrap { gap: 0.6rem; }
+            .countdown-item { min-width: 5rem; padding: 0.6rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">🏆 BOLÃO COPA DO MUNDO 2026 — Participe e concorra a vale-compras!</div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-logo">
+            <div class="logo-icon">PE</div>
+            <div class="logo-text">Planeta Energia <small>Materiais Elétricos</small></div>
+        </div>
+        <div style="display:flex;gap:1.5rem;align-items:center;color:var(--white);font-family:var(--font-title);font-size:1.3rem;font-weight:600;">
+            <span>⚡ Energia para sua obra</span>
+        </div>
+    </header>
+
+    <!-- NAV -->
+    <nav class="nav-bar">
+        <a href="#comoFunciona">⚡ Como Funciona</a>
+        <a href="#premios">🏆 Prêmios</a>
+        <a href="#jogos">⚽ Jogos</a>
+        <a href="#ranking">📊 Ranking</a>
+        <a href="#regulamento">📜 Regras</a>
+        <a href="#formSection">🎯 Participar</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-icon">🏆</div>
+        <h1>Bolão Copa 2026</h1>
+        <p>Faça seus palpites nos jogos do Brasil e concorra a vale-compras na Planeta Energia! ⚡</p>
+        <div class="countdown-wrap" id="countdown">
+            <div class="countdown-item"><span class="countdown-num" id="cd-dias">--</span><span class="countdown-label">Dias</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="cd-horas">--</span><span class="countdown-label">Horas</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="cd-min">--</span><span class="countdown-label">Min</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="cd-seg">--</span><span class="countdown-label">Seg</span></div>
+        </div>
+        <div style="margin-top:1.5rem;">
+            <a href="#formSection" class="hero-btn">Quero Participar!</a>
+        </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section" id="comoFunciona">
+        <div class="container">
+            <h2 class="section-title">⚡ Como Funciona</h2>
+            <div class="steps-grid">
+                <div class="step-card"><div class="step-num">1</div><h3>Cadastre-se</h3><p>Preencha seus dados com CPF ou CNPJ</p></div>
+                <div class="step-card"><div class="step-num">2</div><h3>Faça Palpites</h3><p>Acerte os placares dos jogos do Brasil</p></div>
+                <div class="step-card"><div class="step-num">3</div><h3>Acumule Pontos</h3><p>Cada acerto vale pontos. Acertou mais, ganha</p></div>
+                <div class="step-card"><div class="step-num">4</div><h3>Ganhe Prêmios</h3><p>Os melhores colocados levam vale-compras!</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRÊMIOS -->
+    <section class="section premios-section" id="premios">
+        <div class="container">
+            <h2 class="section-title -white">🏆 Premiações</h2>
+            <div class="premios-grid">
+                <div class="premio-card"><div class="posicao">2º Lugar</div><span class="emoji-big">🥈</span><div class="valor">R$ 300</div><div class="tipo">em Vale-Compras</div></div>
+                <div class="premio-card -destaque"><div class="posicao">1º Lugar</div><span class="emoji-big">🥇</span><div class="valor" style="font-size:3.2rem;">R$ 500</div><div class="tipo">em Vale-Compras</div></div>
+                <div class="premio-card"><div class="posicao">3º Lugar</div><span class="emoji-big">🥉</span><div class="valor">R$ 200</div><div class="tipo">em Vale-Compras</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOGOS -->
+    <section class="section" id="jogos">
+        <div class="container">
+            <h2 class="section-title">⚽ Jogos do Brasil na Copa 2026</h2>
+            <div class="games-grid" id="jogosGrid"></div>
+        </div>
+    </section>
+
+    <!-- RANKING -->
+    <section class="section ranking-section" id="ranking">
+        <div class="container">
+            <h2 class="section-title -white">📊 Ranking do Bolão</h2>
+            <div class="ranking-card" id="rankingCard">
+                <div class="ranking-empty" id="rankingVazio">
+                    <span class="big">📋</span>
+                    <p><strong>Ninguém participou ainda!</strong></p>
+                    <p style="margin-top:0.5rem;font-size:1.1rem;">Seja o primeiro a fazer seus palpites!</p>
+                </div>
+                <div id="rankingTabela" style="display:none;">
+                    <table class="ranking-table"><thead><tr><th>#</th><th>Participante</th><th>Palpites</th><th>Pontos</th></tr></thead><tbody id="rankingBody"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGULAMENTO -->
+    <section class="section" id="regulamento">
+        <div class="container">
+            <h2 class="section-title">📜 Regulamento</h2>
+            <div class="reg-card">
+                <h3>📋 Como Participar</h3>
+                <p>Válido para <strong>clientes Planeta Energia</strong>. Cada CPF/CNPJ pode participar <strong>uma única vez</strong>.</p>
+                <h3>⚽ Pontuação</h3>
+                <ul><li><strong>Placar exato:</strong> 5 pontos</li><li><strong>Vencedor ou empate:</strong> 3 pontos</li><li><strong>Erro:</strong> 0 pontos</li></ul>
+                <h3>🏆 Desempate</h3>
+                <p>Mais placares exatos. Persistindo, inscrição mais antiga vence.</p>
+                <h3>📅 Período</h3>
+                <p>Palpites devem ser enviados <strong>antes do primeiro jogo do Brasil</strong> na Copa 2026.</p>
+                <h3>🎁 Prêmios</h3>
+                <p>Vale-compras na loja Planeta Energia, válidos por 30 dias após o término da Copa.</p>
+                <h3>⚡ Realização</h3>
+                <p><strong>Planeta Energia</strong> — Distribuidora de Materiais Elétricos e Iluminação</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMULÁRIO -->
+    <section class="section form-section" id="formSection">
+        <div class="container">
+            <h2 class="section-title">🎯 Faça Seus Palpites</h2>
+            <div class="form-card">
+                <div class="badge">Cadastro único por CPF/CNPJ</div>
+                <div class="error-msg" id="errorMsg"></div>
+                <div class="success-msg" id="successMsg">
+                    <span class="big">🎉</span>
+                    <h3>Palpites registrados com sucesso!</h3>
+                    <p>Boa sorte na Copa do Mundo 2026! 🇧🇷🏆</p>
+                    <button class="btn-secondary" onclick="resetar()">📝 Novo Cadastro</button>
+                </div>
+                <form id="cadastroForm" novalidate>
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-btn active" data-type="cpf">🧑 CPF</button>
+                        <button type="button" class="toggle-btn" data-type="cnpj">🏢 CNPJ</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" placeholder="João Silva" required>
+                        <div class="field-error" id="erroNome">Preencha o nome</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="documento" id="labelDoc">CPF *</label>
+                        <input type="text" id="documento" placeholder="000.000.000-00" required maxlength="18">
+                        <div class="field-error" id="erroDoc">Documento inválido</div>
+                    </div>
+                    <div class="form-group" id="empresaGroup" style="display:none;">
+                        <label for="empresa">Nome da Empresa *</label>
+                        <input type="text" id="empresa" placeholder="Sua Empresa LTDA">
+                        <div class="field-error" id="erroEmpresa">Preencha a empresa</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone *</label>
+                        <input type="tel" id="telefone" placeholder="(11) 99999-9999" required maxlength="15">
+                        <div class="field-error" id="erroTel">Telefone inválido</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Seus Palpites * <span style="font-weight:400;text-transform:none;font-size:0.75rem;color:var(--gray-3);">(preencha o jogo liberado)</span></label>
+                        <div class="palpites-box" id="palpitesContainer"></div>
+                        <div class="field-error" id="erroPalpites">Preencha o jogo antes de enviar</div>
+                    </div>
+                    <button type="button" class="submit-btn" id="submitBtn" onclick="enviar()">
+                        <span class="btn-text">🚀 Enviar Palpites</span>
+                        <span class="spinner"></span>
+                    </button>
+                    <input type="hidden" id="tipoDoc" value="cpf">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">⚡ Planeta Energia</div>
+        <div class="footer-links">
+            <a href="#comoFunciona">Como Funciona</a>
+            <a href="#premios">Prêmios</a>
+            <a href="#regulamento">Regulamento</a>
+            <a href="bolao-copa-admin.html" target="_blank">⚙️ Admin</a>
+            <a href="bolao-copa-consulta.html" target="_blank">🔍 Consultar</a>
+        </div>
+        <p>Distribuidora de Materiais Elétricos e Iluminação para Obras</p>
+        <p style="margin-top:1rem;font-size:0.9rem;opacity:0.5;">&copy; 2026 Planeta Energia — Bolão Copa do Mundo 🏆</p>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== DADOS ====================
+        function flagImg(code, alt) {
+            if (!code) return '<span style="font-size:1.5rem;">?</span>';
+            return '<img src="https://flagcdn.com/w80/' + code + '.png" alt="' + alt + '" style="width:36px;height:auto;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">';
+        }
+        var JOGOS = [
+            { id:1, rodada:'1a Rodada - Grupo C', paisCasa:'Brasil',  paisFora:'Marrocos',     flagCasa:'br', flagFora:'ma', data:'13/06/2026 22:00', local:'Nova York/Nova Jersey' },
+            { id:2, rodada:'2a Rodada - Grupo C', paisCasa:'Brasil',  paisFora:'Haiti',        flagCasa:'br', flagFora:'ht', data:'20/06/2026 00:30', local:'Filadelfia' },
+            { id:3, rodada:'3a Rodada - Grupo C', paisCasa:'Escocia', paisFora:'Brasil',       flagCasa:'gb-sct', flagFora:'br', data:'24/06/2026 22:00', local:'Miami' },
+            { id:4, rodada:'2a Fase (32 avos)',   paisCasa:'Brasil',  paisFora:'A definir',     flagCasa:'br', flagFora:'', data:'29/06/2026 17:00', local:'A definir' },
+            { id:5, rodada:'Oitavas de Final',    paisCasa:'Brasil',  paisFora:'A definir',     flagCasa:'br', flagFora:'', data:'04/07/2026 21:00', local:'A definir' },
+            { id:6, rodada:'Quartas de Final',    paisCasa:'Brasil',  paisFora:'A definir',     flagCasa:'br', flagFora:'', data:'09/07/2026 20:00', local:'A definir' },
+            { id:7, rodada:'Semifinal',           paisCasa:'Brasil',  paisFora:'A definir',     flagCasa:'br', flagFora:'', data:'14/07/2026 19:00', local:'A definir' },
+            { id:8, rodada:'Final',               paisCasa:'Brasil',  paisFora:'A definir',     flagCasa:'br', flagFora:'', data:'19/07/2026 19:00', local:'A definir' },
+        ];
+        var tipoDoc = 'cpf';
+        var enviando = false;
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderJogos();
+            renderPalpites();
+            setupToggle();
+            setupMascaras();
+            atualizarRanking();
+            iniciarCountdown();
+        });
+
+        // ==================== COUNTDOWN ====================
+        function iniciarCountdown() {
+            var jogo = JOGOS[0];
+            if (!jogo || jogo.data.indexOf('/') < 0) return;
+            var partes = jogo.data.split(' ');
+            var d = partes[0].split('/');
+            var h = partes[1].split(':');
+            var alvo = new Date(parseInt(d[2]), parseInt(d[1])-1, parseInt(d[0]), parseInt(h[0]), parseInt(h[1]));
+            function tick() {
+                var diff = alvo - new Date();
+                if (diff <= 0) { document.querySelectorAll('.countdown-num').forEach(function(el){el.textContent='00'}); return; }
+                document.getElementById('cd-dias').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+                document.getElementById('cd-horas').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+                document.getElementById('cd-min').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+                document.getElementById('cd-seg').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+            }
+            tick(); setInterval(tick, 1000);
+        }
+
+        // ==================== JOGOS ====================
+        function renderJogos() {
+            var resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
+            document.getElementById('jogosGrid').innerHTML = JOGOS.map(function(j) {
+                var r = resultados[j.id];
+                var temR = r && r.gols_casa !== undefined;
+                var h = '<div class="game-card">';
+                h += '<div class="rodada">' + j.rodada + '</div>';
+                h += '<div class="flags-row">';
+                h += flagImg(j.flagCasa, j.paisCasa);
+                h += '<span class="vs">vs</span>';
+                h += (j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.5rem;">?</span>');
+                h += '</div>';
+                h += '<div class="pais-nome">' + j.paisCasa + ' x ' + j.paisFora + '</div>';
+                if (temR) h += '<div class="placar">' + r.gols_casa + ' x ' + r.gols_fora + '</div>';
+                h += '<div class="game-info">' + j.data + (j.local !== 'A definir' ? ' | ' + j.local : '') + '</div>';
+                h += '</div>';
+                return h;
+            }).join('');
+        }
+
+        // ==================== PALPITES ====================
+        function renderPalpites() {
+            var liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
+            var ativos = JOGOS.filter(function(j){ return liberados.indexOf(j.id) >= 0; });
+            var bloqueados = JOGOS.filter(function(j){ return liberados.indexOf(j.id) < 0; });
+            var c = document.getElementById('palpitesContainer');
+            var h = '';
+
+            if (ativos.length) {
+                h += '<div style="margin-bottom:0.8rem;font-size:0.85rem;font-weight:700;color:var(--green);">' + ativos.length + 'o JOGO — Palpite disponivel</div>';
+                h += ativos.map(function(j){
+                    var r = '<div class="bet-row" id="bet-' + j.id + '">';
+                    r += '<div class="flags">' + flagImg(j.flagCasa, j.paisCasa) + '<span class="vs">vs</span>' + (j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">?</span>') + '</div>';
+                    r += '<div class="info"><div class="pais">' + j.paisCasa + ' x ' + j.paisFora + '</div><div class="rodada">' + j.rodada + '</div></div>';
+                    r += '<div class="inputs">';
+                    r += '<input type="number" class="score-input" data-id="' + j.id + '" data-tipo="gols_brasil" min="0" max="9" placeholder="0" style="width:4.5rem;padding:0.8rem;text-align:center;font-weight:800;font-size:1.4rem;border:2px solid var(--primary);border-radius:6px;" oninput="marcar(' + j.id + ')">';
+                    r += '<span class="sep">x</span>';
+                    r += '<input type="number" class="score-input" data-id="' + j.id + '" data-tipo="gols_adversario" min="0" max="9" placeholder="0" style="width:4.5rem;padding:0.8rem;text-align:center;font-weight:800;font-size:1.4rem;border:2px solid var(--primary);border-radius:6px;" oninput="marcar(' + j.id + ')">';
+                    r += '</div></div>';
+                    return r;
+                }).join('');
+            }
+
+            if (bloqueados.length) {
+                h += '<div style="margin-top:1.5rem;margin-bottom:0.8rem;padding-top:1.2rem;border-top:2px dashed var(--gray-2);font-size:0.85rem;color:var(--gray-3);font-weight:600;">Proximos jogos — Bloqueado (admin libera)</div>';
+                h += bloqueados.map(function(j){
+                    var r = '<div class="bet-row" style="opacity:0.4;background:var(--gray-1);">';
+                    r += '<div class="flags">' + flagImg(j.flagCasa, j.paisCasa) + '<span class="vs">vs</span>' + (j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">?</span>') + '</div>';
+                    r += '<div class="info"><div class="pais" style="color:var(--gray-3);">' + j.paisCasa + ' x ' + j.paisFora + '</div><div class="rodada">' + j.rodada + '</div></div>';
+                    r += '<div style="font-size:0.8rem;color:var(--gray-3);font-style:italic;"> Aguardando liberacao</div>';
+                    r += '</div>';
+                    return r;
+                }).join('');
+            }
+
+            c.innerHTML = h;
+        }
+
+        function marcar(id) {
+            var el = document.getElementById('bet-' + id);
+            if (!el) return;
+            var b = el.querySelector('[data-tipo="gols_brasil"]');
+            var a = el.querySelector('[data-tipo="gols_adversario"]');
+            if (b && a && b.value !== '' && a.value !== '') el.classList.add('filled');
+            else el.classList.remove('filled');
+            document.getElementById('erroPalpites').classList.remove('show');
+        }
+
+        // ==================== TOGGLE ====================
+        function setupToggle() {
+            document.querySelectorAll('.toggle-btn').forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    document.querySelectorAll('.toggle-btn').forEach(function(b){ b.classList.remove('active'); });
+                    this.classList.add('active');
+                    tipoDoc = this.dataset.type;
+                    document.getElementById('tipoDoc').value = tipoDoc;
+                    var doc = document.getElementById('documento');
+                    var label = document.getElementById('labelDoc');
+                    var emp = document.getElementById('empresaGroup');
+                    if (tipoDoc === 'cnpj') {
+                        doc.placeholder = '00.000.000/0000-00'; doc.maxLength = '18';
+                        label.textContent = 'CNPJ *'; emp.style.display = 'block';
+                    } else {
+                        doc.placeholder = '000.000.000-00'; doc.maxLength = '14';
+                        label.textContent = 'CPF *'; emp.style.display = 'none';
+                    }
+                    doc.value = ''; limparErro();
+                });
+            });
+        }
+
+        // ==================== MASCARAS ====================
+        function setupMascaras() {
+            document.getElementById('documento').addEventListener('input', function(){
+                var v = this.value.replace(/\D/g, '');
+                if (tipoDoc === 'cpf') {
+                    if (v.length > 11) v = v.slice(0,11);
+                    this.value = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{2})/,'$1-$2');
+                } else {
+                    if (v.length > 14) v = v.slice(0,14);
+                    this.value = v.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d)/,'$1-$2');
+                }
+            });
+            document.getElementById('telefone').addEventListener('input', function(){
+                var v = this.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.slice(0,11);
+                this.value = v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');
+            });
+        }
+
+        // ==================== VALIDACAO ====================
+        function validar() {
+            var ok = true;
+            var nome = document.getElementById('nome').value.trim();
+            var doc = document.getElementById('documento').value.replace(/\D/g, '');
+            var tel = document.getElementById('telefone').value.trim();
+            var emp = document.getElementById('empresa').value.trim();
+            var erroEl = document.getElementById('errorMsg');
+            erroEl.classList.remove('show');
+
+            if (!nome) { document.getElementById('nome').classList.add('error'); document.getElementById('erroNome').classList.add('show'); ok=false; }
+            else { document.getElementById('nome').classList.remove('error'); document.getElementById('erroNome').classList.remove('show'); }
+
+            if (!doc || (tipoDoc==='cpf' && doc.length!==11) || (tipoDoc==='cnpj' && doc.length!==14)) {
+                document.getElementById('documento').classList.add('error'); document.getElementById('erroDoc').classList.add('show'); ok=false;
+            } else { document.getElementById('documento').classList.remove('error'); document.getElementById('erroDoc').classList.remove('show'); }
+
+            if (!tel || tel.replace(/\D/g,'').length<10) { document.getElementById('telefone').classList.add('error'); document.getElementById('erroTel').classList.add('show'); ok=false; }
+            else { document.getElementById('telefone').classList.remove('error'); document.getElementById('erroTel').classList.remove('show'); }
+
+            if (tipoDoc==='cnpj' && !emp) { document.getElementById('empresa').classList.add('error'); document.getElementById('erroEmpresa').classList.add('show'); ok=false; }
+            else if (tipoDoc==='cnpj') { document.getElementById('empresa').classList.remove('error'); document.getElementById('erroEmpresa').classList.remove('show'); }
+
+            // Palpites liberados
+            var lib = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
+            var paraValidar = JOGOS.filter(function(j){ return lib.indexOf(j.id) >= 0; });
+            var todosPreenchidos = paraValidar.every(function(j){
+                var b = document.querySelector('.score-input[data-id="'+j.id+'"][data-tipo="gols_brasil"]');
+                var a = document.querySelector('.score-input[data-id="'+j.id+'"][data-tipo="gols_adversario"]');
+                return b && a && b.value !== '' && a.value !== '';
+            });
+            if (!todosPreenchidos) { document.getElementById('erroPalpites').classList.add('show'); ok=false; }
+            else { document.getElementById('erroPalpites').classList.remove('show'); }
+
+            return ok;
+        }
+
+        // ==================== ENVIAR ====================
+        function enviar() {
+            if (enviando) return;
+            if (!validar()) { document.getElementById('errorMsg').classList.add('show'); return; }
+            
+            var doc = document.getElementById('documento').value.replace(/\D/g, '');
+            var participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            if (participantes.some(function(p){ return p.documento === doc; })) {
+                mostrarToast('Este documento ja foi utilizado!', 'error');
+                return;
+            }
+
+            enviando = true;
+            var btn = document.getElementById('submitBtn');
+            btn.classList.add('loading'); btn.disabled = true;
+            document.getElementById('errorMsg').classList.remove('show');
+
+            var palpites = {};
+            document.querySelectorAll('.score-input').forEach(function(inp){
+                var id = inp.dataset.id;
+                if (!palpites[id]) palpites[id] = {};
+                palpites[id][inp.dataset.tipo] = parseInt(inp.value) || 0;
+            });
+
+            setTimeout(function(){
+                var p = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+                p.push({
+                    nome: document.getElementById('nome').value.trim(),
+                    documento: doc,
+                    telefone: document.getElementById('telefone').value.trim(),
+                    empresa: tipoDoc === 'cnpj' ? document.getElementById('empresa').value.trim() : null,
+                    tipoDocumento: tipoDoc,
+                    palpites: palpites,
+                    data: new Date().toLocaleString('pt-BR')
+                });
+                localStorage.setItem('bolao_participantes', JSON.stringify(p));
+                enviando = false;
+                btn.classList.remove('loading'); btn.disabled = false;
+                document.getElementById('successMsg').classList.add('show');
+                document.getElementById('cadastroForm').style.opacity = '0.5';
+                document.getElementById('cadastroForm').style.pointerEvents = 'none';
+                atualizarRanking();
+                mostrarToast('Palpites registrados com sucesso!');
+                document.getElementById('successMsg').scrollIntoView({behavior:'smooth'});
+            }, 600);
+        }
+
+        function resetar() {
+            document.getElementById('successMsg').classList.remove('show');
+            document.getElementById('cadastroForm').style.opacity = '1';
+            document.getElementById('cadastroForm').style.pointerEvents = 'auto';
+            document.getElementById('cadastroForm').reset();
+            document.querySelectorAll('.error').forEach(function(e){ e.classList.remove('error'); });
+            document.querySelectorAll('.field-error').forEach(function(e){ e.classList.remove('show'); });
+            document.querySelectorAll('.bet-row').forEach(function(e){ e.classList.remove('filled'); });
+        }
+
+        // ==================== RANKING ====================
+        function atualizarRanking() {
+            var p = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            if (!p.length) {
+                document.getElementById('rankingVazio').style.display = 'block';
+                document.getElementById('rankingTabela').style.display = 'none';
+                return;
+            }
+            document.getElementById('rankingVazio').style.display = 'none';
+            document.getElementById('rankingTabela').style.display = 'block';
+            var ranking = p.map(function(participante){
+                var pontos = 0;
+                var total = 0;
+                if (participante.palpites) {
+                    Object.values(participante.palpites).forEach(function(palpite){
+                        total++;
+                        pontos += 1;
+                        if ((palpite.gols_brasil||0) > (palpite.gols_adversario||0)) pontos += 1;
+                    });
+                }
+                return { nome: participante.nome, palpites: total, pontos: pontos };
+            });
+            ranking.sort(function(a,b){ return b.pontos - a.pontos; });
+            document.getElementById('rankingBody').innerHTML = ranking.map(function(p,i){
+                var medalha = i===0 ? '1' : i===1 ? '2' : i===2 ? '3' : (i+1);
+                var cls = i===0 ? 'pos-1' : i===1 ? 'pos-2' : i===2 ? 'pos-3' : '';
+                return '<tr><td class="pos '+cls+'">'+medalha+'</td><td style="font-weight:600;">'+p.nome+'</td><td style="font-size:1rem;color:var(--gray-3);">'+p.palpites+' palpites</td><td class="pts">'+p.pontos+' pts</td></tr>';
+            }).join('');
+        }
+
+        // ==================== TOAST ====================
+        function mostrarToast(msg, tipo) {
+            var t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.borderLeftColor = tipo === 'error' ? 'var(--red)' : 'var(--secondary)';
+            t.classList.add('show');
+            setTimeout(function(){ t.classList.remove('show'); }, 3500);
+        }
+        function limparErro() {
+            document.getElementById('errorMsg').classList.remove('show');
+            document.getElementById('successMsg').classList.remove('show');
+            document.querySelectorAll('.error').forEach(function(e){ e.classList.remove('error'); });
+            document.querySelectorAll('.field-error').forEach(function(e){ e.classList.remove('show'); });
+        }
+    </script>
+</body>
+</html>
