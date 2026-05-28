@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bolão Copa do Mundo 2026 🏆</title>
+    <meta name="description" content="Painel Administrativo do Bolão Copa 2026">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --azul-escuro: #003399;
+            --azul-claro: #004dd9;
+            --amarelo: #FFD000;
+            --verde: #00A651;
+            --vermelho: #E63946;
+            --preto: #000a1f;
+            --branco: #ffffff;
+            --cinza-light: #f0f2f5;
+            --cinza-medium: #8899aa;
+            --cinza-texto: #666;
+            --dark-bg: #0d1117;
+            --sidebar-bg: #161b22;
+            --sidebar-hover: #21262d;
+            --card-bg: #1c2128;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --sombra: 0 4px 20px rgba(0,0,0,0.3);
+            --raio: 10px;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           LOGIN SCREEN
+           ============================================ */
+        .login-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, #001a4d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .login-card {
+            background: var(--branco);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.8rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .login-sub {
+            font-size: 0.9rem;
+            color: var(--cinza-texto);
+            margin-bottom: 30px;
+        }
+
+        .login-card label {
+            display: block;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--preto);
+            margin-bottom: 6px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .login-card input:focus {
+            outline: none;
+            border-color: var(--azul-escuro);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--azul-escuro);
+            color: var(--branco);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-btn:hover {
+            background: var(--azul-claro);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,51,153,0.4);
+        }
+
+        .login-error {
+            color: var(--vermelho);
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .login-error.show { display: block; }
+
+        /* ============================================
+           LAYOUT - SIDEBAR + MAIN
+           ============================================ */
+        .app-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .sidebar-brand .brand-icon {
+            font-size: 2.2rem;
+        }
+
+        .sidebar-brand .brand-name {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--amarelo);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .sidebar-brand .brand-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 12px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-hover);
+            color: var(--amarelo);
+            border-left-color: var(--amarelo);
+        }
+
+        .nav-item .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--vermelho);
+            color: var(--vermelho);
+        }
+
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px 35px;
+            background: var(--dark-bg);
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* ============================================
+           CARDS & TABLES
+           ============================================ */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--raio);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--raio);
+            padding: 20px 24px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-card .stat-value {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--amarelo);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 14px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 12px 14px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .flag-icon {
+            font-size: 1.4rem;
+            margin-right: 6px;
+        }
+
+        /* ============================================
+           FORM ELEMENTS
+           ============================================ */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-sm {
+            width: 60px;
+            padding: 8px 10px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+
+        .input-sm:focus {
+            outline: none;
+            border-color: var(--amarelo);
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--azul-escuro);
+            color: var(--branco);
+        }
+
+        .btn-primary:hover {
+            background: var(--azul-claro);
+        }
+
+        .btn-yellow {
+            background: var(--amarelo);
+            color: var(--preto);
+        }
+
+        .btn-yellow:hover {
+            background: #ffe500;
+        }
+
+        .btn-green {
+            background: var(--verde);
+            color: var(--branco);
+        }
+
+        .btn-green:hover {
+            background: #00c45e;
+        }
+
+        .btn-red {
+            background: var(--vermelho);
+            color: var(--branco);
+        }
+
+        .btn-red:hover {
+            background: #c1121f;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           BADGES
+           ============================================ */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-green {
+            background: rgba(0,166,81,0.2);
+            color: var(--verde);
+        }
+
+        .badge-yellow {
+            background: rgba(255,208,0,0.2);
+            color: var(--amarelo);
+        }
+
+        .badge-gray {
+            background: rgba(139,148,158,0.15);
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           SEARCH
+           ============================================ */
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-bar input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 14px;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--amarelo);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           MEDALS
+           ============================================ */
+        .medal {
+            font-size: 1.3rem;
+        }
+
+        .pos-num {
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .pos-1 { color: #FFD700; }
+        .pos-2 { color: #C0C0C0; }
+        .pos-3 { color: #CD7F32; }
+
+        /* ============================================
+           TOAST
+           ============================================ */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            box-shadow: var(--sombra);
+            animation: slideInRight 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.success { border-left: 4px solid var(--verde); }
+        .toast.error { border-left: 4px solid var(--vermelho); }
+        .toast.info { border-left: 4px solid var(--amarelo); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ============================================
+           GAME CARD
+           ============================================ */
+        .game-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            flex-wrap: wrap;
+        }
+
+        .game-row:last-child {
+            border-bottom: none;
+        }
+
+        .game-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .game-rodada {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .game-teams {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .game-teams .vs {
+            color: var(--text-secondary);
+            font-weight: 300;
+            font-size: 0.8rem;
+        }
+
+        .game-meta {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .game-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-status {
+            min-width: 70px;
+            text-align: center;
+        }
+
+        /* ============================================
+           FINALIZE SECTION
+           ============================================ */
+        .final-rank {
+            margin-top: 20px;
+        }
+
+        .final-rank .pos-1 td { background: rgba(255,215,0,0.05); }
+        .final-rank .pos-2 td { background: rgba(192,192,192,0.05); }
+        .final-rank .pos-3 td { background: rgba(205,127,50,0.05); }
+
+        .print-area {
+            padding: 20px;
+        }
+
+        .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--amarelo);
+        }
+
+        .print-header h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--amarelo);
+            letter-spacing: 2px;
+        }
+
+        .print-header p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .print-date {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 30px;
+        }
+
+        /* ============================================
+           CONFIRM MODAL
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .modal-box h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.6rem;
+            color: var(--amarelo);
+            margin-bottom: 12px;
+        }
+
+        .modal-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                min-width: 60px;
+            }
+            .sidebar-brand .brand-name,
+            .sidebar-brand .brand-sub,
+            .nav-item .nav-label {
+                display: none;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 14px 10px;
+            }
+            .nav-item .nav-icon {
+                margin: 0;
+            }
+            .sidebar-footer .logout-btn span {
+                display: none;
+            }
+            .logout-btn {
+                justify-content: center;
+            }
+            .main-content {
+                padding: 20px 16px;
+            }
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+            .game-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .game-result {
+                width: 100%;
+                justify-content: flex-start;
+                margin-top: 8px;
+            }
+            .stats-row .stat-card {
+                min-width: 120px;
+            }
+            .modal-box {
+                padding: 24px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 50px;
+                min-width: 50px;
+            }
+            .nav-item {
+                padding: 10px 8px;
+            }
+            .main-content {
+                padding: 16px 12px;
+            }
+            table th, table td {
+                padding: 8px 10px;
+                font-size: 0.78rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================
+     LOGIN SCREEN
+     ============================================ -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <div class="login-logo">🏆 Bolão 2026</div>
+        <div class="login-sub">Painel Administrativo</div>
+        <label for="senhaInput">Senha de Administrador</label>
+        <input type="password" id="senhaInput" placeholder="Digite a senha" autocomplete="off">
+        <button class="login-btn" onclick="fazerLogin()">🔐 Entrar</button>
+        <div class="login-error" id="loginError">❌ Senha incorreta! Tente novamente.</div>
+    </div>
+</div>
+
+<!-- ============================================
+     APP LAYOUT
+     ============================================ -->
+<div class="app-layout" id="appLayout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">🏆</div>
+            <div class="brand-name">Bolão Admin</div>
+            <div class="brand-sub">Copa 2026</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-item active" data-tab="jogos" onclick="trocarAba('jogos')">
+                <span class="nav-icon">⚽</span>
+                <span class="nav-label">Gerenciar Jogos</span>
+            </div>
+            <div class="nav-item" data-tab="participantes" onclick="trocarAba('participantes')">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Participantes</span>
+            </div>
+            <div class="nav-item" data-tab="apuracao" onclick="trocarAba('apuracao')">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Apuração</span>
+            </div>
+            <div class="nav-item" data-tab="finalizar" onclick="trocarAba('finalizar')">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-label">Finalizar</span>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="fazerLogout()">
+                <span>🚪</span>
+                <span>Sair</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- ========== ABA: JOGOS ========== -->
+        <div class="page-section active" id="section-jogos">
+            <div class="page-header">
+                <h1>⚽ Gerenciar Jogos</h1>
+                <p>Registre os resultados oficiais dos jogos do Brasil na Copa 2026</p>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 Jogos do Brasil</div>
+                <div id="jogosContainer"></div>
+            </div>
+        </div>
+
+        <!-- ========== ABA: PARTICIPANTES ========== -->
+        <div class="page-section" id="section-participantes">
+            <div class="page-header">
+                <h1>👥 Participantes</h1>
+                <p>Visualize e gerencie os participantes cadastrados</p>
+            </div>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalParticipantes">0</div>
+                    <div class="stat-label">Total de Participantes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="comPalpites">0</div>
+                    <div class="stat-label">Com Palpites</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 Lista de Participantes</div>
+                <div class="search-bar">
+                    <input type="text" id="searchParticipante" placeholder="🔍 Buscar por nome..." oninput="filtrarParticipantes()">
+                    <button class="btn btn-green" onclick="exportarCSV()">📥 Exportar CSV</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>Documento</th>
+                                <th>Telefone</th>
+                                <th>Data</th>
+                                <th>Palpites</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participantesTableBody"></tbody>
+                    </table>
+                </div>
+                <div style="text-align:center;padding:30px;color:var(--text-secondary);display:none" id="nenhumParticipante">
+                    Nenhum participante encontrado.
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ABA: APURAÇÃO ========== -->
+        <div class="page-section" id="section-apuracao">
+            <div class="page-header">
+                <h1>📊 Apuração</h1>
+                <p>Compare os palpites dos participantes com os resultados oficiais</p>
+            </div>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value" id="apuTotalParticipantes">0</div>
+                    <div class="stat-label">Participantes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="apuJogosRealizados">0</div>
+                    <div class="stat-label">Jogos Realizados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="apuMaiorPontuacao">0</div>
+                    <div class="stat-label">Maior Pontuação</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                    <span>📊 Ranking</span>
+                    <button class="btn btn-yellow btn-sm" onclick="calcularApuracao()">🔄 Recalcular</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Nome</th>
+                                <th>Total Acertos</th>
+                                <th>Placar Exato (5pts)</th>
+                                <th>Vencedor (3pts)</th>
+                                <th>Total Pontos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="apuracaoTableBody"></tbody>
+                    </table>
+                </div>
+                <div style="text-align:center;padding:40px;color:var(--text-secondary);display:none" id="apuracaoVazia">
+                    <p style="font-size:1.1rem;margin-bottom:8px;">📭 Nenhum dado disponível</p>
+                    <p>Registre os resultados dos jogos e tenha participantes cadastrados para ver a apuração.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📌 Legenda</div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.7;">
+                    <span class="badge badge-green">5 pts</span> Placar Exato — acertou o resultado exato do jogo<br>
+                    <span class="badge badge-yellow">3 pts</span> Vencedor / Empate — acertou quem venceu ou se houve empate<br>
+                    <span class="badge badge-gray">0 pt</span> Erro — não acertou nem o vencedor nem o placar
+                </p>
+            </div>
+        </div>
+
+        <!-- ========== ABA: FINALIZAR ========== -->
+        <div class="page-section" id="section-finalizar">
+            <div class="page-header">
+                <h1>🏆 Finalizar Bolão</h1>
+                <p>Gere o ranking final e encerre a edição do bolão</p>
+            </div>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <button class="btn btn-yellow" onclick="gerarRelatorioFinal()" style="width:100%;padding:14px;font-size:1rem;justify-content:center;">
+                        📄 Gerar Relatório Final
+                    </button>
+                </div>
+                <div class="stat-card">
+                    <button class="btn btn-primary" onclick="imprimirRelatorio()" style="width:100%;padding:14px;font-size:1rem;justify-content:center;">
+                        🖨️ Imprimir / PDF
+                    </button>
+                </div>
+                <div class="stat-card">
+                    <button class="btn btn-red" onclick="mostrarModalLimpar()" style="width:100%;padding:14px;font-size:1rem;justify-content:center;">
+                        🗑️ Limpar Todos os Dados
+                    </button>
+                </div>
+            </div>
+            <div class="card" id="relatorioFinalCard" style="display:none;">
+                <div class="card-title">📄 Relatório Final - Bolão Copa 2026</div>
+                <div id="relatorioConteudo"></div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ============================================
+     TOAST CONTAINER
+     ============================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============================================
+     CONFIRM MODAL
+     ============================================ -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+        <h3>⚠️ Atenção</h3>
+        <p id="modalMessage">Tem certeza que deseja continuar?</p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+            <button class="btn btn-red" id="modalConfirmBtn" onclick="">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// JOGOS DATA
+// ============================================
+const JOGOS = [
+    { id: 1,  rodada: '1ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'MAR', paisFora: 'Marrocos',     bandeiraFora: '🇲🇦', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
+    { id: 2,  rodada: '2ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'HAI', paisFora: 'Haiti',        bandeiraFora: '🇭🇹', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
+    { id: 3,  rodada: '3ª Rodada - Grupo C', timeCasa: 'SCO', paisCasa: 'Escócia',     bandeiraCasa: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', timeFora: 'BRA', paisFora: 'Brasil',   bandeiraFora: '🇧🇷', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
+    { id: 4,  rodada: '2ª Fase (32 avos)',   timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir (2º F/G/H)', bandeiraFora: '❓', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
+    { id: 5,  rodada: 'Oitavas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
+    { id: 6,  rodada: 'Quartas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
+    { id: 7,  rodada: 'Semifinal',           timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
+    { id: 8,  rodada: 'Final',               timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
+];
+
+// ============================================
+// STATE
+// ============================================
+const SENHA_ADMIN = 'admin123';
+let abaAtual = 'jogos';
+
+// ============================================
+// LOGIN
+// ============================================
+function fazerLogin() {
+    const senha = document.getElementById('senhaInput').value;
+    const erro = document.getElementById('loginError');
+
+    if (senha === SENHA_ADMIN) {
+        sessionStorage.setItem('bolao_admin_logged', 'true');
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('appLayout').style.display = 'flex';
+        carregarTudo();
+        mostrarToast('✅ Login realizado com sucesso!', 'success');
+    } else {
+        erro.classList.add('show');
+        document.getElementById('senhaInput').value = '';
+        document.getElementById('senhaInput').focus();
+    }
+}
+
+function fazerLogout() {
+    sessionStorage.removeItem('bolao_admin_logged');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('appLayout').style.display = 'none';
+    document.getElementById('senhaInput').value = '';
+    document.getElementById('loginError').classList.remove('show');
+}
+
+function verificarLogin() {
+    if (sessionStorage.getItem('bolao_admin_logged') === 'true') {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('appLayout').style.display = 'flex';
+        carregarTudo();
+    } else {
+        document.getElementById('appLayout').style.display = 'none';
+    }
+}
+
+// ============================================
+// TAB NAVIGATION
+// ============================================
+function trocarAba(aba) {
+    abaAtual = aba;
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('section-' + aba).classList.add('active');
+    document.querySelector('.nav-item[data-tab="' + aba + '"]').classList.add('active');
+
+    switch (aba) {
+        case 'jogos': renderizarJogos(); break;
+        case 'participantes': renderizarParticipantes(); break;
+        case 'apuracao': calcularApuracao(); break;
+        case 'finalizar': /* nothing auto */ break;
+    }
+}
+
+// ============================================
+// TOAST
+// ============================================
+function mostrarToast(msg, tipo) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + (tipo || 'info');
+    toast.textContent = msg;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
+// ============================================
+// MODAL
+// ============================================
+let modalCallback = null;
+
+function mostrarModal(mensagem, callback) {
+    document.getElementById('modalMessage').textContent = mensagem;
+    document.getElementById('confirmModal').classList.add('show');
+    modalCallback = callback;
+}
+
+function fecharModal() {
+    document.getElementById('confirmModal').classList.remove('show');
+    modalCallback = null;
+}
+
+function confirmarModal() {
+    if (typeof modalCallback === 'function') {
+        modalCallback();
+    }
+    fecharModal();
+}
+
+function mostrarModalLimpar() {
+    mostrarModal('Tem certeza que deseja limpar TODOS os dados? Esta ação é irreversível e apagará todos os participantes, palpites e resultados.', function() {
+        limparTodosDados();
+    });
+}
+
+// ============================================
+// LOCAL STORAGE HELPERS
+// ============================================
+function getParticipantes() {
+    return JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+}
+
+function getResultados() {
+    return JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
+}
+
+function salvarResultados(resultados) {
+    localStorage.setItem('bolao_resultados', JSON.stringify(resultados));
+}
+
+// ============================================
+// RENDERIZAR JOGOS
+// ============================================
+function renderizarJogos() {
+    const container = document.getElementById('jogosContainer');
+    const resultados = getResultados();
+    let html = '';
+
+    JOGOS.forEach(jogo => {
+        const temResultado = resultados[jogo.id] !== undefined;
+        const r = resultados[jogo.id] || { gols_casa: '', gols_fora: '' };
+
+        html += '<div class="game-row">';
+        html += '  <div class="game-info">';
+        html += '    <div class="game-rodada">' + jogo.rodada + '</div>';
+        html += '    <div class="game-teams">';
+        html += '      <span class="flag-icon">' + jogo.bandeiraCasa + '</span> ' + jogo.timeCasa;
+        html += '      <span class="vs">vs</span>';
+        html += '      <span class="flag-icon">' + jogo.bandeiraFora + '</span> ' + jogo.timeFora;
+        html += '    </div>';
+        html += '    <div class="game-meta">📅 ' + jogo.data + ' | 📍 ' + jogo.local + '</div>';
+        html += '  </div>';
+        html += '  <div class="game-result">';
+        html += '    <span style="font-size:0.8rem;color:var(--text-secondary);">Casa:</span>';
+        html += '    <input type="number" min="0" max="20" class="input-sm" id="golsCasa_' + jogo.id + '" value="' + (temResultado ? r.gols_casa : '') + '" placeholder="0">';
+        html += '    <span style="font-size:0.8rem;color:var(--text-secondary);">×</span>';
+        html += '    <span style="font-size:0.8rem;color:var(--text-secondary);">Fora:</span>';
+        html += '    <input type="number" min="0" max="20" class="input-sm" id="golsFora_' + jogo.id + '" value="' + (temResultado ? r.gols_fora : '') + '" placeholder="0">';
+        html += '    <button class="btn btn-primary btn-sm" onclick="salvarResultado(' + jogo.id + ')">💾 Salvar</button>';
+        html += '    <div class="game-status">';
+        if (temResultado) {
+            html += '      <span class="badge badge-green">✅ Realizado</span>';
+        } else {
+            html += '      <span class="badge badge-gray">⏳ Pendente</span>';
+        }
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
+function salvarResultado(jogoId) {
+    const golsCasa = parseInt(document.getElementById('golsCasa_' + jogoId).value);
+    const golsFora = parseInt(document.getElementById('golsFora_' + jogoId).value);
+
+    if (isNaN(golsCasa) || isNaN(golsFora)) {
+        mostrarToast('⚠️ Preencha ambos os campos de gols!', 'error');
+        return;
+    }
+
+    if (golsCasa < 0 || golsFora < 0) {
+        mostrarToast('⚠️ Os valores não podem ser negativos!', 'error');
+        return;
+    }
+
+    const resultados = getResultados();
+    resultados[jogoId] = { gols_casa: golsCasa, gols_fora: golsFora };
+    salvarResultados(resultados);
+    renderizarJogos();
+    mostrarToast('✅ Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')', 'success');
+}
+
+// ============================================
+// RENDERIZAR PARTICIPANTES
+// ============================================
+function renderizarParticipantes() {
+    const participantes = getParticipantes();
+    const total = participantes.length;
+    const comPalpites = participantes.filter(p => p.palpites && Object.keys(p.palpites).length > 0).length;
+
+    document.getElementById('totalParticipantes').textContent = total;
+    document.getElementById('comPalpites').textContent = comPalpites;
+
+    filtrarParticipantes();
+}
+
+function filtrarParticipantes() {
+    const busca = document.getElementById('searchParticipante').value.toLowerCase().trim();
+    const participantes = getParticipantes();
+    const tbody = document.getElementById('participantesTableBody');
+    const vazio = document.getElementById('nenhumParticipante');
+
+    const filtrados = busca ? participantes.filter(p => p.nome.toLowerCase().includes(busca)) : participantes;
+
+    if (filtrados.length === 0) {
+        tbody.innerHTML = '';
+        vazio.style.display = 'block';
+        return;
+    }
+    vazio.style.display = 'none';
+
+    let html = '';
+    filtrados.forEach((p, i) => {
+        const docMascarado = mascararDocumento(p.documento, p.tipoDocumento);
+        const qtdPalpites = p.palpites ? Object.keys(p.palpites).length : 0;
+
+        html += '<tr>';
+        html += '  <td>' + (i + 1) + '</td>';
+        html += '  <td><strong>' + escapeHtml(p.nome) + '</strong></td>';
+        html += '  <td>' + docMascarado + '</td>';
+        html += '  <td>' + escapeHtml(p.telefone || '-') + '</td>';
+        html += '  <td>' + (p.data || '-') + '</td>';
+        html += '  <td>' + qtdPalpites + ' / ' + JOGOS.length + '</td>';
+        html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
+}
+
+function mascararDocumento(doc, tipo) {
+    if (!doc) return '-';
+    const limpo = doc.replace(/\D/g, '');
+    if (tipo === 'cnpj' && limpo.length === 14) {
+        return limpo.slice(0, 2) + '.***.***/****-' + limpo.slice(-2);
+    }
+    // CPF
+    if (limpo.length === 11) {
+        return limpo.slice(0, 3) + '.***.***-' + limpo.slice(-2);
+    }
+    return '***-***-**' + limpo.slice(-2);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============================================
+// EXPORTAR CSV
+// ============================================
+function exportarCSV() {
+    const participantes = getParticipantes();
+    if (participantes.length === 0) {
+        mostrarToast('⚠️ Nenhum participante para exportar!', 'error');
+        return;
+    }
+
+    let csv = 'Nome,Documento,Telefone,Empresa,Tipo Doc,Data\n';
+    participantes.forEach(p => {
+        const nome = '"' + (p.nome || '').replace(/"/g, '""') + '"';
+        const doc = p.documento || '';
+        const tel = '"' + (p.telefone || '').replace(/"/g, '""') + '"';
+        const empresa = '"' + (p.empresa || '').replace(/"/g, '""') + '"';
+        csv += nome + ',' + doc + ',' + tel + ',' + empresa + ',' + (p.tipoDocumento || 'cpf') + ',' + (p.data || '') + '\n';
+    });
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'participantes-bolao-2026.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+
+    mostrarToast('✅ CSV exportado com sucesso!', 'success');
+}
+
+// ============================================
+// APURAÇÃO / RANKING
+// ============================================
+function calcularApuracao() {
+    const participantes = getParticipantes();
+    const resultados = getResultados();
+    const tbody = document.getElementById('apuracaoTableBody');
+    const vazio = document.getElementById('apuracaoVazia');
+
+    const jogosRealizados = Object.keys(resultados).length;
+    document.getElementById('apuJogosRealizados').textContent = jogosRealizados + ' / ' + JOGOS.length;
+    document.getElementById('apuTotalParticipantes').textContent = participantes.length;
+
+    if (participantes.length === 0 || jogosRealizados === 0) {
+        tbody.innerHTML = '';
+        vazio.style.display = 'block';
+        document.getElementById('apuMaiorPontuacao').textContent = '0';
+        return;
+    }
+    vazio.style.display = 'none';
+
+    const ranking = [];
+
+    participantes.forEach(p => {
+        if (!p.palpites) return;
+
+        let totalAcertos = 0;
+        let placarExato = 0;
+        let vencedorCorreto = 0;
+
+        Object.keys(p.palpites).forEach(jogoId => {
+            const resultado = resultados[jogoId];
+            if (!resultado) return;
+
+            const palpite = p.palpites[jogoId];
+            const jogo = JOGOS.find(j => j.id === parseInt(jogoId));
+            if (!jogo) return;
+
+            // Mapear: participante armazena gols_brasil e gols_adversario
+            // Resultado armazena gols_casa e gols_fora
+            let golsBrasilReal, golsAdvReal;
+
+            if (jogo.timeCasa === 'BRA') {
+                golsBrasilReal = resultado.gols_casa;
+                golsAdvReal = resultado.gols_fora;
+            } else {
+                // BRA is away (jogo 3: SCO vs BRA)
+                golsBrasilReal = resultado.gols_fora;
+                golsAdvReal = resultado.gols_casa;
+            }
+
+            const golsBrasilPalpite = palpite.gols_brasil;
+            const golsAdvPalpite = palpite.gols_adversario;
+
+            if (golsBrasilPalpite === undefined || golsAdvPalpite === undefined) return;
+
+            totalAcertos++;
+
+            // Placar exato = 5 pts
+            if (golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal) {
+                placarExato++;
+                return; // 5 pts, não conta como vencedor correto também
+            }
+
+            // Verificar vencedor/empate
+            const resultadoReal = golsBrasilReal > golsAdvReal ? 'brasil' :
+                                  golsBrasilReal < golsAdvReal ? 'adversario' : 'empate';
+            const resultadoPalpite = golsBrasilPalpite > golsAdvPalpite ? 'brasil' :
+                                     golsBrasilPalpite < golsAdvPalpite ? 'adversario' : 'empate';
+
+            if (resultadoReal === resultadoPalpite) {
+                vencedorCorreto++;
+            }
+        });
+
+        if (totalAcertos > 0) {
+            const pontosTotais = (placarExato * 5) + (vencedorCorreto * 3);
+            ranking.push({
+                nome: p.nome,
+                totalAcertos: totalAcertos,
+                placarExato: placarExato,
+                vencedorCorreto: vencedorCorreto,
+                pontos: pontosTotais
+            });
+        }
+    });
+
+    // Sort by points descending
+    ranking.sort((a, b) => b.pontos - a.pontos || b.totalAcertos - a.totalAcertos);
+
+    document.getElementById('apuMaiorPontuacao').textContent = ranking.length > 0 ? ranking[0].pontos : '0';
+
+    if (ranking.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:30px;">Nenhum palpite pôde ser comparado (resultados pendentes).</td></tr>';
+        return;
+    }
+
+    let html = '';
+    ranking.forEach((r, i) => {
+        const pos = i + 1;
+        let posDisplay = '<span class="pos-num">' + pos + 'º</span>';
+        if (pos === 1) posDisplay = '<span class="medal">🥇</span>';
+        else if (pos === 2) posDisplay = '<span class="medal">🥈</span>';
+        else if (pos === 3) posDisplay = '<span class="medal">🥉</span>';
+
+        const posClass = pos === 1 ? 'pos-1' : pos === 2 ? 'pos-2' : pos === 3 ? 'pos-3' : '';
+
+        html += '<tr class="' + posClass + '">';
+        html += '  <td>' + posDisplay + '</td>';
+        html += '  <td><strong>' + escapeHtml(r.nome) + '</strong></td>';
+        html += '  <td>' + r.totalAcertos + '</td>';
+        html += '  <td>' + r.placarExato + '</td>';
+        html += '  <td>' + r.vencedorCorreto + '</td>';
+        html += '  <td><strong>' + r.pontos + '</strong></td>';
+        html += '</tr>';
+    });
+
+    tbody.innerHTML = html;
+}
+
+// ============================================
+// FINALIZAR / RELATÓRIO
+// ============================================
+function gerarRelatorioFinal() {
+    const participantes = getParticipantes();
+    const resultados = getResultados();
+    const container = document.getElementById('relatorioConteudo');
+    const card = document.getElementById('relatorioFinalCard');
+
+    if (participantes.length === 0) {
+        mostrarToast('⚠️ Nenhum participante cadastrado!', 'error');
+        return;
+    }
+
+    // Recalculate ranking
+    const ranking = [];
+    participantes.forEach(p => {
+        if (!p.palpites) return;
+        let totalAcertos = 0;
+        let placarExato = 0;
+        let vencedorCorreto = 0;
+
+        Object.keys(p.palpites).forEach(jogoId => {
+            const resultado = resultados[jogoId];
+            if (!resultado) return;
+            const palpite = p.palpites[jogoId];
+            const jogo = JOGOS.find(j => j.id === parseInt(jogoId));
+            if (!jogo) return;
+
+            let golsBrasilReal, golsAdvReal;
+            if (jogo.timeCasa === 'BRA') {
+                golsBrasilReal = resultado.gols_casa;
+                golsAdvReal = resultado.gols_fora;
+            } else {
+                golsBrasilReal = resultado.gols_fora;
+                golsAdvReal = resultado.gols_casa;
+            }
+
+            const golsBrasilPalpite = palpite.gols_brasil;
+            const golsAdvPalpite = palpite.gols_adversario;
+            if (golsBrasilPalpite === undefined || golsAdvPalpite === undefined) return;
+            totalAcertos++;
+
+            if (golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal) {
+                placarExato++;
+                return;
+            }
+
+            const resultadoReal = golsBrasilReal > golsAdvReal ? 'brasil' :
+                                  golsBrasilReal < golsAdvReal ? 'adversario' : 'empate';
+            const resultadoPalpite = golsBrasilPalpite > golsAdvPalpite ? 'brasil' :
+                                     golsBrasilPalpite < golsAdvPalpite ? 'adversario' : 'empate';
+            if (resultadoReal === resultadoPalpite) vencedorCorreto++;
+        });
+
+        if (totalAcertos > 0) {
+            ranking.push({
+                nome: p.nome,
+                totalAcertos: totalAcertos,
+                placarExato: placarExato,
+                vencedorCorreto: vencedorCorreto,
+                pontos: (placarExato * 5) + (vencedorCorreto * 3)
+            });
+        }
+    });
+
+    ranking.sort((a, b) => b.pontos - a.pontos || b.totalAcertos - a.totalAcertos);
+
+    const agora = new Date().toLocaleString('pt-BR');
+    let html = '<div class="print-area">';
+    html += '<div class="print-header">';
+    html += '  <h2>🏆 Bolão Copa do Mundo 2026</h2>';
+    html += '  <p>Relatório Final de Resultados</p>';
+    html += '</div>';
+
+    // Summary
+    html += '<div style="margin-bottom:24px;padding:16px;background:rgba(255,255,255,0.03);border-radius:8px;">';
+    html += '  <p><strong>Total de Participantes:</strong> ' + participantes.length + '</p>';
+    html += '  <p><strong>Jogos com Resultado:</strong> ' + Object.keys(resultados).length + ' / ' + JOGOS.length + '</p>';
+    if (ranking.length > 0) {
+        html += '  <p><strong>🏆 Campeão:</strong> ' + escapeHtml(ranking[0].nome) + ' — ' + ranking[0].pontos + ' pontos</p>';
+    }
+    html += '</div>';
+
+    // Jogos results
+    html += '<h3 style="font-family:\'Bebas Neue\',cursive;color:var(--amarelo);margin-bottom:12px;letter-spacing:1px;">⚽ Resultados dos Jogos</h3>';
+    html += '<table style="margin-bottom:30px;">';
+    html += '<thead><tr><th>Jogo</th><th>Placar</th></tr></thead><tbody>';
+    JOGOS.forEach(jogo => {
+        const r = resultados[jogo.id];
+        if (r !== undefined) {
+            html += '<tr><td>' + jogo.bandeiraCasa + ' ' + jogo.timeCasa + ' vs ' + jogo.bandeiraFora + ' ' + jogo.timeFora + '</td>';
+            html += '<td><strong>' + r.gols_casa + ' x ' + r.gols_fora + '</strong></td></tr>';
+        } else {
+            html += '<tr style="opacity:0.4;"><td>' + jogo.bandeiraCasa + ' ' + jogo.timeCasa + ' vs ' + jogo.bandeiraFora + ' ' + jogo.timeFora + '</td>';
+            html += '<td style="color:var(--text-secondary);">⏳ Pendente</td></tr>';
+        }
+    });
+    html += '</tbody></table>';
+
+    // Ranking
+    html += '<h3 style="font-family:\'Bebas Neue\',cursive;color:var(--amarelo);margin-bottom:12px;letter-spacing:1px;">📊 Classificação Final</h3>';
+    html += '<table class="final-rank">';
+    html += '<thead><tr><th>Pos</th><th>Nome</th><th>Acertos</th><th>Placar Exato (5pts)</th><th>Vencedor (3pts)</th><th>Total</th></tr></thead><tbody>';
+
+    if (ranking.length === 0) {
+        html += '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Nenhum dado disponível para classificação.</td></tr>';
+    } else {
+        ranking.forEach((r, i) => {
+            const pos = i + 1;
+            let medal = '';
+            if (pos === 1) medal = '🥇 ';
+            else if (pos === 2) medal = '🥈 ';
+            else if (pos === 3) medal = '🥉 ';
+            html += '<tr>';
+            html += '  <td><strong>' + medal + pos + 'º</strong></td>';
+            html += '  <td>' + escapeHtml(r.nome) + '</td>';
+            html += '  <td>' + r.totalAcertos + '</td>';
+            html += '  <td>' + r.placarExato + '</td>';
+            html += '  <td>' + r.vencedorCorreto + '</td>';
+            html += '  <td><strong>' + r.pontos + ' pts</strong></td>';
+            html += '</tr>';
+        });
+    }
+
+    html += '</tbody></table>';
+    html += '<div class="print-date">Gerado em: ' + agora + '</div>';
+    html += '</div>';
+
+    container.innerHTML = html;
+    card.style.display = 'block';
+    card.scrollIntoView({ behavior: 'smooth' });
+
+    mostrarToast('✅ Relatório final gerado com sucesso!', 'success');
+}
+
+function imprimirRelatorio() {
+    const card = document.getElementById('relatorioFinalCard');
+    if (card.style.display === 'none') {
+        mostrarToast('⚠️ Gere o relatório final primeiro!', 'error');
+        return;
+    }
+    window.print();
+}
+
+// ============================================
+// LIMPAR DADOS
+// ============================================
+function limparTodosDados() {
+    localStorage.removeItem('bolao_participantes');
+    localStorage.removeItem('bolao_resultados');
+    renderizarJogos();
+    renderizarParticipantes();
+    calcularApuracao();
+    document.getElementById('relatorioFinalCard').style.display = 'none';
+    mostrarToast('🗑️ Todos os dados foram removidos!', 'success');
+}
+
+// ============================================
+// CARREGAR TUDO
+// ============================================
+function carregarTudo() {
+    renderizarJogos();
+    renderizarParticipantes();
+    calcularApuracao();
+}
+
+// ============================================
+// ENTER KEY ON LOGIN
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    verificarLogin();
+    document.getElementById('senhaInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') fazerLogin();
+    });
+});
+</script>
+
+</body>
+</html>

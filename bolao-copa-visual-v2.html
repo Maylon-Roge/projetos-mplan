@@ -498,7 +498,7 @@
 
         .jogos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -506,12 +506,14 @@
         .jogo-card {
             background: linear-gradient(135deg, var(--verde) 0%, #009640 100%);
             color: var(--branco);
-            padding: 20px 15px;
+            padding: 20px 12px;
             border-radius: var(--raio);
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 166, 81, 0.2);
             transition: all 0.3s ease;
             cursor: default;
+            position: relative;
+            overflow: hidden;
         }
 
         .jogo-card:hover {
@@ -520,47 +522,84 @@
         }
 
         .jogo-card.realizado {
-            opacity: 0.7;
+            opacity: 0.6;
             filter: grayscale(0.3);
+        }
+
+        .jogo-card .resultado-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--amarelo);
+            color: var(--azul-escuro);
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .jogo-rodada {
             font-family: 'Bebas Neue', cursive;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             opacity: 0.9;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
         .jogo-times {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            margin: 10px 0;
-            gap: 8px;
+            justify-content: center;
+            gap: 6px;
+            margin: 6px 0;
         }
 
-        .jogo-time {
-            font-size: 1.8rem;
+        .jogo-time-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .jogo-time-flag {
+            font-size: 2.2rem;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .jogo-time-nome {
+            font-size: 0.6rem;
+            font-weight: 600;
+            margin-top: 3px;
+            opacity: 0.9;
+            white-space: nowrap;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .jogo-vs {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
-            opacity: 0.8;
+            opacity: 0.7;
+            padding: 0 2px;
         }
 
         .jogo-data {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             opacity: 0.8;
+            margin-top: 4px;
         }
 
         .jogo-placar {
             font-family: 'Bebas Neue', cursive;
             font-size: 1.2rem;
-            margin-top: 6px;
+            margin-top: 5px;
             background: rgba(255,255,255,0.15);
-            padding: 4px 12px;
+            padding: 3px 12px;
             border-radius: 6px;
             display: inline-block;
         }
@@ -1396,6 +1435,8 @@
             <a href="#premiacoes">🏆 Prêmios</a>
             <a href="#regulamento">📜 Regulamento</a>
             <a href="#formSection">🎯 Participar</a>
+            <a href="bolao-copa-consulta.html" target="_blank">🔍 Consultar Palpites</a>
+            <a href="bolao-copa-admin.html" target="_blank">⚙️ Admin</a>
         </div>
         <p>💡 <strong>Dica:</strong> Quanto mais placares você acertar, maior a pontuação!</p>
         <p>⚠️ Cada CPF/CNPJ pode participar apenas uma vez</p>
@@ -1510,17 +1551,31 @@
         // ============================================
         function renderizarJogos() {
             const container = document.getElementById('jogosGrid');
+            // Carregar resultados oficiais (do admin)
+            const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
             container.innerHTML = JOGOS.map(jogo => {
                 const isPlaceholder = jogo.timeFora === '???';
+                const resultado = resultados[jogo.id];
+                const temResultado = resultado && resultado.gols_casa !== undefined && resultado.gols_fora !== undefined;
                 return `
-                    <div class="jogo-card ${isPlaceholder ? '' : ''}">
+                    <div class="jogo-card ${temResultado ? 'realizado' : ''}">
+                        ${temResultado ? '<span class="resultado-badge">✓ realizado</span>' : ''}
                         <div class="jogo-rodada">${jogo.rodada}</div>
                         <div class="jogo-times">
-                            <span class="jogo-time">${jogo.bandeiraCasa}</span>
+                            <div class="jogo-time-col">
+                                <span class="jogo-time-flag">${jogo.bandeiraCasa}</span>
+                                <span class="jogo-time-nome">${jogo.paisCasa}</span>
+                            </div>
                             <span class="jogo-vs">vs</span>
-                            <span class="jogo-time">${jogo.bandeiraFora}</span>
+                            <div class="jogo-time-col">
+                                <span class="jogo-time-flag">${jogo.bandeiraFora}</span>
+                                <span class="jogo-time-nome">${jogo.paisFora}</span>
+                            </div>
                         </div>
-                        ${!isPlaceholder ? `<div class="jogo-placar">${jogo.paisCasa} × ${jogo.paisFora}</div>` : ''}
+                        ${temResultado
+                            ? `<div class="jogo-placar">${resultado.gols_casa} × ${resultado.gols_fora}</div>`
+                            : `<div class="jogo-placar">${jogo.paisCasa} × ${jogo.paisFora}</div>`
+                        }
                         <div class="jogo-data">📅 ${jogo.data}</div>
                         ${jogo.local !== 'A definir' ? `<div class="jogo-data">📍 ${jogo.local}</div>` : ''}
                     </div>

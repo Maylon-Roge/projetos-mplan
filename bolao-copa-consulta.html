@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Consultar Palpites - Bolão Copa 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --azul-escuro: #003399;
+            --azul-claro: #004dd9;
+            --amarelo: #FFD000;
+            --verde: #00A651;
+            --vermelho: #E63946;
+            --preto: #000a1f;
+            --branco: #ffffff;
+            --cinza-light: #f5f5f5;
+            --cinza: #e0e0e0;
+            --cinza-texto: #666;
+            --sombra-media: 0 20px 60px rgba(0,0,0,0.15);
+            --raio: 12px;
+            --raio-card: 20px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+            min-height: 100vh;
+            color: var(--preto);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 15px;
+        }
+        .container { max-width: 800px; width: 100%; }
+        
+        .header-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--raio-card);
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .header-card h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.8rem;
+            color: var(--amarelo);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .header-card p { color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 1rem; }
+        
+        .search-card {
+            background: var(--branco);
+            border-radius: var(--raio-card);
+            padding: 35px;
+            box-shadow: var(--sombra-media);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid var(--cinza);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--verde);
+            box-shadow: 0 0 0 4px rgba(0,166,81,0.1);
+        }
+        .search-box button {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--verde), #009640);
+            color: var(--branco);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .search-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,166,81,0.3); }
+
+        .info-text {
+            text-align: center;
+            color: var(--cinza-texto);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .info-text strong { color: var(--azul-escuro); }
+
+        .error-msg {
+            display: none;
+            background: var(--vermelho);
+            color: var(--branco);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: shake 0.3s;
+        }
+        .error-msg.show { display: block; }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .result-area { display: none; }
+        .result-area.show { display: block; }
+
+        .participant-info {
+            background: var(--cinza-light);
+            border-radius: var(--raio);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .participant-info h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--azul-escuro);
+            text-transform: uppercase;
+        }
+        .participant-info .meta {
+            color: var(--cinza-texto);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .game-result {
+            background: var(--cinza-light);
+            border-radius: var(--raio);
+            padding: 15px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+        .game-result:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .game-result .flags {
+            font-size: 1.8rem;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            min-width: 80px;
+        }
+        .game-result .flags .vs { font-size: 0.6rem; opacity: 0.5; padding: 0 2px; }
+        .game-result .info { flex: 1; }
+        .game-result .info .rodada { font-weight: 700; color: var(--azul-escuro); font-size: 0.9rem; }
+        .game-result .info .paises { font-size: 0.8rem; color: var(--cinza-texto); }
+        .game-result .info .data { font-size: 0.75rem; color: var(--cinza-texto); margin-top: 2px; }
+        
+        .game-result .placares {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .game-result .placares .palpite {
+            text-align: center;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: var(--branco);
+            min-width: 55px;
+        }
+        .game-result .placares .palpite .label { font-size: 0.6rem; text-transform: uppercase; color: var(--cinza-texto); letter-spacing: 0.5px; }
+        .game-result .placares .palpite .valor { font-size: 1.3rem; font-weight: 800; font-family: 'Bebas Neue', cursive; }
+        .game-result .placares .palpite .valor.acerto-placar { color: var(--verde); }
+        .game-result .placares .palpite .valor.acerto-vencedor { color: var(--amarelo); }
+        .game-result .placares .palpite .valor.erro { color: var(--vermelho); }
+        .game-result .placares .separador { font-size: 1.3rem; font-weight: 700; color: var(--cinza-texto); }
+        
+        .game-result .status-badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .game-result .status-badge.aguardando { background: #fff3cd; color: #856404; }
+        .game-result .status-badge.acerto-placar { background: #d4edda; color: #155724; }
+        .game-result .status-badge.acerto-vencedor { background: #fff3cd; color: #856404; }
+        .game-result .status-badge.erro { background: #f8d7da; color: #721c24; }
+
+        .resumo-card {
+            background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+            color: var(--branco);
+            border-radius: var(--raio);
+            padding: 20px;
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        .resumo-card .item .numero {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--amarelo);
+        }
+        .resumo-card .item .label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--amarelo); }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 10px; }
+            .header-card h1 { font-size: 2rem; }
+            .header-card { padding: 25px; }
+            .search-card { padding: 20px; }
+            .search-box { flex-direction: column; }
+            .search-box button { width: 100%; }
+            .game-result { flex-wrap: wrap; gap: 8px; }
+            .game-result .flags { min-width: auto; }
+            .game-result .placares { width: 100%; justify-content: center; }
+            .resumo-card { grid-template-columns: 1fr; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-card">
+            <h1>🔍 Consultar Palpites</h1>
+            <p>Bolão Copa do Mundo 2026 🏆</p>
+        </div>
+
+        <div class="search-card">
+            <div class="search-box">
+                <input type="text" id="documentoInput" placeholder="Digite seu CPF ou CNPJ (apenas números)" maxlength="18">
+                <button onclick="consultar()">🔍 Consultar</button>
+            </div>
+            <p class="info-text">Digite o <strong>CPF</strong> ou <strong>CNPJ</strong> que você usou no cadastro para ver seus palpites</p>
+            
+            <div class="error-msg" id="errorMsg"></div>
+
+            <div class="result-area" id="resultArea">
+                <div class="participant-info" id="participantInfo"></div>
+                <div id="palpitesList"></div>
+                <div class="resumo-card" id="resumoCard">
+                    <div class="item">
+                        <div class="numero" id="totalJogos">0</div>
+                        <div class="label">Jogos</div>
+                    </div>
+                    <div class="item">
+                        <div class="numero" id="acertosCount" style="color: #4ade80;">0</div>
+                        <div class="label">Acertos</div>
+                    </div>
+                    <div class="item">
+                        <div class="numero" id="pontosCount" style="color: var(--amarelo);">0</div>
+                        <div class="label">Pontos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;">
+            <a href="bolao-copa-visual-v2.html" class="back-link">← Voltar ao Bolão</a>
+        </div>
+    </div>
+
+    <script>
+        const JOGOS = [
+            { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'Marrocos',     bandeiraFora: '🇲🇦', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
+            { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'Haiti',        bandeiraFora: '🇭🇹', data: '20/06/2026 00:30', local: 'Filadélfia' },
+            { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',     bandeiraCasa: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', paisFora: 'Brasil',   bandeiraFora: '🇧🇷', data: '24/06/2026 22:00', local: 'Miami' },
+            { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '29/06/2026 17:00', local: 'A definir' },
+            { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '04/07/2026 21:00', local: 'A definir' },
+            { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '09/07/2026 20:00', local: 'A definir' },
+            { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '14/07/2026 19:00', local: 'A definir' },
+            { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '19/07/2026 19:00', local: 'A definir' },
+        ];
+
+        document.getElementById('documentoInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') consultar();
+        });
+
+        function consultar() {
+            const doc = document.getElementById('documentoInput').value.replace(/\D/g, '');
+            if (!doc || (doc.length !== 11 && doc.length !== 14)) {
+                mostrarErro('Digite um CPF (11 dígitos) ou CNPJ (14 dígitos) válido');
+                return;
+            }
+
+            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
+            const participante = participantes.find(p => p.documento === doc);
+
+            if (!participante) {
+                mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?');
+                return;
+            }
+
+            document.getElementById('errorMsg').classList.remove('show');
+            document.getElementById('resultArea').classList.add('show');
+            mostrarDados(participante);
+        }
+
+        function mostrarErro(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = '⚠️ ' + msg;
+            el.classList.add('show');
+            document.getElementById('resultArea').classList.remove('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        function mostrarDados(p) {
+            // Info do participante
+            const docMascarado = p.documento.length === 11
+                ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
+                : p.documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
+            
+            document.getElementById('participantInfo').innerHTML = `
+                <h2>👤 ${p.nome}</h2>
+                <div class="meta">
+                    📄 ${p.tipoDocumento.toUpperCase()}: ${docMascarado}
+                    ${p.empresa ? `&nbsp;|&nbsp; 🏢 ${p.empresa}` : ''}
+                    &nbsp;|&nbsp; 📅 ${p.data || 'N/A'}
+                </div>
+            `;
+
+            // Palpites
+            const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
+            let totalAcertos = 0;
+            let totalPontos = 0;
+            let totalJogos = 0;
+
+            const html = JOGOS.map(jogo => {
+                const palpite = p.palpites ? p.palpites[jogo.id] : null;
+                const resultado = resultados[jogo.id];
+                const temResultado = resultado && resultado.gols_casa !== undefined;
+
+                const golsCasaPalpite = palpite ? (palpite.gols_brasil !== undefined ? palpite.gols_brasil : palpite.gols_casa) : null;
+                const golsForaPalpite = palpite ? (palpite.gols_adversario !== undefined ? palpite.gols_adversario : palpite.gols_fora) : null;
+
+                let statusClasse = 'aguardando';
+                let statusTexto = '⏳ Aguardando';
+                let classeCasa = '';
+                let classeFora = '';
+
+                // Mapear quem é Brasil no jogo
+                const brasilEhCasa = jogo.paisCasa === 'Brasil';
+                const golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.gols_casa : resultado.gols_fora) : null;
+                const golsAdvReal = temResultado ? (brasilEhCasa ? resultado.gols_fora : resultado.gols_casa) : null;
+
+                if (temResultado && golsCasaPalpite !== null && golsForaPalpite !== null) {
+                    totalJogos++;
+                    
+                    // O palpite do Brasil está em gols_brasil/gols_adversario
+                    const golsBrasilPalpite = golsCasaPalpite; // gols_brasil
+                    const golsAdvPalpite = golsForaPalpite; // gols_adversario
+                    
+                    const acertouPlacar = golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal;
+                    
+                    // Verificar vencedor
+                    const vitoriaBrasilReal = golsBrasilReal > golsAdvReal;
+                    const derrotaBrasilReal = golsBrasilReal < golsAdvReal;
+                    const empateReal = golsBrasilReal === golsAdvReal;
+                    
+                    const vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite;
+                    const derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite;
+                    const empatePalpite = golsBrasilPalpite === golsAdvPalpite;
+                    
+                    const acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) ||
+                                           (derrotaBrasilReal && derrotaBrasilPalpite) ||
+                                           (empateReal && empatePalpite);
+
+                    if (acertouPlacar) {
+                        statusClasse = 'acerto-placar';
+                        statusTexto = '✅ Placar Exato! (+5pts)';
+                        classeCasa = 'acerto-placar';
+                        classeFora = 'acerto-placar';
+                        totalAcertos++;
+                        totalPontos += 5;
+                    } else if (acertouVencedor) {
+                        statusClasse = 'acerto-vencedor';
+                        statusTexto = '🎯 Vencedor! (+3pts)';
+                        classeCasa = 'acerto-vencedor';
+                        classeFora = 'acerto-vencedor';
+                        totalAcertos++;
+                        totalPontos += 3;
+                    } else {
+                        statusClasse = 'erro';
+                        statusTexto = '❌ Erro (0pts)';
+                        classeCasa = 'erro';
+                        classeFora = 'erro';
+                    }
+                }
+
+                const temPalpite = golsCasaPalpite !== null && golsForaPalpite !== null;
+
+                return `
+                    <div class="game-result">
+                        <div class="flags">
+                            <span>${jogo.bandeiraCasa}</span>
+                            <span class="vs">vs</span>
+                            <span>${jogo.bandeiraFora}</span>
+                        </div>
+                        <div class="info">
+                            <div class="rodada">${jogo.rodada}</div>
+                            <div class="paises">${jogo.paisCasa} × ${jogo.paisFora}</div>
+                            <div class="data">📅 ${jogo.data} &nbsp;📍 ${jogo.local}</div>
+                        </div>
+                        <div class="placares">
+                            <div class="palpite">
+                                <div class="label">Seu palpite</div>
+                                <div class="valor ${temResultado ? classeCasa : ''}">
+                                    ${temPalpite ? (golsCasaPalpite + ' × ' + golsForaPalpite) : '—'}
+                                </div>
+                            </div>
+                            ${temResultado ? `
+                            <div class="separador">|</div>
+                            <div class="palpite" style="background:var(--azul-claro);color:var(--branco);">
+                                <div class="label" style="color:rgba(255,255,255,0.7);">Real</div>
+                                <div class="valor" style="color:var(--amarelo);">${resultado.gols_casa} × ${resultado.gols_fora}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <span class="status-badge ${statusClasse}">${statusTexto}</span>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('palpitesList').innerHTML = html;
+            document.getElementById('totalJogos').textContent = JOGOS.length;
+            document.getElementById('acertosCount').textContent = totalAcertos;
+            document.getElementById('pontosCount').textContent = totalPontos;
+            
+            // Scroll suave para os resultados
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
