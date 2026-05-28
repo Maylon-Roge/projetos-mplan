@@ -284,15 +284,19 @@
     </div>
 
     <script>
+        function flagImg(code, alt) {
+            if (!code) return '<span style="font-size:1.5rem;">❓</span>';
+            return `<img src="https://flagcdn.com/w80/${code}.png" alt="${alt}" style="width:32px;height:auto;vertical-align:middle;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,0.2);">`;
+        }
         const JOGOS = [
-            { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'Marrocos',     bandeiraFora: '🇲🇦', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
-            { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'Haiti',        bandeiraFora: '🇭🇹', data: '20/06/2026 00:30', local: 'Filadélfia' },
-            { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',     bandeiraCasa: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', paisFora: 'Brasil',   bandeiraFora: '🇧🇷', data: '24/06/2026 22:00', local: 'Miami' },
-            { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '29/06/2026 17:00', local: 'A definir' },
-            { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '04/07/2026 21:00', local: 'A definir' },
-            { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '09/07/2026 20:00', local: 'A definir' },
-            { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '14/07/2026 19:00', local: 'A definir' },
-            { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', paisFora: 'A definir',    bandeiraFora: '❓', data: '19/07/2026 19:00', local: 'A definir' },
+            { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
+            { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',      flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia' },
+            { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',     flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami' },
+            { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir' },
+            { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir' },
+            { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir' },
+            { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir' },
+            { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir' },
         ];
 
         document.getElementById('documentoInput').addEventListener('keydown', function(e) {
@@ -414,10 +418,10 @@
 
                 return `
                     <div class="game-result">
-                        <div class="flags">
-                            <span>${jogo.bandeiraCasa}</span>
+                        <div class="flags" style="display:flex;align-items:center;gap:6px;">
+                            ${flagImg(jogo.flagCasa, jogo.paisCasa)}
                             <span class="vs">vs</span>
-                            <span>${jogo.bandeiraFora}</span>
+                            ${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.2rem;">❓</span>'}
                         </div>
                         <div class="info">
                             <div class="rodada">${jogo.rodada}</div>

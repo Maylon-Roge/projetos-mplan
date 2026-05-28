@@ -1015,15 +1015,19 @@
 // ============================================
 // JOGOS DATA
 // ============================================
+function flagImg(code, alt) {
+    if (!code) return '<span style="font-size:1.5rem;">?</span>';
+    return '<img src="https://flagcdn.com/w80/' + code + '.png" alt="' + alt + '" style="width:36px;height:auto;vertical-align:middle;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,0.2);">';
+}
 const JOGOS = [
-    { id: 1,  rodada: '1ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'MAR', paisFora: 'Marrocos',     bandeiraFora: '🇲🇦', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
-    { id: 2,  rodada: '2ª Rodada - Grupo C', timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: 'HAI', paisFora: 'Haiti',        bandeiraFora: '🇭🇹', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
-    { id: 3,  rodada: '3ª Rodada - Grupo C', timeCasa: 'SCO', paisCasa: 'Escócia',     bandeiraCasa: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', timeFora: 'BRA', paisFora: 'Brasil',   bandeiraFora: '🇧🇷', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
-    { id: 4,  rodada: '2ª Fase (32 avos)',   timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir (2º F/G/H)', bandeiraFora: '❓', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
-    { id: 5,  rodada: 'Oitavas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
-    { id: 6,  rodada: 'Quartas de Final',    timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
-    { id: 7,  rodada: 'Semifinal',           timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
-    { id: 8,  rodada: 'Final',               timeCasa: 'BRA', paisCasa: 'Brasil',      bandeiraCasa: '🇧🇷', timeFora: '???', paisFora: 'A definir',            bandeiraFora: '❓', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
+    { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
+    { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',      flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
+    { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',     flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
+    { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
+    { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
+    { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
+    { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
+    { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
 ];
 
 // ============================================
@@ -1164,9 +1168,9 @@ function renderizarJogos() {
         html += '  <div class="game-info">';
         html += '    <div class="game-rodada">' + jogo.rodada + '</div>';
         html += '    <div class="game-teams">';
-        html += '      <span class="flag-icon">' + jogo.bandeiraCasa + '</span> ' + jogo.timeCasa;
+        html += '      ' + flagImg(jogo.flagCasa, jogo.paisCasa) + ' ' + jogo.paisCasa;
         html += '      <span class="vs">vs</span>';
-        html += '      <span class="flag-icon">' + jogo.bandeiraFora + '</span> ' + jogo.timeFora;
+        html += '      ' + (jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '?') + ' ' + jogo.paisFora;
         html += '    </div>';
         html += '    <div class="game-meta">📅 ' + jogo.data + ' | 📍 ' + jogo.local + '</div>';
         html += '  </div>';
@@ -1351,7 +1355,7 @@ function calcularApuracao() {
             // Resultado armazena gols_casa e gols_fora
             let golsBrasilReal, golsAdvReal;
 
-            if (jogo.timeCasa === 'BRA') {
+            if (jogo.paisCasa === 'Brasil') {
                 golsBrasilReal = resultado.gols_casa;
                 golsAdvReal = resultado.gols_fora;
             } else {
@@ -1459,7 +1463,7 @@ function gerarRelatorioFinal() {
             if (!jogo) return;
 
             let golsBrasilReal, golsAdvReal;
-            if (jogo.timeCasa === 'BRA') {
+            if (jogo.paisCasa === 'Brasil') {
                 golsBrasilReal = resultado.gols_casa;
                 golsAdvReal = resultado.gols_fora;
             } else {
@@ -1520,10 +1524,10 @@ function gerarRelatorioFinal() {
     JOGOS.forEach(jogo => {
         const r = resultados[jogo.id];
         if (r !== undefined) {
-            html += '<tr><td>' + jogo.bandeiraCasa + ' ' + jogo.timeCasa + ' vs ' + jogo.bandeiraFora + ' ' + jogo.timeFora + '</td>';
+            html += '<tr><td>' + (jogo.flagCasa ? flagImg(jogo.flagCasa, jogo.paisCasa) : '') + ' ' + jogo.paisCasa + ' vs ' + (jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '') + ' ' + jogo.paisFora + '</td>';
             html += '<td><strong>' + r.gols_casa + ' x ' + r.gols_fora + '</strong></td></tr>';
         } else {
-            html += '<tr style="opacity:0.4;"><td>' + jogo.bandeiraCasa + ' ' + jogo.timeCasa + ' vs ' + jogo.bandeiraFora + ' ' + jogo.timeFora + '</td>';
+            html += '<tr style="opacity:0.4;"><td>' + (jogo.flagCasa ? flagImg(jogo.flagCasa, jogo.paisCasa) : '') + ' ' + jogo.paisCasa + ' vs ' + (jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '') + ' ' + jogo.paisFora + '</td>';
             html += '<td style="color:var(--text-secondary);">⏳ Pendente</td></tr>';
         }
     });
