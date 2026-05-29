@@ -670,9 +670,10 @@ async function fazerLogin() {
         sessionStorage.setItem('bolao_admin_token', token);
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('appLayout').style.display = 'block';
-        await carregarTudo();
+        try { await carregarTudo(); } catch (e2) { console.warn('Erro ao carregar dados:', e2); }
         mostrarToast('✅ Login realizado com sucesso!');
     } catch (e) {
+        erro.textContent = '❌ Senha incorreta! Tente novamente.';
         erro.classList.add('show');
         document.getElementById('senhaInput').value = '';
         document.getElementById('senhaInput').focus();
