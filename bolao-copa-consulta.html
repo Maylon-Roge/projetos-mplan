@@ -298,7 +298,8 @@
             <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:26px;width:auto;">
             <span>× Bolão Copa 2026</span>
         </div>
-        <p>© 2026 - Planeta Energia × Master Plan | Bolão Virtual Copa do Mundo 🏆</p>
+        <p>© 2026 - Planeta Energia | Bolão Virtual Copa do Mundo 🏆</p>
+        <p style="font-size:0.75rem;margin-top:6px;opacity:0.7;">Loja Física: Av. Senador Lemos, 2247 — Telégrafo, Belém-PA</p>
     </footer>
 
     <script>
@@ -341,6 +342,15 @@
             setTimeout(() => el.classList.remove('show'), 5000);
         }
 
+        /* Helper: extrai gols do palpite em qualquer formato (casa/fora ou gols_brasil/gols_adversario) */
+        function getPalpiteGols(palpite) {
+            if (!palpite) return null;
+            if (palpite.casa !== undefined && palpite.fora !== undefined) return { casa: palpite.casa, fora: palpite.fora };
+            if (palpite.gols_brasil !== undefined && palpite.gols_adversario !== undefined) return { casa: palpite.gols_brasil, fora: palpite.gols_adversario };
+            if (palpite.gols_casa !== undefined && palpite.gols_fora !== undefined) return { casa: palpite.gols_casa, fora: palpite.gols_fora };
+            return null;
+        }
+
         function mostrarDados(p) {
             const docMascarado = p.documento.length === 11
                 ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
@@ -351,10 +361,11 @@
             let totalAcertos = 0, totalPontos = 0, totalJogos = 0;
             const html = JOGOS.map(jogo => {
                 const palpite = p.palpites ? p.palpites.find(pp => pp.jogoId === jogo.id) : null;
+                const gols = getPalpiteGols(palpite);
                 const resultado = resultados[jogo.id];
                 const temResultado = resultado && resultado.gols_casa !== undefined;
-                const golsCasaPalpite = palpite ? palpite.casa : null;
-                const golsForaPalpite = palpite ? palpite.fora : null;
+                const golsCasaPalpite = gols ? gols.casa : null;
+                const golsForaPalpite = gols ? gols.fora : null;
                 let statusClasse = 'aguardando', statusTexto = '⏳ Aguardando', classeCasa = '', classeFora = '';
                 const brasilEhCasa = jogo.paisCasa === 'Brasil';
                 const golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.gols_casa : resultado.gols_fora) : null;

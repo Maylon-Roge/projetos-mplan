@@ -562,7 +562,8 @@
 
     <!-- FOOTER -->
     <div class="admin-footer">
-        <p>⚡ Planeta Energia × Bolão Copa 2026 | <a href="bolao-copa-visual-v2.html" target="_blank">← Voltar ao Bolão</a></p>
+        <p>⚡ Planeta Energia × Bolão Copa 2026</p>
+        <p style="font-size:0.75rem;margin-top:4px;opacity:0.7;">Loja Física: Av. Senador Lemos, 2247 — Telégrafo, Belém-PA</p>
     </div>
 </div>
 
@@ -723,6 +724,13 @@ function filtrarParticipantes() {
 }
 function mascararDocumento(doc, t) { if (!doc) return '-'; const l = doc.replace(/\D/g,''); if (t==='cnpj' && l.length===14) return l.slice(0,2)+'.***.***/****-'+l.slice(-2); if (l.length===11) return l.slice(0,3)+'.***.***-'+l.slice(-2); return '***-***-**'+l.slice(-2); }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+function getPalpiteGols(palpite) {
+    if (!palpite) return null;
+    if (palpite.casa !== undefined && palpite.fora !== undefined) return { casa: palpite.casa, fora: palpite.fora };
+    if (palpite.gols_brasil !== undefined && palpite.gols_adversario !== undefined) return { casa: palpite.gols_brasil, fora: palpite.gols_adversario };
+    if (palpite.gols_casa !== undefined && palpite.gols_fora !== undefined) return { casa: palpite.gols_casa, fora: palpite.gols_fora };
+    return null;
+}
 function exportarCSV() {
     const p = getParticipantes();
     if (p.length === 0) { mostrarToast('Nenhum participante para exportar!', 'error'); return; }
@@ -754,7 +762,8 @@ function calcularApuracao() {
             let gbr, gar;
             if (jogo.paisCasa==='Brasil') { gbr=resultado.gols_casa; gar=resultado.gols_fora; }
             else { gbr=resultado.gols_fora; gar=resultado.gols_casa; }
-            const gbp = palpite.casa; const gap = palpite.fora;
+            const gols = getPalpiteGols(palpite);
+            const gbp = gols ? gols.casa : undefined; const gap = gols ? gols.fora : undefined;
             if (gbp===undefined || gap===undefined) return;
             ta++;
             if (gbp===gbr && gap===gar) { pe++; return; }
@@ -785,7 +794,8 @@ function gerarRelatorioFinal() {
             const jogoId=palpite.jogoId; const r=resultados[jogoId]; if(!r) return;
             const jogo=JOGOS.find(j=>j.id===jogoId); if(!jogo) return;
             let gbr,gar; if(jogo.paisCasa==='Brasil'){gbr=r.gols_casa;gar=r.gols_fora}else{gbr=r.gols_fora;gar=r.gols_casa}
-            const gbp=palpite.casa,gap=palpite.fora; if(gbp===undefined||gap===undefined)return; ta++;
+            const gols=getPalpiteGols(palpite);
+            const gbp=gols?gols.casa:undefined,gap=gols?gols.fora:undefined; if(gbp===undefined||gap===undefined)return; ta++;
             if(gbp===gbr&&gap===gar){pe++;return;}
             if((gbr>gar?'brasil':gbr<gar?'adversario':'empate')===(gbp>gap?'brasil':gbp<gap?'adversario':'empate'))vc++;
         });
