@@ -9,165 +9,427 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #003a70;
-            --primary-dark: #002242;
+            --primary-dark: #002a52;
             --primary-light: #004d99;
             --secondary: #fbd70e;
+            --secondary-dark: #e6c20d;
             --green: #00a651;
             --red: #e63946;
             --white: #ffffff;
             --black: #16161d;
-            --gray-1: #f0f2f5;
+            --gray-1: #f9f9f9;
             --gray-2: #d5e0e9;
             --gray-3: #707070;
             --gray-4: #363636;
-            --dark-bg: #0d1117;
-            --sidebar-bg: #161b22;
-            --card-bg: #1c2128;
-            --border-color: #30363d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.12);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
             --radius: 8px;
+            --radius-card: 16px;
         }
-        html, body { height: 100%; font-family: 'Montserrat', sans-serif; background: var(--dark-bg); color: var(--text-primary); }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--gray-1);
+            color: var(--gray-4);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-        .login-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--primary); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        /* TOP BAR */
+        .top-bar {
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 8px 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .top-bar a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .top-bar a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+        /* LOGIN SCREEN */
+        .login-screen {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
         .login-screen.hidden { display: none; }
-        .login-card { background: var(--white); border-radius: 16px; padding: 45px 35px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
-        .login-card .brand { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--gray-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .login-card {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            padding: 45px 35px;
+            width: 100%; max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
         .login-card .brand-logo { margin-bottom: 10px; }
-        .login-card .brand-logo img { height: 35px; width: auto; }
-        .login-card h1 { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .login-card .brand-logo img { height: 40px; width: auto; }
+        .login-card h1 { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
         .login-card .sub { font-size: 0.85rem; color: var(--gray-3); margin-bottom: 25px; }
         .login-card label { display: block; text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--gray-4); margin-bottom: 6px; }
-        .login-card input { width: 100%; padding: 12px 14px; border: 2px solid var(--gray-2); border-radius: var(--radius); font-size: 0.95rem; font-family: 'Montserrat', sans-serif; transition: border-color 0.3s; margin-bottom: 18px; }
+        .login-card input {
+            width: 100%; padding: 12px 14px;
+            border: 2px solid var(--gray-2); border-radius: var(--radius);
+            font-size: 0.95rem; font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s; margin-bottom: 18px;
+        }
         .login-card input:focus { outline: none; border-color: var(--primary); }
-        .login-btn { width: 100%; padding: 12px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+        .login-btn {
+            width: 100%; padding: 12px;
+            background: var(--primary); color: var(--white);
+            border: none; border-radius: var(--radius);
+            font-size: 0.95rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+        }
         .login-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
         .login-error { color: var(--red); font-size: 0.8rem; margin-top: 10px; display: none; }
         .login-error.show { display: block; }
 
-        .app-layout { display: flex; height: 100vh; display: none; }
-        .sidebar { width: 230px; min-width: 230px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar-brand { padding: 20px; border-bottom: 1px solid var(--border-color); text-align: center; }
-        .sidebar-brand .brand-logo { margin-bottom: 6px; }
-        .sidebar-brand .brand-logo img { height: 30px; width: auto; }
-        .sidebar-brand .brand-name { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--secondary); margin-top: 4px; letter-spacing: 0.3px; }
-        .sidebar-brand .brand-sub { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
-        .sidebar-nav { flex: 1; padding: 10px 0; }
-        .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 18px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
-        .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
-        .nav-item.active { background: rgba(255,255,255,0.06); color: var(--secondary); border-left-color: var(--secondary); }
-        .nav-item .nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
-        .sidebar-footer { padding: 14px 18px; border-top: 1px solid var(--border-color); }
-        .logout-btn { display: flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 7px 14px; border-radius: var(--radius); cursor: pointer; font-size: 0.8rem; font-family: 'Montserrat', sans-serif; width: 100%; transition: all 0.2s; }
-        .logout-btn:hover { border-color: var(--red); color: var(--red); }
+        /* ADMIN HEADER */
+        .admin-header {
+            background: var(--primary);
+            padding: 18px 0;
+            border-bottom: 3px solid var(--secondary);
+        }
+        .admin-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .admin-brand img { height: 35px; width: auto; }
+        .admin-brand .brand-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.3); }
+        .admin-brand .brand-text {
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .admin-brand .brand-sub {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .admin-logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 7px 16px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
+        }
+        .admin-logout-btn:hover { background: rgba(255,255,255,0.2); }
 
-        .main-content { flex: 1; overflow-y: auto; padding: 25px 30px; background: var(--dark-bg); }
+        /* ADMIN NAV */
+        .admin-nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-2);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-nav .container {
+            display: flex;
+            gap: 0;
+        }
+        .nav-item {
+            padding: 14px 22px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-3);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+        .nav-item:hover { color: var(--primary); background: rgba(0,58,112,0.03); }
+        .nav-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--secondary);
+        }
+        .nav-item .nav-icon { margin-right: 6px; }
+
+        /* MAIN */
+        .main-content { padding: 30px 0; }
         .page-section { display: none; }
         .page-section.active { display: block; }
         .page-header { margin-bottom: 25px; }
-        .page-header h1 { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--secondary); }
-        .page-header p { color: var(--text-secondary); font-size: 0.85rem; margin-top: 3px; }
+        .page-header h1 { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+        .page-header p { color: var(--gray-3); font-size: 0.85rem; margin-top: 3px; }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 20px; margin-bottom: 18px; }
-        .card-title { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; }
+        .card {
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
         .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 16px 20px; flex: 1; min-width: 140px; }
-        .stat-card .stat-value { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--secondary); }
-        .stat-card .stat-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: var(--radius-card);
+            padding: 18px 22px;
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-card .stat-value { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .stat-card .stat-label { font-size: 0.7rem; color: var(--gray-3); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
-        table th { background: rgba(255,255,255,0.03); padding: 10px 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); font-weight: 600; text-align: left; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
-        table td { padding: 10px 12px; font-size: 0.83rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        table tr:hover { background: rgba(255,255,255,0.02); }
+        table th {
+            padding: 10px 12px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-3);
+            font-weight: 700;
+            text-align: left;
+            border-bottom: 3px solid var(--secondary);
+            background: var(--gray-1);
+            white-space: nowrap;
+        }
+        table td { padding: 10px 12px; font-size: 0.85rem; border-bottom: 1px solid var(--gray-2); vertical-align: middle; }
+        table tr:hover td { background: rgba(0,58,112,0.02); }
 
-        .input-group { display: flex; align-items: center; gap: 6px; }
-        .input-sm { width: 55px; padding: 7px 8px; background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-primary); font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-align: center; }
-        .input-sm:focus { outline: none; border-color: var(--secondary); }
-        .btn { padding: 7px 16px; border: none; border-radius: 5px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; display: inline-flex; align-items: center; gap: 5px; }
-        .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
-        .btn-primary { background: var(--primary); color: var(--white); }
-        .btn-primary:hover { background: var(--primary-light); }
-        .btn-yellow { background: var(--secondary); color: var(--primary); }
-        .btn-yellow:hover { filter: brightness(1.1); }
-        .btn-green { background: var(--green); color: var(--white); }
-        .btn-green:hover { filter: brightness(1.1); }
-        .btn-red { background: var(--red); color: var(--white); }
-        .btn-red:hover { filter: brightness(1.1); }
-        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
-        .btn-outline:hover { border-color: var(--text-primary); color: var(--text-primary); }
-        .search-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-        .search-bar input { flex: 1; min-width: 180px; padding: 9px 12px; background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-size: 0.85rem; font-family: 'Montserrat', sans-serif; }
-        .search-bar input:focus { outline: none; border-color: var(--secondary); }
-        .search-bar input::placeholder { color: var(--text-secondary); }
-
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 16px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-        .badge-green { background: rgba(0,166,81,0.2); color: var(--green); }
-        .badge-yellow { background: rgba(251,215,14,0.2); color: var(--secondary); }
-        .badge-gray { background: rgba(139,148,158,0.15); color: var(--text-secondary); }
-        .medal { font-size: 1.2rem; }
-        .pos-1 td { background: rgba(255,215,0,0.04); }
-        .pos-2 td { background: rgba(192,192,192,0.04); }
-        .pos-3 td { background: rgba(205,127,50,0.04); }
-
-        .game-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); flex-wrap: wrap; }
+        .game-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-2);
+            flex-wrap: wrap;
+        }
         .game-row:last-child { border-bottom: none; }
-        .game-info { flex: 1; min-width: 180px; }
-        .game-rodada { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .game-teams { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.95rem; }
+        .game-info { flex: 1; min-width: 200px; }
+        .game-rodada { font-size: 0.65rem; color: var(--gray-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; font-weight: 600; }
+        .game-teams { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.95rem; color: var(--gray-4); }
         .game-teams img { width: 28px; height: auto; border-radius: 2px; }
-        .game-teams .vs { color: var(--text-secondary); font-weight: 300; font-size: 0.75rem; }
-        .game-meta { font-size: 0.73rem; color: var(--text-secondary); margin-top: 2px; }
-        .game-result { display: flex; align-items: center; gap: 8px; }
+        .game-teams .vs { color: var(--gray-3); font-weight: 300; font-size: 0.75rem; }
+        .game-meta { font-size: 0.73rem; color: var(--gray-3); margin-top: 3px; }
+        .game-result { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .game-status { min-width: 60px; text-align: center; }
 
-        .toast-container { position: fixed; top: 16px; right: 16px; z-index: 10000; }
-        .toast { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 12px 18px; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 6px; box-shadow: var(--shadow); animation: slideIn 0.3s ease-out; display: flex; align-items: center; gap: 8px; }
-        .toast.success { border-left: 4px solid var(--green); }
-        .toast.error { border-left: 4px solid var(--red); }
-        .toast.info { border-left: 4px solid var(--secondary); }
+        .input-group { display: flex; align-items: center; gap: 6px; }
+        .input-sm {
+            width: 50px; padding: 6px 6px;
+            background: var(--white);
+            border: 2px solid var(--gray-2);
+            border-radius: 6px;
+            color: var(--gray-4);
+            font-size: 0.85rem;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .input-sm:focus { outline: none; border-color: var(--primary); }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .btn-yellow { background: var(--secondary); color: var(--primary); }
+        .btn-yellow:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-green { background: var(--green); color: var(--white); }
+        .btn-green:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-red { background: var(--red); color: var(--white); }
+        .btn-red:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 2px solid var(--gray-2); color: var(--gray-3); }
+        .btn-outline:hover { border-color: var(--gray-4); color: var(--gray-4); }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-bar input {
+            flex: 1; min-width: 180px;
+            padding: 10px 14px;
+            border: 2px solid var(--gray-2);
+            border-radius: var(--radius);
+            color: var(--gray-4);
+            font-size: 0.85rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s;
+        }
+        .search-bar input:focus { outline: none; border-color: var(--primary); }
+        .search-bar input::placeholder { color: var(--gray-3); }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .badge-green { background: #d4edda; color: #155724; }
+        .badge-yellow { background: #fff3cd; color: #856404; }
+        .badge-gray { background: #e9ecef; color: #6c757d; }
+
+        .medal { font-size: 1.3rem; }
+        .pos-1 td { background: rgba(255,215,0,0.05); }
+        .pos-2 td { background: rgba(192,192,192,0.05); }
+        .pos-3 td { background: rgba(205,127,50,0.05); }
+
+        /* LEGENDA */
+        .legenda { font-size: 0.8rem; color: var(--gray-3); line-height: 1.7; }
+
+        /* TOAST */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
+        .toast {
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: var(--radius);
+            padding: 12px 18px;
+            color: var(--gray-4);
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            box-shadow: var(--shadow-md);
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid var(--green);
+        }
+        .toast.error { border-left-color: var(--red); }
+        .toast.info { border-left-color: var(--secondary); }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 9998; backdrop-filter: blur(4px); }
+        /* MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none; align-items: center; justify-content: center;
+            z-index: 9998;
+        }
         .modal-overlay.show { display: flex; }
-        .modal-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 28px; max-width: 420px; width: 90%; text-align: center; }
-        .modal-box h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--secondary); margin-bottom: 10px; }
-        .modal-box p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; }
+        .modal-box {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            padding: 30px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-box h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .modal-box p { color: var(--gray-3); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; }
         .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+        /* PRINT */
         .print-area { padding: 0; }
         .print-header { text-align: center; margin-bottom: 25px; padding-bottom: 18px; border-bottom: 3px solid var(--secondary); }
-        .print-header h2 { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; color: var(--secondary); }
-        .print-header p { color: var(--text-secondary); font-size: 0.8rem; }
-        .print-date { text-align: right; font-size: 0.75rem; color: var(--text-secondary); margin-top: 25px; }
+        .print-header h2 { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .print-header p { color: var(--gray-3); font-size: 0.8rem; }
+        .print-date { text-align: right; font-size: 0.75rem; color: var(--gray-3); margin-top: 25px; }
+
+        /* FOOTER */
+        .admin-footer {
+            background: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            border-top: 3px solid var(--secondary);
+        }
+        .admin-footer a { color: var(--secondary); text-decoration: none; }
+        .admin-footer a:hover { text-decoration: underline; }
+
+        /* STAT BUTTONS AREA */
+        .stat-card .stat-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
 
         @media (max-width: 768px) {
-            .sidebar { width: 50px; min-width: 50px; }
-            .sidebar-brand .brand-logo img { height: 22px; }
-            .sidebar-brand .brand-name, .sidebar-brand .brand-sub, .nav-item .nav-label { display: none; }
-            .sidebar-brand { padding: 14px 8px; }
-            .nav-item { justify-content: center; padding: 12px 8px; }
-            .sidebar-footer .logout-btn span:last-child { display: none; }
-            .logout-btn { justify-content: center; }
-            .main-content { padding: 16px; }
+            .admin-header .container { flex-direction: column; gap: 8px; text-align: center; }
+            .admin-nav .container { overflow-x: auto; }
+            .nav-item { padding: 12px 14px; font-size: 0.78rem; }
+            .main-content { padding: 20px 0; }
             .page-header h1 { font-size: 1.4rem; }
             .game-row { flex-direction: column; align-items: flex-start; }
             .game-result { width: 100%; justify-content: flex-start; margin-top: 6px; }
             .stats-row .stat-card { min-width: 100px; }
         }
         @media (max-width: 480px) {
-            .sidebar { width: 44px; min-width: 44px; }
-            .nav-item { padding: 8px 5px; }
-            .main-content { padding: 12px 10px; }
+            .admin-brand .brand-text { font-size: 0.95rem; }
+            .admin-brand img { height: 28px; }
+            .nav-item { padding: 10px 10px; font-size: 0.72rem; }
             table th, table td { padding: 6px 8px; font-size: 0.72rem; }
+            .card { padding: 16px; }
         }
     </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container">
+        <span>⚡ DISTRIBUIDORA DE MATERIAIS ELÉTRICOS</span>
+        <span>📞 WHATSAPP: <a href="https://wa.me/5508003328000" target="_blank">0800 332 8000</a></span>
+    </div>
+</div>
+
+<!-- LOGIN SCREEN -->
 <div class="login-screen" id="loginScreen">
     <div class="login-card">
-        <div class="brand-logo"><img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:35px;width:auto;"></div>
+        <div class="brand-logo"><img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia"></div>
         <h1>🏆 Bolão 2026</h1>
         <div class="sub">Painel Administrativo</div>
         <label for="senhaInput">Senha de Administrador</label>
@@ -177,94 +439,159 @@
     </div>
 </div>
 
-<div class="app-layout" id="appLayout">
-    <aside class="sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-logo"><img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:30px;width:auto;"></div>
-            <div class="brand-name">Bolão Admin</div>
-            <div class="brand-sub">Copa 2026</div>
-        </div>
-        <nav class="sidebar-nav">
-            <div class="nav-item active" data-tab="jogos" onclick="trocarAba('jogos')"><span class="nav-icon">⚽</span><span class="nav-label">Gerenciar Jogos</span></div>
-            <div class="nav-item" data-tab="participantes" onclick="trocarAba('participantes')"><span class="nav-icon">👥</span><span class="nav-label">Participantes</span></div>
-            <div class="nav-item" data-tab="apuracao" onclick="trocarAba('apuracao')"><span class="nav-icon">📊</span><span class="nav-label">Apuração</span></div>
-            <div class="nav-item" data-tab="finalizar" onclick="trocarAba('finalizar')"><span class="nav-icon">🏆</span><span class="nav-label">Finalizar</span></div>
-        </nav>
-        <div class="sidebar-footer"><button class="logout-btn" onclick="fazerLogout()"><span>🚪</span><span>Sair</span></button></div>
-    </aside>
+<!-- ADMIN LAYOUT -->
+<div id="appLayout" style="display:none;">
 
+    <!-- HEADER -->
+    <div class="admin-header">
+        <div class="container">
+            <div class="admin-brand">
+                <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia">
+                <div class="brand-divider"></div>
+                <div>
+                    <div class="brand-text">⚙️ Admin Bolão Copa 2026</div>
+                    <div class="brand-sub">Planeta Energia</div>
+                </div>
+            </div>
+            <button class="admin-logout-btn" onclick="fazerLogout()">🚪 Sair</button>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="admin-nav">
+        <div class="container">
+            <div class="nav-item active" data-tab="jogos" onclick="trocarAba('jogos')"><span class="nav-icon">⚽</span>Gerenciar Jogos</div>
+            <div class="nav-item" data-tab="participantes" onclick="trocarAba('participantes')"><span class="nav-icon">👥</span>Participantes</div>
+            <div class="nav-item" data-tab="apuracao" onclick="trocarAba('apuracao')"><span class="nav-icon">📊</span>Apuração</div>
+            <div class="nav-item" data-tab="finalizar" onclick="trocarAba('finalizar')"><span class="nav-icon">🏆</span>Finalizar</div>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
     <main class="main-content">
-        <div class="page-section active" id="section-jogos">
-            <div class="page-header"><h1>⚽ Gerenciar Jogos</h1><p>Registre os resultados oficiais dos jogos do Brasil na Copa 2026</p></div>
-            <div class="card"><div class="card-title">📋 Jogos do Brasil</div><div id="jogosContainer"></div></div>
-        </div>
-        <div class="page-section" id="section-participantes">
-            <div class="page-header"><h1>👥 Participantes</h1><p>Visualize e gerencie os participantes cadastrados</p></div>
-            <div class="stats-row">
-                <div class="stat-card"><div class="stat-value" id="totalParticipantes">0</div><div class="stat-label">Total de Participantes</div></div>
-                <div class="stat-card"><div class="stat-value" id="comPalpites">0</div><div class="stat-label">Com Palpites</div></div>
+        <div class="container">
+
+            <!-- JOGOS -->
+            <div class="page-section active" id="section-jogos">
+                <div class="page-header"><h1>⚽ Gerenciar Jogos</h1><p>Registre os resultados oficiais dos jogos do Brasil na Copa 2026</p></div>
+                <div class="card">
+                    <div class="card-title">📋 Jogos do Brasil</div>
+                    <div id="jogosContainer"></div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-title">📋 Lista de Participantes</div>
-                <div class="search-bar"><input type="text" id="searchParticipante" placeholder="🔍 Buscar por nome..." oninput="filtrarParticipantes()"><button class="btn btn-green" onclick="exportarCSV()">📥 Exportar CSV</button></div>
-                <div class="table-wrapper"><table><thead><tr><th>#</th><th>Nome</th><th>Documento</th><th>Telefone</th><th>Data</th><th>Palpites</th></tr></thead><tbody id="participantesTableBody"></tbody></table></div>
-                <div style="text-align:center;padding:25px;color:var(--text-secondary);display:none" id="nenhumParticipante">Nenhum participante encontrado.</div>
+
+            <!-- PARTICIPANTES -->
+            <div class="page-section" id="section-participantes">
+                <div class="page-header"><h1>👥 Participantes</h1><p>Visualize e gerencie os participantes cadastrados</p></div>
+                <div class="stats-row">
+                    <div class="stat-card"><div class="stat-value" id="totalParticipantes">0</div><div class="stat-label">Total de Participantes</div></div>
+                    <div class="stat-card"><div class="stat-value" id="comPalpites">0</div><div class="stat-label">Com Palpites</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📋 Lista de Participantes</div>
+                    <div class="search-bar">
+                        <input type="text" id="searchParticipante" placeholder="🔍 Buscar por nome..." oninput="filtrarParticipantes()">
+                        <button class="btn btn-green" onclick="exportarCSV()">📥 Exportar CSV</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>#</th><th>Nome</th><th>Documento</th><th>Telefone</th><th>Data</th><th>Palpites</th></tr></thead>
+                            <tbody id="participantesTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div style="text-align:center;padding:25px;color:var(--gray-3);display:none" id="nenhumParticipante">Nenhum participante encontrado.</div>
+                </div>
             </div>
-        </div>
-        <div class="page-section" id="section-apuracao">
-            <div class="page-header"><h1>📊 Apuração</h1><p>Compare os palpites dos participantes com os resultados oficiais</p></div>
-            <div class="stats-row">
-                <div class="stat-card"><div class="stat-value" id="apuTotalParticipantes">0</div><div class="stat-label">Participantes</div></div>
-                <div class="stat-card"><div class="stat-value" id="apuJogosRealizados">0</div><div class="stat-label">Jogos Realizados</div></div>
-                <div class="stat-card"><div class="stat-value" id="apuMaiorPontuacao">0</div><div class="stat-label">Maior Pontuação</div></div>
+
+            <!-- APURAÇÃO -->
+            <div class="page-section" id="section-apuracao">
+                <div class="page-header"><h1>📊 Apuração</h1><p>Compare os palpites dos participantes com os resultados oficiais</p></div>
+                <div class="stats-row">
+                    <div class="stat-card"><div class="stat-value" id="apuTotalParticipantes">0</div><div class="stat-label">Participantes</div></div>
+                    <div class="stat-card"><div class="stat-value" id="apuJogosRealizados">0</div><div class="stat-label">Jogos Realizados</div></div>
+                    <div class="stat-card"><div class="stat-value" id="apuMaiorPontuacao">0</div><div class="stat-label">Maior Pontuação</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                        <span>📊 Ranking</span>
+                        <button class="btn btn-yellow btn-sm" onclick="calcularApuracao()">🔄 Recalcular</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>Pos</th><th>Nome</th><th>Total Acertos</th><th>Placar Exato (5pts)</th><th>Vencedor (3pts)</th><th>Total Pontos</th></tr></thead>
+                            <tbody id="apuracaoTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div style="text-align:center;padding:35px;color:var(--gray-3);display:none" id="apuracaoVazia">
+                        <p style="font-size:1rem;margin-bottom:6px;">📭 Nenhum dado disponível</p>
+                        <p>Registre os resultados dos jogos e tenha participantes cadastrados para ver a apuração.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📌 Legenda</div>
+                    <div class="legenda">
+                        <span class="badge badge-green">5 pts</span> Placar Exato<br>
+                        <span class="badge badge-yellow">3 pts</span> Vencedor / Empate<br>
+                        <span class="badge badge-gray">0 pt</span> Erro
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;"><span>📊 Ranking</span><button class="btn btn-yellow btn-sm" onclick="calcularApuracao()">🔄 Recalcular</button></div>
-                <div class="table-wrapper"><table><thead><tr><th>Pos</th><th>Nome</th><th>Total Acertos</th><th>Placar Exato (5pts)</th><th>Vencedor (3pts)</th><th>Total Pontos</th></tr></thead><tbody id="apuracaoTableBody"></tbody></table></div>
-                <div style="text-align:center;padding:35px;color:var(--text-secondary);display:none" id="apuracaoVazia"><p style="font-size:1rem;margin-bottom:6px;">📭 Nenhum dado disponível</p><p>Registre os resultados dos jogos e tenha participantes cadastrados para ver a apuração.</p></div>
+
+            <!-- FINALIZAR -->
+            <div class="page-section" id="section-finalizar">
+                <div class="page-header"><h1>🏆 Finalizar Bolão</h1><p>Gere o ranking final e encerre a edição do bolão</p></div>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <button class="btn btn-yellow" onclick="gerarRelatorioFinal()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">📄 Gerar Relatório Final</button>
+                    </div>
+                    <div class="stat-card">
+                        <button class="btn btn-primary" onclick="imprimirRelatorio()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">🖨️ Imprimir / PDF</button>
+                    </div>
+                    <div class="stat-card">
+                        <button class="btn btn-red" onclick="mostrarModalLimpar()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">🗑️ Limpar Todos os Dados</button>
+                    </div>
+                </div>
+                <div class="card" id="relatorioFinalCard" style="display:none;">
+                    <div class="card-title">📄 Relatório Final - Bolão Copa 2026</div>
+                    <div id="relatorioConteudo"></div>
+                </div>
             </div>
-            <div class="card">
-                <div class="card-title">📌 Legenda</div>
-                <p style="font-size:0.8rem;color:var(--text-secondary);line-height:1.7;">
-                    <span class="badge badge-green">5 pts</span> Placar Exato<br>
-                    <span class="badge badge-yellow">3 pts</span> Vencedor / Empate<br>
-                    <span class="badge badge-gray">0 pt</span> Erro
-                </p>
-            </div>
-        </div>
-        <div class="page-section" id="section-finalizar">
-            <div class="page-header"><h1>🏆 Finalizar Bolão</h1><p>Gere o ranking final e encerre a edição do bolão</p></div>
-            <div class="stats-row">
-                <div class="stat-card"><button class="btn btn-yellow" onclick="gerarRelatorioFinal()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">📄 Gerar Relatório Final</button></div>
-                <div class="stat-card"><button class="btn btn-primary" onclick="imprimirRelatorio()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">🖨️ Imprimir / PDF</button></div>
-                <div class="stat-card"><button class="btn btn-red" onclick="mostrarModalLimpar()" style="width:100%;padding:12px;font-size:0.9rem;justify-content:center;">🗑️ Limpar Todos os Dados</button></div>
-            </div>
-            <div class="card" id="relatorioFinalCard" style="display:none;"><div class="card-title">📄 Relatório Final - Bolão Copa 2026</div><div id="relatorioConteudo"></div></div>
+
         </div>
     </main>
+
+    <!-- FOOTER -->
+    <div class="admin-footer">
+        <p>⚡ Planeta Energia × Bolão Copa 2026 | <a href="bolao-copa-visual-v2.html" target="_blank">← Voltar ao Bolão</a></p>
+    </div>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
 <div class="modal-overlay" id="confirmModal">
-    <div class="modal-box"><h3>⚠️ Atenção</h3><p id="modalMessage">Tem certeza que deseja continuar?</p>
-        <div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal()">Cancelar</button><button class="btn btn-red" id="modalConfirmBtn" onclick="">Confirmar</button></div>
+    <div class="modal-box">
+        <h3>⚠️ Atenção</h3>
+        <p id="modalMessage">Tem certeza que deseja continuar?</p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+            <button class="btn btn-red" id="modalConfirmBtn" onclick="">Confirmar</button>
+        </div>
     </div>
 </div>
 
 <script>
 function flagImg(code, alt) {
-    if (!code) return '<span style="font-size:1.3rem;">?</span>';
+    if (!code) return '<span style="font-size:1.3rem;">❓</span>';
     return '<img src="https://flagcdn.com/w80/' + code + '.png" alt="' + alt + '" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">';
 }
 const JOGOS = [
-    { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
-    { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',      flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
-    { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',     flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
-    { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
-    { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
-    { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
-    { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
-    { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
+    { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
+    { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',      flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia' },
+    { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',     flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami' },
+    { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir' },
+    { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir' },
+    { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir' },
+    { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir' },
+    { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir' },
 ];
 const SENHA_ADMIN = 'admin123';
 let abaAtual = 'jogos';
@@ -275,9 +602,9 @@ function fazerLogin() {
     if (senha === SENHA_ADMIN) {
         sessionStorage.setItem('bolao_admin_logged', 'true');
         document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('appLayout').style.display = 'flex';
+        document.getElementById('appLayout').style.display = 'block';
         carregarTudo();
-        mostrarToast('✅ Login realizado com sucesso!', 'success');
+        mostrarToast('✅ Login realizado com sucesso!');
     } else {
         erro.classList.add('show');
         document.getElementById('senhaInput').value = '';
@@ -294,9 +621,11 @@ function fazerLogout() {
 function verificarLogin() {
     if (sessionStorage.getItem('bolao_admin_logged') === 'true') {
         document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('appLayout').style.display = 'flex';
+        document.getElementById('appLayout').style.display = 'block';
         carregarTudo();
-    } else { document.getElementById('appLayout').style.display = 'none'; }
+    } else {
+        document.getElementById('appLayout').style.display = 'none';
+    }
 }
 function trocarAba(aba) {
     abaAtual = aba;
@@ -313,7 +642,7 @@ function trocarAba(aba) {
 function mostrarToast(msg, tipo) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
-    toast.className = 'toast ' + (tipo || 'info');
+    toast.className = 'toast ' + (tipo || '');
     toast.textContent = msg;
     container.appendChild(toast);
     setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
@@ -333,13 +662,25 @@ function renderizarJogos() {
     JOGOS.forEach(jogo => {
         const temResultado = resultados[jogo.id] !== undefined;
         const r = resultados[jogo.id] || { gols_casa: '', gols_fora: '' };
-        html += '<div class="game-row"><div class="game-info"><div class="game-rodada">' + jogo.rodada + '</div><div class="game-teams">' + flagImg(jogo.flagCasa, jogo.paisCasa) + ' ' + jogo.paisCasa + ' <span class="vs">vs</span> ' + (jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '?') + ' ' + jogo.paisFora + '</div><div class="game-meta">📅 ' + jogo.data + ' | 📍 ' + jogo.local + '</div></div>';
-        html += '<div class="game-result"><span style="font-size:0.75rem;color:var(--text-secondary);">Casa:</span><input type="number" min="0" max="20" class="input-sm" id="golsCasa_' + jogo.id + '" value="' + (temResultado ? r.gols_casa : '') + '" placeholder="0"><span style="font-size:0.75rem;color:var(--text-secondary);">×</span><span style="font-size:0.75rem;color:var(--text-secondary);">Fora:</span><input type="number" min="0" max="20" class="input-sm" id="golsFora_' + jogo.id + '" value="' + (temResultado ? r.gols_fora : '') + '" placeholder="0">';
-        html += '<button class="btn btn-primary btn-sm" onclick="salvarResultado(' + jogo.id + ')">💾 Salvar</button><div class="game-status">';
-        if (temResultado) html += '<span class="badge badge-green"> Realizado</span>'; else html += '<span class="badge badge-gray"> Pendente</span>';
+        html += '<div class="game-row">' +
+            '<div class="game-info">' +
+            '<div class="game-rodada">' + jogo.rodada + '</div>' +
+            '<div class="game-teams">' + flagImg(jogo.flagCasa, jogo.paisCasa) + ' ' + jogo.paisCasa + ' <span class="vs">vs</span> ' +
+            (jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.2rem;">❓</span>') + ' ' + jogo.paisFora + '</div>' +
+            '<div class="game-meta">📅 ' + jogo.data + ' | 📍 ' + jogo.local + '</div></div>' +
+            '<div class="game-result">' +
+            '<span style="font-size:0.72rem;color:var(--gray-3);font-weight:600;">Casa:</span>' +
+            '<input type="number" min="0" max="20" class="input-sm" id="golsCasa_' + jogo.id + '" value="' + (temResultado ? r.gols_casa : '') + '" placeholder="0">' +
+            '<span style="font-size:0.8rem;color:var(--gray-3);font-weight:600;">×</span>' +
+            '<span style="font-size:0.72rem;color:var(--gray-3);font-weight:600;">Fora:</span>' +
+            '<input type="number" min="0" max="20" class="input-sm" id="golsFora_' + jogo.id + '" value="' + (temResultado ? r.gols_fora : '') + '" placeholder="0">' +
+            '<button class="btn btn-primary btn-sm" onclick="salvarResultado(' + jogo.id + ')">💾 Salvar</button>' +
+            '<div class="game-status">' +
+            (temResultado ? '<span class="badge badge-green">Realizado</span>' : '<span class="badge badge-gray">Pendente</span>');
         var lib = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
         var estaLib = lib.indexOf(jogo.id) >= 0;
-        html += '<button class="btn btn-sm ' + (estaLib ? "btn-yellow" : "btn-outline") + '" onclick="toggleLiberarJogo(' + jogo.id + ')" style="margin-left:6px;">' + (estaLib ? " Liberado" : " Bloqueado") + '</button></div></div></div>';
+        html += '<button class="btn btn-sm ' + (estaLib ? 'btn-yellow' : 'btn-outline') + '" onclick="toggleLiberarJogo(' + jogo.id + ')" style="margin-left:6px;">' +
+            (estaLib ? '🔓 Liberado' : '🔒 Bloqueado') + '</button></div></div></div>';
     });
     container.innerHTML = html;
 }
@@ -350,19 +691,19 @@ function salvarResultado(jogoId) {
     const resultados = getResultados();
     resultados[jogoId] = { gols_casa: golsCasa, gols_fora: golsFora };
     salvarResultados(resultados); renderizarJogos();
-    mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')', 'success');
+    mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')');
 }
 function toggleLiberarJogo(jogoId) {
     const liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
     const idx = liberados.indexOf(jogoId);
     if (idx >= 0) { liberados.splice(idx, 1); mostrarToast('Jogo ' + jogoId + ' bloqueado', 'info'); }
-    else { liberados.push(jogoId); mostrarToast('Jogo ' + jogoId + ' liberado!', 'success'); }
+    else { liberados.push(jogoId); mostrarToast('Jogo ' + jogoId + ' liberado!'); }
     localStorage.setItem('bolao_jogos_liberados', JSON.stringify(liberados)); renderizarJogos();
 }
 function renderizarParticipantes() {
     const participantes = getParticipantes();
     document.getElementById('totalParticipantes').textContent = participantes.length;
-    document.getElementById('comPalpites').textContent = participantes.filter(p => p.palpites && Object.keys(p.palpites).length > 0).length;
+    document.getElementById('comPalpites').textContent = participantes.filter(p => p.palpites && p.palpites.length > 0).length;
     filtrarParticipantes();
 }
 function filtrarParticipantes() {
@@ -375,8 +716,8 @@ function filtrarParticipantes() {
     vazio.style.display = 'none';
     let html = '';
     filtrados.forEach((p, i) => {
-        const qtd = p.palpites ? Object.keys(p.palpites).length : 0;
-        html += '<tr><td>' + (i+1) + '</td><td><strong>' + escapeHtml(p.nome) + '</strong></td><td>' + mascararDocumento(p.documento, p.tipoDocumento) + '</td><td>' + escapeHtml(p.telefone || '-') + '</td><td>' + (p.data || '-') + '</td><td>' + qtd + ' / ' + JOGOS.length + '</td></tr>';
+        const qtd = p.palpites ? p.palpites.length : 0;
+        html += '<tr><td>' + (i+1) + '</td><td><strong>' + escapeHtml(p.nome) + '</strong></td><td>' + mascararDocumento(p.documento, p.tipoDocumento) + '</td><td>' + escapeHtml(p.telefone || '-') + '</td><td>' + (p.timestamp ? new Date(p.timestamp).toLocaleDateString('pt-BR') : '-') + '</td><td>' + qtd + ' / ' + JOGOS.length + '</td></tr>';
     });
     tbody.innerHTML = html;
 }
@@ -386,11 +727,11 @@ function exportarCSV() {
     const p = getParticipantes();
     if (p.length === 0) { mostrarToast('Nenhum participante para exportar!', 'error'); return; }
     let csv = 'Nome,Documento,Telefone,Empresa,Tipo Doc,Data\n';
-    p.forEach(x => { csv += '"'+(x.nome||'').replace(/"/g,'""')+'",'+(x.documento||'')+',"'+(x.telefone||'').replace(/"/g,'""')+'",'+(x.empresa||'')+','+(x.tipoDocumento||'cpf')+','+(x.data||'')+'\n'; });
+    p.forEach(x => { csv += '"'+(x.nome||'').replace(/"/g,'""')+'",'+(x.documento||'')+',"'+(x.telefone||'').replace(/"/g,'""')+'",'+(x.empresa||'')+','+(x.tipoDocumento||'cpf')+','+(x.timestamp||'')+'\n'; });
     const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
     const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'participantes-bolao-2026.csv';
     document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(link.href);
-    mostrarToast('✅ CSV exportado com sucesso!', 'success');
+    mostrarToast('✅ CSV exportado com sucesso!');
 }
 function calcularApuracao() {
     const participantes = getParticipantes();
@@ -406,11 +747,14 @@ function calcularApuracao() {
     participantes.forEach(p => {
         if (!p.palpites) return;
         let ta=0, pe=0, vc=0;
-        Object.keys(p.palpites).forEach(jogoId => {
+        p.palpites.forEach(palpite => {
+            const jogoId = palpite.jogoId;
             const resultado = resultados[jogoId]; if (!resultado) return;
-            const palpite = p.palpites[jogoId]; const jogo = JOGOS.find(j=>j.id===parseInt(jogoId)); if (!jogo) return;
-            let gbr, gar; if (jogo.paisCasa==='Brasil') { gbr=resultado.gols_casa; gar=resultado.gols_fora; } else { gbr=resultado.gols_fora; gar=resultado.gols_casa; }
-            const gbp = palpite.gols_brasil; const gap = palpite.gols_adversario;
+            const jogo = JOGOS.find(j=>j.id===jogoId); if (!jogo) return;
+            let gbr, gar;
+            if (jogo.paisCasa==='Brasil') { gbr=resultado.gols_casa; gar=resultado.gols_fora; }
+            else { gbr=resultado.gols_fora; gar=resultado.gols_casa; }
+            const gbp = palpite.casa; const gap = palpite.fora;
             if (gbp===undefined || gap===undefined) return;
             ta++;
             if (gbp===gbr && gap===gar) { pe++; return; }
@@ -422,10 +766,10 @@ function calcularApuracao() {
     });
     ranking.sort((a,b)=>b.pontos-a.pontos||b.totalAcertos-a.totalAcertos);
     document.getElementById('apuMaiorPontuacao').textContent = ranking.length>0?ranking[0].pontos:'0';
-    if (ranking.length===0) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:25px;">Nenhum palpite pôde ser comparado.</td></tr>'; return; }
+    if (ranking.length===0) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray-3);padding:25px;">Nenhum palpite pôde ser comparado.</td></tr>'; return; }
     let html='';
     ranking.forEach((r,i)=>{
-        const pos=i+1; let pd='<span class="pos-num">'+pos+'º</span>';
+        const pos=i+1; let pd='<span style="font-weight:700;">'+pos+'º</span>';
         if (pos===1) pd='<span class="medal">🥇</span>'; else if (pos===2) pd='<span class="medal">🥈</span>'; else if (pos===3) pd='<span class="medal">🥉</span>';
         html+='<tr class="'+(pos===1?'pos-1':pos===2?'pos-2':pos===3?'pos-3':'')+'"><td>'+pd+'</td><td><strong>'+escapeHtml(r.nome)+'</strong></td><td>'+r.totalAcertos+'</td><td>'+r.placarExato+'</td><td>'+r.vencedorCorreto+'</td><td><strong>'+r.pontos+'</strong></td></tr>';
     });
@@ -435,12 +779,13 @@ function gerarRelatorioFinal() {
     const participantes=getParticipantes(), resultados=getResultados();
     const container=document.getElementById('relatorioConteudo'), card=document.getElementById('relatorioFinalCard');
     if (participantes.length===0) { mostrarToast('Nenhum participante cadastrado!', 'error'); return; }
-    const ranking=[]; participantes.forEach(p=>{ /* same apuracao logic */
+    const ranking=[]; participantes.forEach(p=>{
         if(!p.palpites) return; let ta=0,pe=0,vc=0;
-        Object.keys(p.palpites).forEach(jogoId=>{
-            const r=resultados[jogoId]; if(!r) return; const palpite=p.palpites[jogoId], jogo=JOGOS.find(j=>j.id===parseInt(jogoId)); if(!jogo) return;
+        p.palpites.forEach(palpite=>{
+            const jogoId=palpite.jogoId; const r=resultados[jogoId]; if(!r) return;
+            const jogo=JOGOS.find(j=>j.id===jogoId); if(!jogo) return;
             let gbr,gar; if(jogo.paisCasa==='Brasil'){gbr=r.gols_casa;gar=r.gols_fora}else{gbr=r.gols_fora;gar=r.gols_casa}
-            const gbp=palpite.gols_brasil,gap=palpite.gols_adversario; if(gbp===undefined||gap===undefined)return; ta++;
+            const gbp=palpite.casa,gap=palpite.fora; if(gbp===undefined||gap===undefined)return; ta++;
             if(gbp===gbr&&gap===gar){pe++;return;}
             if((gbr>gar?'brasil':gbr<gar?'adversario':'empate')===(gbp>gap?'brasil':gbp<gap?'adversario':'empate'))vc++;
         });
@@ -449,17 +794,18 @@ function gerarRelatorioFinal() {
     ranking.sort((a,b)=>b.pontos-a.pontos||b.totalAcertos-a.totalAcertos);
     const agora=new Date().toLocaleString('pt-BR');
     let html='<div class="print-area"><div class="print-header"><h2>🏆 Bolão Copa do Mundo 2026</h2><p>Relatório Final — Planeta Energia</p></div>';
-    html+='<div style="margin-bottom:20px;padding:14px;background:rgba(255,255,255,0.03);border-radius:8px;"><p><strong>Total de Participantes:</strong> '+participantes.length+'</p><p><strong>Jogos com Resultado:</strong> '+Object.keys(resultados).length+' / '+JOGOS.length+'</p>'+(ranking.length>0?'<p><strong>🏆 Campeão:</strong> '+escapeHtml(ranking[0].nome)+' — '+ranking[0].pontos+' pontos</p>':'')+'</div>';
-    html+='<h3 style="font-family:\'Inter\',sans-serif;font-weight:700;color:var(--secondary);margin-bottom:10px;">⚽ Resultados</h3><table style="margin-bottom:25px;"><thead><tr><th>Jogo</th><th>Placar</th></tr></thead><tbody>';
-    JOGOS.forEach(j=>{const r=resultados[j.id]; const ff=j.flagFora?flagImg(j.flagFora,j.paisFora):'❓'; if(r!==undefined) html+='<tr><td>'+flagImg(j.flagCasa,j.paisCasa)+' '+j.paisCasa+' vs '+ff+' '+j.paisFora+'</td><td><strong>'+r.gols_casa+' x '+r.gols_fora+'</strong></td></tr>'; else html+='<tr style="opacity:0.4;"><td>'+flagImg(j.flagCasa,j.paisCasa)+' '+j.paisCasa+' vs '+ff+' '+j.paisFora+'</td><td style="color:var(--text-secondary);">⏳ Pendente</td></tr>'; });
-    html+='</tbody></table><h3 style="font-family:\'Inter\',sans-serif;font-weight:700;color:var(--secondary);margin-bottom:10px;">📊 Classificação Final</h3><table><thead><tr><th>Pos</th><th>Nome</th><th>Acertos</th><th>Placar Exato (5pts)</th><th>Vencedor (3pts)</th><th>Total</th></tr></thead><tbody>';
-    if(ranking.length===0) html+='<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);">Nenhum dado disponível.</td></tr>';
+    html+='<div style="margin-bottom:20px;padding:14px;background:var(--gray-1);border-radius:8px;"><p><strong>Total de Participantes:</strong> '+participantes.length+'</p><p><strong>Jogos com Resultado:</strong> '+Object.keys(resultados).length+' / '+JOGOS.length+'</p>'+(ranking.length>0?'<p><strong>🏆 Campeão:</strong> '+escapeHtml(ranking[0].nome)+' — '+ranking[0].pontos+' pontos</p>':'')+'</div>';
+    html+='<h3 style="font-family:\'Inter\',sans-serif;font-weight:700;color:var(--primary);margin-bottom:10px;">⚽ Resultados</h3><table style="margin-bottom:25px;"><thead><tr><th>Jogo</th><th>Placar</th></tr></thead><tbody>';
+    JOGOS.forEach(j=>{const r=resultados[j.id]; const ff=j.flagFora?flagImg(j.flagFora,j.paisFora):'❓'; if(r!==undefined) html+='<tr><td>'+flagImg(j.flagCasa,j.paisCasa)+' '+j.paisCasa+' vs '+ff+' '+j.paisFora+'</td><td><strong>'+r.gols_casa+' x '+r.gols_fora+'</strong></td></tr>'; else html+='<tr style="opacity:0.4;"><td>'+flagImg(j.flagCasa,j.paisCasa)+' '+j.paisCasa+' vs '+ff+' '+j.paisFora+'</td><td style="color:var(--gray-3);">⏳ Pendente</td></tr>'; });
+    html+='</tbody></table><h3 style="font-family:\'Inter\',sans-serif;font-weight:700;color:var(--primary);margin-bottom:10px;">📊 Classificação Final</h3><table><thead><tr><th>Pos</th><th>Nome</th><th>Acertos</th><th>Placar Exato (5pts)</th><th>Vencedor (3pts)</th><th>Total</th></tr></thead><tbody>';
+    if(ranking.length===0) html+='<tr><td colspan="6" style="text-align:center;color:var(--gray-3);">Nenhum dado disponível.</td></tr>';
     else ranking.forEach((r,i)=>{const pos=i+1; let m=''; if(pos===1)m='🥇 ';else if(pos===2)m='🥈 ';else if(pos===3)m='🥉 '; html+='<tr><td><strong>'+m+pos+'º</strong></td><td>'+escapeHtml(r.nome)+'</td><td>'+r.totalAcertos+'</td><td>'+r.placarExato+'</td><td>'+r.vencedorCorreto+'</td><td><strong>'+r.pontos+' pts</strong></td></tr>';});
     html+='</tbody></table><div class="print-date">Gerado em: '+agora+'</div></div>';
-    container.innerHTML=html; card.style.display='block'; card.scrollIntoView({behavior:'smooth'}); mostrarToast('✅ Relatório final gerado com sucesso!','success');
+    container.innerHTML=html; card.style.display='block'; card.scrollIntoView({behavior:'smooth'}); mostrarToast('✅ Relatório final gerado com sucesso!');
 }
 function imprimirRelatorio(){if(document.getElementById('relatorioFinalCard').style.display==='none'){mostrarToast('Gere o relatório final primeiro!','error');return;}window.print();}
-function limparTodosDados(){localStorage.removeItem('bolao_participantes');localStorage.removeItem('bolao_resultados');renderizarJogos();renderizarParticipantes();calcularApuracao();document.getElementById('relatorioFinalCard').style.display='none';mostrarToast('🗑️ Dados removidos!','success');}
+function mostrarModalLimpar(){mostrarModal('Tem certeza que deseja limpar TODOS os dados do bolão? Esta ação não pode ser desfeita.', function(){limparTodosDados();});}
+function limparTodosDados(){localStorage.removeItem('bolao_participantes');localStorage.removeItem('bolao_resultados');renderizarJogos();renderizarParticipantes();calcularApuracao();document.getElementById('relatorioFinalCard').style.display='none';mostrarToast('🗑️ Todos os dados foram removidos!','info');}
 function carregarTudo(){renderizarJogos();renderizarParticipantes();calcularApuracao();}
 document.addEventListener('DOMContentLoaded',function(){verificarLogin();document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});});
 </script>
