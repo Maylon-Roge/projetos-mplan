@@ -580,6 +580,64 @@
 </div>
 
 <script>
+// ─── Supabase Config ─────────────────────────────────────────────
+const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
+const ADMIN_EMAIL = 'admin@planetaenergia.com.br';
+
+// ─── Supabase Helpers ────────────────────────────────────────────
+let adminToken = null;
+
+async function supabaseGet(table, opts) {
+    const params = new URLSearchParams(opts || {});
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+        method: 'GET',
+        headers: { apikey: SUPABASE_ANON_KEY }
+    });
+    if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
+    return res.json();
+}
+
+async function supabaseInsert(table, body, token) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: {
+            apikey: SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(await res.text());
+}
+
+async function supabasePatch(table, body, query, token) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
+        method: 'PATCH',
+        headers: {
+            apikey: SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`Supabase PATCH ${table}: ${res.status}`);
+}
+
+async function supabaseAuth(email, password) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    if (!res.ok) throw new Error('Falha no login');
+    const data = await res.json();
+    return data.access_token;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────
 function flagImg(code, alt) {
     if (!code) return '<span style="font-size:1.3rem;">❓</span>';
     return '<img src="https://flagcdn.com/w80/' + code + '.png" alt="' + alt + '" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">';
@@ -594,33 +652,44 @@ const JOGOS = [
     { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir' },
     { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',  flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir' },
 ];
-const SENHA_ADMIN = 'admin123';
-let abaAtual = 'jogos';
 
-function fazerLogin() {
+// ─── Global State ────────────────────────────────────────────────
+let abaAtual = 'jogos';
+let cachedParticipantes = [];
+let cachedResultados = {};
+let cachedJogosLiberados = [];
+
+// ─── Login ───────────────────────────────────────────────────────
+async function fazerLogin() {
     const senha = document.getElementById('senhaInput').value;
     const erro = document.getElementById('loginError');
-    if (senha === SENHA_ADMIN) {
-        sessionStorage.setItem('bolao_admin_logged', 'true');
+    erro.classList.remove('show');
+    try {
+        const token = await supabaseAuth(ADMIN_EMAIL, senha);
+        adminToken = token;
+        sessionStorage.setItem('bolao_admin_token', token);
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('appLayout').style.display = 'block';
-        carregarTudo();
+        await carregarTudo();
         mostrarToast('✅ Login realizado com sucesso!');
-    } else {
+    } catch (e) {
         erro.classList.add('show');
         document.getElementById('senhaInput').value = '';
         document.getElementById('senhaInput').focus();
     }
 }
 function fazerLogout() {
-    sessionStorage.removeItem('bolao_admin_logged');
+    adminToken = null;
+    sessionStorage.removeItem('bolao_admin_token');
     document.getElementById('loginScreen').classList.remove('hidden');
     document.getElementById('appLayout').style.display = 'none';
     document.getElementById('senhaInput').value = '';
     document.getElementById('loginError').classList.remove('show');
 }
 function verificarLogin() {
-    if (sessionStorage.getItem('bolao_admin_logged') === 'true') {
+    const token = sessionStorage.getItem('bolao_admin_token');
+    if (token) {
+        adminToken = token;
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('appLayout').style.display = 'block';
         carregarTudo();
@@ -628,6 +697,8 @@ function verificarLogin() {
         document.getElementById('appLayout').style.display = 'none';
     }
 }
+
+// ─── Navigation & UI ─────────────────────────────────────────────
 function trocarAba(aba) {
     abaAtual = aba;
     document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
@@ -652,13 +723,34 @@ let modalCallback = null;
 function mostrarModal(mensagem, callback) { document.getElementById('modalMessage').textContent = mensagem; document.getElementById('confirmModal').classList.add('show'); modalCallback = callback; }
 function fecharModal() { document.getElementById('confirmModal').classList.remove('show'); modalCallback = null; }
 function confirmarModal() { if (typeof modalCallback === 'function') modalCallback(); fecharModal(); }
-function getParticipantes() { return JSON.parse(localStorage.getItem('bolao_participantes') || '[]'); }
-function getResultados() { return JSON.parse(localStorage.getItem('bolao_resultados') || '{}'); }
-function salvarResultados(r) { localStorage.setItem('bolao_resultados', JSON.stringify(r)); }
 
-function renderizarJogos() {
+// ─── Data Fetching ───────────────────────────────────────────────
+async function fetchDados() {
+    try {
+        const [participantes, resultados, jogosLiberados] = await Promise.all([
+            supabaseGet('participantes', { select: '*' }),
+            supabaseGet('resultados', { select: '*' }),
+            supabaseGet('jogos_liberados', { select: '*' })
+        ]);
+        cachedParticipantes = participantes || [];
+        // Convert resultados array to dict keyed by jogo_id
+        const rdict = {};
+        (resultados || []).forEach(r => { rdict[r.jogo_id] = r; });
+        cachedResultados = rdict;
+        // Extract liberados as array of jogo_id
+        cachedJogosLiberados = (jogosLiberados || [])
+            .filter(j => j.liberado === true)
+            .map(j => j.jogo_id);
+    } catch (e) {
+        mostrarToast('Erro ao carregar dados: ' + e.message, 'error');
+    }
+}
+
+// ─── Jogos ───────────────────────────────────────────────────────
+async function renderizarJogos() {
+    await fetchDados();
     const container = document.getElementById('jogosContainer');
-    const resultados = getResultados();
+    const resultados = cachedResultados;
     let html = '';
     JOGOS.forEach(jogo => {
         const temResultado = resultados[jogo.id] !== undefined;
@@ -678,38 +770,64 @@ function renderizarJogos() {
             '<button class="btn btn-primary btn-sm" onclick="salvarResultado(' + jogo.id + ')">💾 Salvar</button>' +
             '<div class="game-status">' +
             (temResultado ? '<span class="badge badge-green">Realizado</span>' : '<span class="badge badge-gray">Pendente</span>');
-        var lib = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
-        var estaLib = lib.indexOf(jogo.id) >= 0;
+        var estaLib = cachedJogosLiberados.indexOf(jogo.id) >= 0;
         html += '<button class="btn btn-sm ' + (estaLib ? 'btn-yellow' : 'btn-outline') + '" onclick="toggleLiberarJogo(' + jogo.id + ')" style="margin-left:6px;">' +
             (estaLib ? '🔓 Liberado' : '🔒 Bloqueado') + '</button></div></div></div>';
     });
     container.innerHTML = html;
 }
-function salvarResultado(jogoId) {
+async function salvarResultado(jogoId) {
     const golsCasa = parseInt(document.getElementById('golsCasa_' + jogoId).value);
     const golsFora = parseInt(document.getElementById('golsFora_' + jogoId).value);
     if (isNaN(golsCasa) || isNaN(golsFora)) { mostrarToast('Preencha ambos os campos de gols!', 'error'); return; }
-    const resultados = getResultados();
-    resultados[jogoId] = { gols_casa: golsCasa, gols_fora: golsFora };
-    salvarResultados(resultados); renderizarJogos();
-    mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')');
+    try {
+        if (cachedResultados[jogoId]) {
+            // Update existing
+            await supabasePatch('resultados', { gols_casa: golsCasa, gols_fora: golsFora }, 'jogo_id=eq.' + jogoId, adminToken);
+        } else {
+            // Insert new
+            await supabaseInsert('resultados', { jogo_id: jogoId, gols_casa: golsCasa, gols_fora: golsFora }, adminToken);
+        }
+        await renderizarJogos();
+        mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')');
+    } catch (e) {
+        mostrarToast('Erro ao salvar resultado: ' + e.message, 'error');
+    }
 }
-function toggleLiberarJogo(jogoId) {
-    const liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
-    const idx = liberados.indexOf(jogoId);
-    if (idx >= 0) { liberados.splice(idx, 1); mostrarToast('Jogo ' + jogoId + ' bloqueado', 'info'); }
-    else { liberados.push(jogoId); mostrarToast('Jogo ' + jogoId + ' liberado!'); }
-    localStorage.setItem('bolao_jogos_liberados', JSON.stringify(liberados)); renderizarJogos();
+async function toggleLiberarJogo(jogoId) {
+    const estaLib = cachedJogosLiberados.indexOf(jogoId) >= 0;
+    const novoStatus = !estaLib;
+    try {
+        if (estaLib) {
+            // Was liberado → set liberado=false
+            await supabasePatch('jogos_liberados', { liberado: false }, 'jogo_id=eq.' + jogoId, adminToken);
+        } else {
+            // Was bloqueado → try update, if no rows affected, insert
+            try {
+                await supabasePatch('jogos_liberados', { liberado: true }, 'jogo_id=eq.' + jogoId, adminToken);
+            } catch (ePatch) {
+                // If no row exists, insert
+                await supabaseInsert('jogos_liberados', { jogo_id: jogoId, liberado: true }, adminToken);
+            }
+        }
+        mostrarToast('Jogo ' + jogoId + (novoStatus ? ' liberado!' : ' bloqueado'), novoStatus ? '' : 'info');
+        await renderizarJogos();
+    } catch (e) {
+        mostrarToast('Erro ao alterar liberação: ' + e.message, 'error');
+    }
 }
-function renderizarParticipantes() {
-    const participantes = getParticipantes();
+
+// ─── Participantes ───────────────────────────────────────────────
+async function renderizarParticipantes() {
+    await fetchDados();
+    const participantes = cachedParticipantes;
     document.getElementById('totalParticipantes').textContent = participantes.length;
     document.getElementById('comPalpites').textContent = participantes.filter(p => p.palpites && p.palpites.length > 0).length;
     filtrarParticipantes();
 }
 function filtrarParticipantes() {
     const busca = document.getElementById('searchParticipante').value.toLowerCase().trim();
-    const participantes = getParticipantes();
+    const participantes = cachedParticipantes;
     const tbody = document.getElementById('participantesTableBody');
     const vazio = document.getElementById('nenhumParticipante');
     const filtrados = busca ? participantes.filter(p => p.nome.toLowerCase().includes(busca)) : participantes;
@@ -718,7 +836,9 @@ function filtrarParticipantes() {
     let html = '';
     filtrados.forEach((p, i) => {
         const qtd = p.palpites ? p.palpites.length : 0;
-        html += '<tr><td>' + (i+1) + '</td><td><strong>' + escapeHtml(p.nome) + '</strong></td><td>' + mascararDocumento(p.documento, p.tipoDocumento) + '</td><td>' + escapeHtml(p.telefone || '-') + '</td><td>' + (p.timestamp ? new Date(p.timestamp).toLocaleDateString('pt-BR') : '-') + '</td><td>' + qtd + ' / ' + JOGOS.length + '</td></tr>';
+        // Map DB field tipo_documento (underscore) to function param
+        const tipoDoc = p.tipo_documento || p.tipoDocumento || 'cpf';
+        html += '<tr><td>' + (i+1) + '</td><td><strong>' + escapeHtml(p.nome) + '</strong></td><td>' + mascararDocumento(p.documento, tipoDoc) + '</td><td>' + escapeHtml(p.telefone || '-') + '</td><td>' + (p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : '-') + '</td><td>' + qtd + ' / ' + JOGOS.length + '</td></tr>';
     });
     tbody.innerHTML = html;
 }
@@ -732,18 +852,21 @@ function getPalpiteGols(palpite) {
     return null;
 }
 function exportarCSV() {
-    const p = getParticipantes();
+    const p = cachedParticipantes;
     if (p.length === 0) { mostrarToast('Nenhum participante para exportar!', 'error'); return; }
     let csv = 'Nome,Documento,Telefone,Empresa,Tipo Doc,Data\n';
-    p.forEach(x => { csv += '"'+(x.nome||'').replace(/"/g,'""')+'",'+(x.documento||'')+',"'+(x.telefone||'').replace(/"/g,'""')+'",'+(x.empresa||'')+','+(x.tipoDocumento||'cpf')+','+(x.timestamp||'')+'\n'; });
+    p.forEach(x => { csv += '"'+(x.nome||'').replace(/"/g,'""')+'",'+(x.documento||'')+',"'+(x.telefone||'').replace(/"/g,'""')+'",'+(x.empresa||'')+','+(x.tipo_documento||x.tipoDocumento||'cpf')+','+(x.created_at||'')+'\n'; });
     const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
     const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'participantes-bolao-2026.csv';
     document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(link.href);
     mostrarToast('✅ CSV exportado com sucesso!');
 }
-function calcularApuracao() {
-    const participantes = getParticipantes();
-    const resultados = getResultados();
+
+// ─── Apuração ────────────────────────────────────────────────────
+async function calcularApuracao() {
+    await fetchDados();
+    const participantes = cachedParticipantes;
+    const resultados = cachedResultados;
     const tbody = document.getElementById('apuracaoTableBody');
     const vazio = document.getElementById('apuracaoVazia');
     const jr = Object.keys(resultados).length;
@@ -784,8 +907,12 @@ function calcularApuracao() {
     });
     tbody.innerHTML=html;
 }
-function gerarRelatorioFinal() {
-    const participantes=getParticipantes(), resultados=getResultados();
+
+// ─── Relatório Final ─────────────────────────────────────────────
+async function gerarRelatorioFinal() {
+    await fetchDados();
+    const participantes = cachedParticipantes;
+    const resultados = cachedResultados;
     const container=document.getElementById('relatorioConteudo'), card=document.getElementById('relatorioFinalCard');
     if (participantes.length===0) { mostrarToast('Nenhum participante cadastrado!', 'error'); return; }
     const ranking=[]; participantes.forEach(p=>{
@@ -815,9 +942,43 @@ function gerarRelatorioFinal() {
 }
 function imprimirRelatorio(){if(document.getElementById('relatorioFinalCard').style.display==='none'){mostrarToast('Gere o relatório final primeiro!','error');return;}window.print();}
 function mostrarModalLimpar(){mostrarModal('Tem certeza que deseja limpar TODOS os dados do bolão? Esta ação não pode ser desfeita.', function(){limparTodosDados();});}
-function limparTodosDados(){localStorage.removeItem('bolao_participantes');localStorage.removeItem('bolao_resultados');renderizarJogos();renderizarParticipantes();calcularApuracao();document.getElementById('relatorioFinalCard').style.display='none';mostrarToast('🗑️ Todos os dados foram removidos!','info');}
-function carregarTudo(){renderizarJogos();renderizarParticipantes();calcularApuracao();}
-document.addEventListener('DOMContentLoaded',function(){verificarLogin();document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});});
+async function limparTodosDados() {
+    // Clear resultados via Supabase (requires auth)
+    if (!adminToken) { mostrarToast('Faça login novamente!', 'error'); return; }
+    try {
+        // Delete all resultados
+        for (const jogo of JOGOS) {
+            try {
+                await supabasePatch('resultados', { gols_casa: null, gols_fora: null }, 'jogo_id=eq.' + jogo.id, adminToken);
+            } catch(_){}
+        }
+        // Delete all jogos_liberados
+        for (const jogo of JOGOS) {
+            try {
+                await supabasePatch('jogos_liberados', { liberado: false }, 'jogo_id=eq.' + jogo.id, adminToken);
+            } catch(_){}
+        }
+        cachedResultados = {};
+        cachedJogosLiberados = [];
+        renderizarJogos();
+        renderizarParticipantes();
+        calcularApuracao();
+        document.getElementById('relatorioFinalCard').style.display='none';
+        mostrarToast('🗑️ Todos os dados foram removidos! (participantes mantidos no banco)', 'info');
+    } catch (e) {
+        mostrarToast('Erro ao limpar dados: ' + e.message, 'error');
+    }
+}
+async function carregarTudo() {
+    await fetchDados();
+    renderizarJogos();
+    renderizarParticipantes();
+    calcularApuracao();
+}
+document.addEventListener('DOMContentLoaded',function(){
+    verificarLogin();
+    document.getElementById('senhaInput').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});
+});
 </script>
 </body>
 </html>

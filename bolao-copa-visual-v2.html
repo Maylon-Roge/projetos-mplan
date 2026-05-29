@@ -759,6 +759,41 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // ============================================
+        // SUPABASE CONFIG
+        // ============================================
+        const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
+
+        async function supabaseGet(table, opts = {}) {
+            const params = new URLSearchParams();
+            if (opts.select) params.set('select', opts.select);
+            if (opts.order) params.set('order', opts.order);
+            if (opts.limit) params.set('limit', opts.limit);
+            const qs = params.toString();
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`, {
+                headers: { apikey: SUPABASE_ANON_KEY, Accept: 'application/json' }
+            });
+            if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
+            return res.json();
+        }
+
+        async function supabaseInsert(table, body) {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+                method: 'POST',
+                headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(err);
+            }
+            return true;
+        }
+
+        // ============================================
+        // DADOS DOS JOGOS
+        // ============================================
         function flagImg(code, alt) {
             return `<img src="https://flagcdn.com/w80/${code.toLowerCase()}.png" alt="${alt}" style="width:30px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
         }
@@ -775,8 +810,11 @@
 
         let tipoDocumento = 'cpf';
         let enviando = false;
+        let resultadosCache = {};
+        let liberadosCache = [1];
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await Promise.all([carregarResultados(), carregarLiberados()]);
             renderizarJogos();
             renderizarPalpites();
             setupToggle();
@@ -786,6 +824,21 @@
             iniciarCountdown();
             setupRevealAnimations();
         });
+
+        async function carregarResultados() {
+            try {
+                const data = await supabaseGet('resultados', { select: '*' });
+                resultadosCache = {};
+                data.forEach(r => { resultadosCache[r.jogo_id] = { casa: r.gols_casa, fora: r.gols_fora }; });
+            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
+        }
+
+        async function carregarLiberados() {
+            try {
+                const data = await supabaseGet('jogos_liberados', { select: '*' });
+                liberadosCache = data.filter(j => j.liberado).map(j => j.jogo_id);
+            } catch (e) { console.warn('Erro ao carregar jogos liberados:', e); }
+        }
 
         function setupRevealAnimations() {
             const observer = new IntersectionObserver((entries) => {
@@ -810,9 +863,8 @@
 
         function renderizarJogos() {
             const grid = document.getElementById('jogosGrid');
-            const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
             grid.innerHTML = JOGOS.map(j => {
-                const res = resultados[j.id];
+                const res = resultadosCache[j.id];
                 const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
                 return `<div class="jogo-card ${res ? 'realizado' : ''}">
                     ${res ? '<span class="resultado-badge">✅ Realizado</span>' : ''}
@@ -836,9 +888,8 @@
 
         function renderizarPalpites() {
             const container = document.getElementById('palpitesContainer');
-            const liberados = JSON.parse(localStorage.getItem('bolao_jogos_liberados') || '[1]');
             container.innerHTML = JOGOS.map(j => {
-                const ativo = liberados.includes(j.id);
+                const ativo = liberadosCache.includes(j.id);
                 const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
                 return `<div class="bet-match" style="${ativo ? '' : 'opacity:0.4;pointer-events:none;'}">
                     <div class="match-flags">${flagImg(j.flagCasa, j.paisCasa)}<span style="font-size:0.7rem;font-weight:600;">×</span>${flagForaHtml}</div>
@@ -932,7 +983,7 @@
             return valido;
         }
 
-        function enviarPalpites() {
+        async function enviarPalpites() {
             if (enviando) return;
             document.getElementById('errorMessage').classList.remove('show');
             document.getElementById('erroPalpites').classList.remove('show');
@@ -948,23 +999,34 @@
             });
             const dados = {
                 nome: document.getElementById('nome').value.trim(),
-                documento: document.getElementById('documento').value.trim(),
-                tipoDocumento,
+                documento: document.getElementById('documento').value.trim().replace(/\D/g,''),
+                tipo_documento: tipoDocumento,
                 empresa: document.getElementById('empresa').value.trim(),
                 telefone: document.getElementById('telefone').value.trim(),
-                palpites,
-                timestamp: new Date().toISOString()
+                palpites
             };
-            setTimeout(() => {
-                const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
-                participantes.push({ ...dados, pontos: 0, acertosExatos: 0 });
-                localStorage.setItem('bolao_participantes', JSON.stringify(participantes));
+            try {
+                await supabaseInsert('participantes', dados);
                 btn.classList.remove('loading'); btn.disabled = false; enviando = false;
                 document.getElementById('cadastroForm').style.display = 'none';
                 document.getElementById('successMessage').classList.add('show');
-                atualizarRanking();
+                await atualizarRanking();
                 mostrarToast('🎉 Palpites registrados com sucesso!');
-            }, 800);
+            } catch (e) {
+                btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+                const msg = e.message;
+                if (msg.includes('duplicate') || msg.includes('23505')) {
+                    mostrarErro('Este CPF/CNPJ já está cadastrado! Cada documento pode participar apenas uma vez.');
+                } else {
+                    mostrarErro('Erro ao registrar. Tente novamente.');
+                }
+            }
+        }
+
+        function mostrarErro(msg) {
+            const el = document.getElementById('errorMessage');
+            el.textContent = '⚠️ ' + msg;
+            el.classList.add('show');
         }
 
         function resetarFormulario() {
@@ -975,18 +1037,20 @@
             document.querySelectorAll('.error').forEach(e => e.classList.remove('error'));
         }
 
-        function atualizarRanking() {
-            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
-            const vazio = document.getElementById('rankingVazio');
-            const wrapper = document.getElementById('rankingTabelaWrapper');
-            const body = document.getElementById('rankingBody');
-            if (participantes.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
-            vazio.style.display = 'none'; wrapper.style.display = 'block';
-            const ordenados = participantes.sort((a,b) => (b.pontos||0) - (a.pontos||0));
-            body.innerHTML = ordenados.map((p, i) => {
-                const posClass = i < 3 ? `posicao-${i+1}` : '';
-                return `<tr><td class="posicao ${posClass}">${i+1}º</td><td class="nome-participante">${p.nome}</td><td class="acertos">${p.palpites?.length || 0} palpites</td><td class="pontos">${p.pontos || 0} pts</td></tr>`;
-            }).join('');
+        async function atualizarRanking() {
+            try {
+                const participantes = await supabaseGet('participantes', { select: 'nome,palpites', order: 'id.asc' });
+                const vazio = document.getElementById('rankingVazio');
+                const wrapper = document.getElementById('rankingTabelaWrapper');
+                const body = document.getElementById('rankingBody');
+                if (!participantes || participantes.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
+                vazio.style.display = 'none'; wrapper.style.display = 'block';
+                const ordenados = participantes.sort((a,b) => (b.pontos||0) - (a.pontos||0));
+                body.innerHTML = ordenados.map((p, i) => {
+                    const posClass = i < 3 ? `posicao-${i+1}` : '';
+                    return `<tr><td class="posicao ${posClass}">${i+1}º</td><td class="nome-participante">${p.nome}</td><td class="acertos">${(p.palpites && p.palpites.length) || 0} palpites</td><td class="pontos">${p.pontos || 0} pts</td></tr>`;
+                }).join('');
+            } catch (e) { console.warn('Erro ao carregar ranking:', e); }
         }
 
         function mostrarToast(msg, tipo = '') {

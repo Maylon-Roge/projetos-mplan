@@ -303,6 +303,25 @@
     </footer>
 
     <script>
+        // ============================================
+        // SUPABASE CONFIG
+        // ============================================
+        const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
+
+        async function supabaseGet(table, opts = {}) {
+            const params = new URLSearchParams();
+            if (opts.select) params.set('select', opts.select);
+            if (opts.order) params.set('order', opts.order);
+            if (opts.query) params.set(opts.query.name, opts.query.value);
+            const qs = params.toString();
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`, {
+                headers: { apikey: SUPABASE_ANON_KEY, Accept: 'application/json' }
+            });
+            if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
+            return res.json();
+        }
+
         function flagImg(code, alt) {
             if (!code) return '<span style="font-size:1.3rem;">❓</span>';
             return `<img src="https://flagcdn.com/w80/${code}.png" alt="${alt}" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
@@ -320,18 +339,29 @@
 
         document.getElementById('documentoInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') consultar(); });
 
-        function consultar() {
+        async function consultar() {
             const doc = document.getElementById('documentoInput').value.replace(/\D/g, '');
             if (!doc || (doc.length !== 11 && doc.length !== 14)) {
                 mostrarErro('Digite um CPF (11 dígitos) ou CNPJ (14 dígitos) válido');
                 return;
             }
-            const participantes = JSON.parse(localStorage.getItem('bolao_participantes') || '[]');
-            const participante = participantes.find(p => p.documento === doc);
-            if (!participante) { mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?'); return; }
-            document.getElementById('errorMsg').classList.remove('show');
-            document.getElementById('resultArea').classList.add('show');
-            mostrarDados(participante);
+            try {
+                const participantes = await supabaseGet('participantes', {
+                    select: '*',
+                    query: { name: 'documento', value: `eq.${doc}` }
+                });
+                if (!participantes || participantes.length === 0) {
+                    mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?');
+                    return;
+                }
+                const participante = participantes[0];
+                document.getElementById('errorMsg').classList.remove('show');
+                document.getElementById('resultArea').classList.add('show');
+                await mostrarDados(participante);
+            } catch (e) {
+                mostrarErro('Erro ao consultar. Tente novamente.');
+                console.warn(e);
+            }
         }
 
         function mostrarErro(msg) {
@@ -351,13 +381,19 @@
             return null;
         }
 
-        function mostrarDados(p) {
+        async function mostrarDados(p) {
             const docMascarado = p.documento.length === 11
                 ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
                 : p.documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
-            document.getElementById('participantInfo').innerHTML = `<h2>👤 ${p.nome}</h2><div class="meta">📄 ${p.tipoDocumento.toUpperCase()}: ${docMascarado}${p.empresa ? ' | 🏢 '+p.empresa : ''} | 📅 ${p.timestamp ? new Date(p.timestamp).toLocaleDateString('pt-BR') : 'N/A'}</div>`;
+            const tipoDoc = p.tipo_documento || p.tipoDocumento || 'cpf';
+            const dataReg = p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : 'N/A';
+            document.getElementById('participantInfo').innerHTML = `<h2>👤 ${p.nome}</h2><div class="meta">📄 ${tipoDoc.toUpperCase()}: ${docMascarado}${p.empresa ? ' | 🏢 '+p.empresa : ''} | 📅 ${dataReg}</div>`;
 
-            const resultados = JSON.parse(localStorage.getItem('bolao_resultados') || '{}');
+            let resultados = {};
+            try {
+                const data = await supabaseGet('resultados', { select: '*' });
+                data.forEach(r => { resultados[r.jogo_id] = { gols_casa: r.gols_casa, gols_fora: r.gols_fora }; });
+            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
             let totalAcertos = 0, totalPontos = 0, totalJogos = 0;
             const html = JOGOS.map(jogo => {
                 const palpite = p.palpites ? p.palpites.find(pp => pp.jogoId === jogo.id) : null;
