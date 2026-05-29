@@ -957,9 +957,46 @@
             });
         }
 
+        function validarCPF(cpf) {
+            const digitos = cpf.replace(/\D/g,'');
+            if (digitos.length !== 11) return false;
+            if (/^(\d)\1{10}$/.test(digitos)) return false;
+            let soma = 0;
+            for (let i = 0; i < 9; i++) soma += parseInt(digitos[i]) * (10 - i);
+            let resto = (soma * 10) % 11;
+            if (resto === 10) resto = 0;
+            if (resto !== parseInt(digitos[9])) return false;
+            soma = 0;
+            for (let i = 0; i < 10; i++) soma += parseInt(digitos[i]) * (11 - i);
+            resto = (soma * 10) % 11;
+            if (resto === 10) resto = 0;
+            if (resto !== parseInt(digitos[10])) return false;
+            return true;
+        }
+
+        function validarCNPJ(cnpj) {
+            const digitos = cnpj.replace(/\D/g,'');
+            if (digitos.length !== 14) return false;
+            if (/^(\d)\1{13}$/.test(digitos)) return false;
+            const pesos1 = [5,4,3,2,9,8,7,6,5,4,3,2];
+            let soma = 0;
+            for (let i = 0; i < 12; i++) soma += parseInt(digitos[i]) * pesos1[i];
+            let resto = soma % 11;
+            let dig1 = resto < 2 ? 0 : 11 - resto;
+            if (dig1 !== parseInt(digitos[12])) return false;
+            const pesos2 = [6,5,4,3,2,9,8,7,6,5,4,3,2];
+            soma = 0;
+            for (let i = 0; i < 13; i++) soma += parseInt(digitos[i]) * pesos2[i];
+            resto = soma % 11;
+            let dig2 = resto < 2 ? 0 : 11 - resto;
+            if (dig2 !== parseInt(digitos[13])) return false;
+            return true;
+        }
+
         function validarDocumento(val) {
             const digitos = val.replace(/\D/g,'');
-            return tipoDocumento === 'cpf' ? digitos.length === 11 : digitos.length === 14;
+            if (tipoDocumento === 'cpf') return validarCPF(digitos);
+            else return validarCNPJ(digitos);
         }
 
         function validarFormulario() {
