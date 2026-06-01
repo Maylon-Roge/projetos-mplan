@@ -580,61 +580,36 @@
 </div>
 
 <script>
-// ─── Supabase Config ─────────────────────────────────────────────
-const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
+// ─── Edge Functions Config ──────────────────────────────────────
+const API_BASE = 'https://shyvzreadwnvgovgrqek.supabase.co/functions/v1';
+// Anon key mantida APENAS para o login (Supabase Auth requer apikey no header)
+const SUPABASE_AUTH_URL = 'https://shyvzreadwnvgovgrqek.supabase.co/auth/v1/token?grant_type=password';
 const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
 const ADMIN_EMAIL = 'admin@planetaenergia.com.br';
 
-// ─── Supabase Helpers ────────────────────────────────────────────
 let adminToken = null;
 
-async function supabaseGet(table, opts) {
-    const params = new URLSearchParams(opts || {});
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-        method: 'GET',
-        headers: { apikey: SUPABASE_ANON_KEY }
-    });
-    if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
-    return res.json();
-}
-
-async function supabaseInsert(table, body, token) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+// ─── Edge Function Helper ────────────────────────────────────────
+async function callAdminAPI(operacao, extra) {
+    const body = { operacao: operacao, ...(extra || {}) };
+    const res = await fetch(API_BASE + '/admin-operations', {
         method: 'POST',
         headers: {
-            apikey: SUPABASE_ANON_KEY,
             'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
+            ...(adminToken ? { Authorization: 'Bearer ' + adminToken } : {})
         },
         body: JSON.stringify(body)
     });
-    if (!res.ok) throw new Error(await res.text());
-}
-
-async function supabasePatch(table, body, query, token) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
-        method: 'PATCH',
-        headers: {
-            apikey: SUPABASE_ANON_KEY,
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify(body)
-    });
-    if (!res.ok) throw new Error(`Supabase PATCH ${table}: ${res.status}`);
-}
-
-async function supabaseAuth(email, password) {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-        method: 'POST',
-        headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-    });
-    if (!res.ok) throw new Error('Falha no login');
     const data = await res.json();
-    return data.access_token;
+    if (!data.success) throw new Error(data.error || 'Erro na operação');
+    return data;
+}
+
+// ─── Dados públicos (ranking + resultados) ──────────────────────
+async function fetchDadosPublicos() {
+    const res = await fetch(API_BASE + '/ranking?limit=1&include_data=true', { headers: { Accept: 'application/json' } });
+    const data = await res.json();
+    return data.success ? data.data : { ranking: [], resultados: [], jogos_liberados: [] };
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────
@@ -665,7 +640,14 @@ async function fazerLogin() {
     const erro = document.getElementById('loginError');
     erro.classList.remove('show');
     try {
-        const token = await supabaseAuth(ADMIN_EMAIL, senha);
+        const res = await fetch(SUPABASE_AUTH_URL, {
+            method: 'POST',
+            headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: ADMIN_EMAIL, password: senha })
+        });
+        if (!res.ok) throw new Error('Falha no login');
+        const authData = await res.json();
+        const token = authData.access_token;
         adminToken = token;
         sessionStorage.setItem('bolao_admin_token', token);
         document.getElementById('loginScreen').classList.add('hidden');
@@ -728,20 +710,19 @@ function confirmarModal() { if (typeof modalCallback === 'function') modalCallba
 // ─── Data Fetching ───────────────────────────────────────────────
 async function fetchDados() {
     try {
-        const [participantes, resultados, jogosLiberados] = await Promise.all([
-            supabaseGet('participantes', { select: '*' }),
-            supabaseGet('resultados', { select: '*' }),
-            supabaseGet('jogos_liberados', { select: '*' })
+        const [adminResult, publicData] = await Promise.all([
+            callAdminAPI('listar_participantes').catch(function(e) { console.warn('Erro participantes:', e); return { data: { participantes: [] } }; }),
+            fetchDadosPublicos()
         ]);
-        cachedParticipantes = participantes || [];
+        cachedParticipantes = (adminResult && adminResult.data && adminResult.data.participantes) || [];
         // Convert resultados array to dict keyed by jogo_id
         const rdict = {};
-        (resultados || []).forEach(r => { rdict[r.jogo_id] = r; });
+        (publicData.resultados || []).forEach(function(r) { rdict[r.jogo_id] = r; });
         cachedResultados = rdict;
         // Extract liberados as array of jogo_id
-        cachedJogosLiberados = (jogosLiberados || [])
-            .filter(j => j.liberado === true)
-            .map(j => j.jogo_id);
+        cachedJogosLiberados = (publicData.jogos_liberados || [])
+            .filter(function(j) { return j.liberado === true; })
+            .map(function(j) { return j.jogo_id; });
     } catch (e) {
         mostrarToast('Erro ao carregar dados: ' + e.message, 'error');
     }
@@ -782,13 +763,7 @@ async function salvarResultado(jogoId) {
     const golsFora = parseInt(document.getElementById('golsFora_' + jogoId).value);
     if (isNaN(golsCasa) || isNaN(golsFora)) { mostrarToast('Preencha ambos os campos de gols!', 'error'); return; }
     try {
-        if (cachedResultados[jogoId]) {
-            // Update existing
-            await supabasePatch('resultados', { gols_casa: golsCasa, gols_fora: golsFora }, 'jogo_id=eq.' + jogoId, adminToken);
-        } else {
-            // Insert new
-            await supabaseInsert('resultados', { jogo_id: jogoId, gols_casa: golsCasa, gols_fora: golsFora }, adminToken);
-        }
+        await callAdminAPI('salvar_resultado', { jogo_id: jogoId, gols_casa: golsCasa, gols_fora: golsFora });
         await renderizarJogos();
         mostrarToast('Resultado do jogo ' + jogoId + ' salvo! (' + golsCasa + ' x ' + golsFora + ')');
     } catch (e) {
@@ -799,18 +774,7 @@ async function toggleLiberarJogo(jogoId) {
     const estaLib = cachedJogosLiberados.indexOf(jogoId) >= 0;
     const novoStatus = !estaLib;
     try {
-        if (estaLib) {
-            // Was liberado → set liberado=false
-            await supabasePatch('jogos_liberados', { liberado: false }, 'jogo_id=eq.' + jogoId, adminToken);
-        } else {
-            // Was bloqueado → try update, if no rows affected, insert
-            try {
-                await supabasePatch('jogos_liberados', { liberado: true }, 'jogo_id=eq.' + jogoId, adminToken);
-            } catch (ePatch) {
-                // If no row exists, insert
-                await supabaseInsert('jogos_liberados', { jogo_id: jogoId, liberado: true }, adminToken);
-            }
-        }
+        await callAdminAPI('liberar_jogo', { jogo_id: jogoId, liberado: novoStatus });
         mostrarToast('Jogo ' + jogoId + (novoStatus ? ' liberado!' : ' bloqueado'), novoStatus ? '' : 'info');
         await renderizarJogos();
     } catch (e) {
@@ -944,19 +908,18 @@ async function gerarRelatorioFinal() {
 function imprimirRelatorio(){if(document.getElementById('relatorioFinalCard').style.display==='none'){mostrarToast('Gere o relatório final primeiro!','error');return;}window.print();}
 function mostrarModalLimpar(){mostrarModal('Tem certeza que deseja limpar TODOS os dados do bolão? Esta ação não pode ser desfeita.', function(){limparTodosDados();});}
 async function limparTodosDados() {
-    // Clear resultados via Supabase (requires auth)
     if (!adminToken) { mostrarToast('Faça login novamente!', 'error'); return; }
     try {
-        // Delete all resultados
+        // Clear all resultados
         for (const jogo of JOGOS) {
             try {
-                await supabasePatch('resultados', { gols_casa: null, gols_fora: null }, 'jogo_id=eq.' + jogo.id, adminToken);
+                await callAdminAPI('salvar_resultado', { jogo_id: jogo.id, gols_casa: null, gols_fora: null });
             } catch(_){}
         }
-        // Delete all jogos_liberados
+        // Clear all jogos_liberados
         for (const jogo of JOGOS) {
             try {
-                await supabasePatch('jogos_liberados', { liberado: false }, 'jogo_id=eq.' + jogo.id, adminToken);
+                await callAdminAPI('liberar_jogo', { jogo_id: jogo.id, liberado: false });
             } catch(_){}
         }
         cachedResultados = {};

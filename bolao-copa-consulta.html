@@ -304,27 +304,25 @@
 
     <script>
         // ============================================
-        // SUPABASE CONFIG
+        // EDGE FUNCTIONS CONFIG (sem chave anônima!)
         // ============================================
-        const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
+        const API_BASE = 'https://shyvzreadwnvgovgrqek.supabase.co/functions/v1';
+        let resultadosCache = {};
 
-        async function supabaseGet(table, opts = {}) {
-            const params = new URLSearchParams();
-            if (opts.select) params.set('select', opts.select);
-            if (opts.order) params.set('order', opts.order);
-            if (opts.query) params.set(opts.query.name, opts.query.value);
-            const qs = params.toString();
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`, {
-                headers: { apikey: SUPABASE_ANON_KEY, Accept: 'application/json' }
-            });
-            if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
-            return res.json();
+        async function carregarResultados() {
+            try {
+                const res = await fetch(API_BASE + '/ranking?limit=1&include_data=true', { headers: { Accept: 'application/json' } });
+                const data = await res.json();
+                if (data.success && data.data.resultados) {
+                    resultadosCache = {};
+                    data.data.resultados.forEach(function(r) { resultadosCache[r.jogo_id] = { casa: r.gols_casa, fora: r.gols_fora }; });
+                }
+            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
         }
 
         function flagImg(code, alt) {
             if (!code) return '<span style="font-size:1.3rem;">❓</span>';
-            return `<img src="https://flagcdn.com/w80/${code}.png" alt="${alt}" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
+            return '<img src="https://flagcdn.com/w80/' + code + '.png" alt="' + alt + '" style="width:28px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">';
         }
         const JOGOS = [
             { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',   flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey' },
@@ -340,21 +338,20 @@
         document.getElementById('documentoInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') consultar(); });
 
         async function consultar() {
-            const doc = document.getElementById('documentoInput').value.replace(/\D/g, '');
+            var doc = document.getElementById('documentoInput').value.replace(/\D/g, '');
             if (!doc || (doc.length !== 11 && doc.length !== 14)) {
                 mostrarErro('Digite um CPF (11 dígitos) ou CNPJ (14 dígitos) válido');
                 return;
             }
             try {
-                const participantes = await supabaseGet('participantes', {
-                    select: '*',
-                    query: { name: 'documento', value: `eq.${doc}` }
-                });
-                if (!participantes || participantes.length === 0) {
-                    mostrarErro('Documento não encontrado. Você ainda não se cadastrou no bolão?');
+                await carregarResultados();
+                var res = await fetch(API_BASE + '/consulta?documento=' + doc, { headers: { Accept: 'application/json' } });
+                var data = await res.json();
+                if (!data.success) {
+                    mostrarErro(data.error || 'Documento não encontrado. Você ainda não se cadastrou no bolão?');
                     return;
                 }
-                const participante = participantes[0];
+                var participante = data.data;
                 document.getElementById('errorMsg').classList.remove('show');
                 document.getElementById('resultArea').classList.add('show');
                 await mostrarDados(participante);
@@ -365,11 +362,11 @@
         }
 
         function mostrarErro(msg) {
-            const el = document.getElementById('errorMsg');
+            var el = document.getElementById('errorMsg');
             el.textContent = '⚠️ ' + msg;
             el.classList.add('show');
             document.getElementById('resultArea').classList.remove('show');
-            setTimeout(() => el.classList.remove('show'), 5000);
+            setTimeout(function() { el.classList.remove('show'); }, 5000);
         }
 
         /* Helper: extrai gols do palpite em qualquer formato (casa/fora ou gols_brasil/gols_adversario) */
@@ -382,43 +379,44 @@
         }
 
         async function mostrarDados(p) {
-            const docMascarado = p.documento.length === 11
-                ? p.documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
-                : p.documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
-            const tipoDoc = p.tipo_documento || p.tipoDocumento || 'cpf';
-            const dataReg = p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : 'N/A';
-            document.getElementById('participantInfo').innerHTML = `<h2>👤 ${p.nome}</h2><div class="meta">📄 ${tipoDoc.toUpperCase()}: ${docMascarado}${p.empresa ? ' | 🏢 '+p.empresa : ''} | 📅 ${dataReg}</div>`;
+            var docMascarado = p.documento_raw.length === 11
+                ? p.documento_raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
+                : p.documento_raw.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
+            var tipoDoc = p.tipo_documento || 'cpf';
+            var dataReg = p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : 'N/A';
+            document.getElementById('participantInfo').innerHTML = '<h2>👤 ' + p.nome + '</h2><div class="meta">📄 ' + tipoDoc.toUpperCase() + ': ' + docMascarado + (p.empresa ? ' | 🏢 ' + p.empresa : '') + ' | 📅 ' + dataReg + '</div>';
 
-            let resultados = {};
-            try {
-                const data = await supabaseGet('resultados', { select: '*' });
-                data.forEach(r => { resultados[r.jogo_id] = { gols_casa: r.gols_casa, gols_fora: r.gols_fora }; });
-            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
-            let totalAcertos = 0, totalPontos = 0, totalJogos = 0;
-            const html = JOGOS.map(jogo => {
-                const palpite = p.palpites ? p.palpites.find(pp => pp.jogoId === jogo.id) : null;
-                const gols = getPalpiteGols(palpite);
-                const resultado = resultados[jogo.id];
-                const temResultado = resultado && resultado.gols_casa !== undefined;
-                const golsCasaPalpite = gols ? gols.casa : null;
-                const golsForaPalpite = gols ? gols.fora : null;
-                let statusClasse = 'aguardando', statusTexto = '⏳ Aguardando', classeCasa = '', classeFora = '';
-                const brasilEhCasa = jogo.paisCasa === 'Brasil';
-                const golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.gols_casa : resultado.gols_fora) : null;
-                const golsAdvReal = temResultado ? (brasilEhCasa ? resultado.gols_fora : resultado.gols_casa) : null;
+            var resultados = resultadosCache;
+            var totalAcertos = 0, totalPontos = 0, totalJogos = 0;
+            var html = JOGOS.map(function(jogo) {
+                var palpite = p.palpites ? p.palpites.find(function(pp) { return pp.jogoId === jogo.id; }) : null;
+                var gols = getPalpiteGols(palpite);
+                var resultado = resultados[jogo.id];
+                var temResultado = resultado && resultado.casa !== undefined;
+                var golsCasaPalpite = gols ? gols.casa : null;
+                var golsForaPalpite = gols ? gols.fora : null;
+                var statusClasse = 'aguardando', statusTexto = '⏳ Aguardando', classeCasa = '', classeFora = '';
+                var brasilEhCasa = jogo.paisCasa === 'Brasil';
+                var golsBrasilReal = temResultado ? (brasilEhCasa ? resultado.casa : resultado.fora) : null;
+                var golsAdvReal = temResultado ? (brasilEhCasa ? resultado.fora : resultado.casa) : null;
                 if (temResultado && golsCasaPalpite !== null && golsForaPalpite !== null) {
                     totalJogos++;
-                    const golsBrasilPalpite = golsCasaPalpite, golsAdvPalpite = golsForaPalpite;
-                    const acertouPlacar = golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal;
-                    const vitoriaBrasilReal = golsBrasilReal > golsAdvReal, derrotaBrasilReal = golsBrasilReal < golsAdvReal, empateReal = golsBrasilReal === golsAdvReal;
-                    const vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite, derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite, empatePalpite = golsBrasilPalpite === golsAdvPalpite;
-                    const acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) || (derrotaBrasilReal && derrotaBrasilPalpite) || (empateReal && empatePalpite);
+                    var golsBrasilPalpite = golsCasaPalpite, golsAdvPalpite = golsForaPalpite;
+                    var acertouPlacar = golsBrasilPalpite === golsBrasilReal && golsAdvPalpite === golsAdvReal;
+                    var vitoriaBrasilReal = golsBrasilReal > golsAdvReal, derrotaBrasilReal = golsBrasilReal < golsAdvReal, empateReal = golsBrasilReal === golsAdvReal;
+                    var vitoriaBrasilPalpite = golsBrasilPalpite > golsAdvPalpite, derrotaBrasilPalpite = golsBrasilPalpite < golsAdvPalpite, empatePalpite = golsBrasilPalpite === golsAdvPalpite;
+                    var acertouVencedor = (vitoriaBrasilReal && vitoriaBrasilPalpite) || (derrotaBrasilReal && derrotaBrasilPalpite) || (empateReal && empatePalpite);
                     if (acertouPlacar) { statusClasse='acerto-placar'; statusTexto='✅ Placar Exato! (+5pts)'; classeCasa='acerto-placar'; classeFora='acerto-placar'; totalAcertos++; totalPontos+=5; }
                     else if (acertouVencedor) { statusClasse='acerto-vencedor'; statusTexto='🎯 Vencedor! (+3pts)'; classeCasa='acerto-vencedor'; classeFora='acerto-vencedor'; totalAcertos++; totalPontos+=3; }
                     else { statusClasse='erro'; statusTexto='❌ Erro (0pts)'; classeCasa='erro'; classeFora='erro'; }
                 }
-                const temPalpite = golsCasaPalpite !== null && golsForaPalpite !== null;
-                return `<div class="game-result"><div class="flags">${flagImg(jogo.flagCasa, jogo.paisCasa)}<span class="vs">vs</span>${jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.1rem;">❓</span>'}</div><div class="info"><div class="rodada">${jogo.rodada}</div><div class="paises">${jogo.paisCasa} × ${jogo.paisFora}</div><div class="data">📅 ${jogo.data} &nbsp;📍 ${jogo.local}</div></div><div class="placares"><div class="palpite"><div class="label">Seu palpite</div><div class="valor ${temResultado ? classeCasa : ''}">${temPalpite ? (golsCasaPalpite + ' × ' + golsForaPalpite) : '—'}</div></div>${temResultado ? `<div class="separador">|</div><div class="palpite" style="background:var(--primary);color:var(--white);"><div class="label" style="color:rgba(255,255,255,0.7);">Real</div><div class="valor" style="color:var(--secondary);">${resultado.gols_casa} × ${resultado.gols_fora}</div></div>` : ''}</div><span class="status-badge ${statusClasse}">${statusTexto}</span></div>`;
+                var temPalpite = golsCasaPalpite !== null && golsForaPalpite !== null;
+                var ff = jogo.flagFora ? flagImg(jogo.flagFora, jogo.paisFora) : '<span style="font-size:1.1rem;">❓</span>';
+                var placarHtml = '<div class="palpite"><div class="label">Seu palpite</div><div class="valor ' + (temResultado ? classeCasa : '') + '">' + (temPalpite ? (golsCasaPalpite + ' × ' + golsForaPalpite) : '—') + '</div></div>';
+                if (temResultado) {
+                    placarHtml += '<div class="separador">|</div><div class="palpite" style="background:var(--primary);color:var(--white);"><div class="label" style="color:rgba(255,255,255,0.7);">Real</div><div class="valor" style="color:var(--secondary);">' + resultado.casa + ' × ' + resultado.fora + '</div></div>';
+                }
+                return '<div class="game-result"><div class="flags">' + flagImg(jogo.flagCasa, jogo.paisCasa) + '<span class="vs">vs</span>' + ff + '</div><div class="info"><div class="rodada">' + jogo.rodada + '</div><div class="paises">' + jogo.paisCasa + ' × ' + jogo.paisFora + '</div><div class="data">📅 ' + jogo.data + ' &nbsp;📍 ' + jogo.local + '</div></div><div class="placares">' + placarHtml + '</div><span class="status-badge ' + statusClasse + '">' + statusTexto + '</span></div>';
             }).join('');
             document.getElementById('palpitesList').innerHTML = html;
             document.getElementById('totalJogos').textContent = JOGOS.length;

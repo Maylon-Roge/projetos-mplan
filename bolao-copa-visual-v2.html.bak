@@ -1,0 +1,1104 @@
+     1|<!DOCTYPE html>
+     2|<html lang="pt-BR">
+     3|<head>
+     4|    <meta charset="UTF-8">
+     5|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6|    <title>Bolão Copa do Mundo 2026 🏆 - Planeta Energia</title>
+     7|    <meta name="description" content="Participe do Bolão Virtual da Copa do Mundo 2026 promovido pela Planeta Energia. Faça seus palpites, acumule pontos e ganhe prêmios!">
+     8|    <meta name="keywords" content="bolão, copa do mundo, 2026, palpites, futebol, Planeta Energia">
+     9|    <meta property="og:title" content="Bolão Copa do Mundo 2026 🏆 - Planeta Energia">
+    10|    <meta property="og:description" content="Faça seus palpites nos jogos do Brasil e concorra a R$ 500 em vale-compras!">
+    11|    <meta property="og:type" content="website">
+    12|    <meta property="og:url" content="https://maylon-roge.github.io/projetos-mplan/bolao-copa-visual-v2.html">
+    13|    <meta property="og:image" content="https://maylon-roge.github.io/projetos-mplan/assets/bolao-og.jpg">
+    14|    <meta name="theme-color" content="#003a70">
+    15|
+    16|    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    17|    <style>
+    18|        * { margin: 0; padding: 0; box-sizing: border-box; }
+    19|
+    20|        :root {
+    21|            --primary: #003a70;
+    22|            --primary-dark: #002a52;
+    23|            --primary-light: #004d99;
+    24|            --secondary: #fbd70e;
+    25|            --secondary-dark: #e6c20d;
+    26|            --green: #00a651;
+    27|            --red: #e63946;
+    28|            --black: #16161d;
+    29|            --white: #ffffff;
+    30|            --gray-1: #f9f9f9;
+    31|            --gray-2: #d5e0e9;
+    32|            --gray-3: #707070;
+    33|            --gray-4: #363636;
+    34|            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    35|            --shadow-md: 0 10px 30px rgba(0,0,0,0.12);
+    36|            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+    37|            --radius: 8px;
+    38|            --radius-card: 16px;
+    39|        }
+    40|
+    41|        html { scroll-behavior: smooth; }
+    42|
+    43|        body {
+    44|            font-family: 'Montserrat', sans-serif;
+    45|            background: var(--gray-1);
+    46|            color: var(--gray-4);
+    47|            overflow-x: hidden;
+    48|            line-height: 1.6;
+    49|        }
+    50|
+    51|        /* ============================================
+    52|           TOP BAR (estilo Planeta Energia)
+    53|           ============================================ */
+    54|        .top-bar {
+    55|            background: var(--secondary);
+    56|            color: var(--primary);
+    57|            padding: 8px 0;
+    58|            font-size: 0.8rem;
+    59|            font-weight: 500;
+    60|        }
+    61|        .top-bar .container {
+    62|            display: flex;
+    63|            justify-content: space-between;
+    64|            align-items: center;
+    65|            flex-wrap: wrap;
+    66|            gap: 5px;
+    67|        }
+    68|        .top-bar a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    69|        .top-bar a:hover { text-decoration: underline; }
+    70|
+    71|        /* ============================================
+    72|           CONTAINER
+    73|           ============================================ */
+    74|        .container {
+    75|            max-width: 1200px;
+    76|            margin: 0 auto;
+    77|            padding: 0 20px;
+    78|            position: relative;
+    79|            z-index: 1;
+    80|        }
+    81|
+    82|        /* ============================================
+    83|           HEADER
+    84|           ============================================ */
+    85|        header {
+    86|            background: var(--primary);
+    87|            padding: 35px 0 45px;
+    88|            text-align: center;
+    89|            position: relative;
+    90|        }
+    91|        header::after {
+    92|            content: '';
+    93|            position: absolute;
+    94|            bottom: 0;
+    95|            left: 0;
+    96|            right: 0;
+    97|            height: 4px;
+    98|            background: var(--secondary);
+    99|        }
+   100|
+   101|        .brand-logo {
+   102|            display: flex;
+   103|            align-items: center;
+   104|            justify-content: center;
+   105|            gap: 15px;
+   106|            margin-bottom: 25px;
+   107|        }
+   108|        .brand-logo img { height: 45px; width: auto; }
+   109|        .brand-logo .brand-divider {
+   110|            width: 1px;
+   111|            height: 40px;
+   112|            background: rgba(255,255,255,0.3);
+   113|        }
+   114|        .brand-logo .brand-text {
+   115|            color: var(--white);
+   116|            font-family: 'Inter', sans-serif;
+   117|            font-size: 1.4rem;
+   118|            font-weight: 700;
+   119|            letter-spacing: 0.5px;
+   120|        }
+   121|
+   122|        .header-content h1 {
+   123|            font-family: 'Inter', sans-serif;
+   124|            font-size: 3.2rem;
+   125|            font-weight: 900;
+   126|            color: var(--secondary);
+   127|            margin-bottom: 10px;
+   128|            letter-spacing: -0.5px;
+   129|        }
+   130|        .header-content .tagline {
+   131|            font-size: 1.1rem;
+   132|            color: rgba(255,255,255,0.85);
+   133|            font-weight: 400;
+   134|            margin-bottom: 25px;
+   135|        }
+   136|
+   137|        .countdown-container { margin-bottom: 25px; }
+   138|        .countdown-label {
+   139|            color: rgba(255,255,255,0.6);
+   140|            font-size: 0.8rem;
+   141|            text-transform: uppercase;
+   142|            letter-spacing: 1px;
+   143|            margin-bottom: 8px;
+   144|        }
+   145|        .countdown {
+   146|            display: flex;
+   147|            justify-content: center;
+   148|            gap: 12px;
+   149|        }
+   150|        .countdown-item {
+   151|            background: rgba(255,255,255,0.1);
+   152|            border-radius: var(--radius);
+   153|            padding: 10px 16px;
+   154|            min-width: 60px;
+   155|            text-align: center;
+   156|            border: 1px solid rgba(255,255,255,0.12);
+   157|        }
+   158|        .countdown-number {
+   159|            font-family: 'Inter', sans-serif;
+   160|            font-size: 1.6rem;
+   161|            font-weight: 800;
+   162|            color: var(--secondary);
+   163|            display: block;
+   164|            line-height: 1;
+   165|        }
+   166|        .countdown-text {
+   167|            font-size: 0.55rem;
+   168|            color: rgba(255,255,255,0.6);
+   169|            text-transform: uppercase;
+   170|            letter-spacing: 1px;
+   171|            display: block;
+   172|            margin-top: 3px;
+   173|        }
+   174|
+   175|        .cta-button {
+   176|            display: inline-block;
+   177|            background: var(--secondary);
+   178|            color: var(--primary);
+   179|            padding: 14px 36px;
+   180|            border: none;
+   181|            border-radius: 50px;
+   182|            font-size: 1rem;
+   183|            font-weight: 700;
+   184|            cursor: pointer;
+   185|            text-transform: uppercase;
+   186|            letter-spacing: 1px;
+   187|            transition: all 0.3s ease;
+   188|            box-shadow: 0 8px 25px rgba(251,215,14,0.3);
+   189|            font-family: 'Inter', sans-serif;
+   190|            text-decoration: none;
+   191|        }
+   192|        .cta-button:hover {
+   193|            transform: translateY(-2px);
+   194|            box-shadow: 0 12px 35px rgba(251,215,14,0.4);
+   195|            background: #ffe033;
+   196|        }
+   197|
+   198|        /* ============================================
+   199|           NAVEGAÇÃO RÁPIDA
+   200|           ============================================ */
+   201|        .nav-rapida {
+   202|            background: var(--primary-dark);
+   203|            padding: 10px 0;
+   204|            position: sticky;
+   205|            top: 0;
+   206|            z-index: 100;
+   207|            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+   208|        }
+   209|        .nav-rapida .container {
+   210|            display: flex;
+   211|            justify-content: center;
+   212|            gap: 6px;
+   213|            flex-wrap: wrap;
+   214|        }
+   215|        .nav-link {
+   216|            color: var(--white);
+   217|            text-decoration: none;
+   218|            padding: 7px 14px;
+   219|            border-radius: 20px;
+   220|            font-size: 0.8rem;
+   221|            font-weight: 500;
+   222|            transition: all 0.3s ease;
+   223|            background: rgba(255,255,255,0.08);
+   224|            white-space: nowrap;
+   225|        }
+   226|        .nav-link:hover {
+   227|            background: var(--secondary);
+   228|            color: var(--primary);
+   229|        }
+   230|
+   231|        .section { padding: 60px 0; position: relative; z-index: 2; }
+   232|        .section-title {
+   233|            font-family: 'Inter', sans-serif;
+   234|            font-size: 2.2rem;
+   235|            font-weight: 800;
+   236|            color: var(--primary);
+   237|            margin-bottom: 35px;
+   238|            text-align: center;
+   239|            letter-spacing: -0.3px;
+   240|        }
+   241|        .section-title-light { color: var(--white); }
+   242|        .section-subtitle {
+   243|            text-align: center;
+   244|            color: var(--gray-3);
+   245|            margin-top: -28px;
+   246|            margin-bottom: 30px;
+   247|            font-size: 0.95rem;
+   248|        }
+   249|        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease-out; }
+   250|        .reveal.visible { opacity: 1; transform: translateY(0); }
+   251|
+   252|        .como-funciona {
+   253|            background: var(--white);
+   254|            border-radius: var(--radius-card);
+   255|            padding: 45px;
+   256|            box-shadow: var(--shadow-md);
+   257|        }
+   258|        .passos {
+   259|            display: grid;
+   260|            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+   261|            gap: 25px;
+   262|            position: relative;
+   263|        }
+   264|        .passo { text-align: center; }
+   265|        .passo-numero {
+   266|            width: 60px; height: 60px;
+   267|            background: var(--primary);
+   268|            color: var(--secondary);
+   269|            border-radius: 50%;
+   270|            font-size: 1.6rem;
+   271|            font-weight: 800;
+   272|            display: flex;
+   273|            align-items: center;
+   274|            justify-content: center;
+   275|            margin: 0 auto 12px;
+   276|            font-family: 'Inter', sans-serif;
+   277|        }
+   278|        .passo-titulo {
+   279|            font-family: 'Inter', sans-serif;
+   280|            font-size: 1.1rem;
+   281|            font-weight: 700;
+   282|            color: var(--primary);
+   283|            margin-bottom: 8px;
+   284|        }
+   285|        .passo-descricao { color: var(--gray-3); font-size: 0.9rem; }
+   286|        @media (min-width: 768px) {
+   287|            .passos { position: relative; }
+   288|            .passo::after {
+   289|                content: '→';
+   290|                position: absolute;
+   291|                right: -25px;
+   292|                top: 25px;
+   293|                font-size: 1.6rem;
+   294|                color: var(--secondary);
+   295|                font-weight: bold;
+   296|            }
+   297|            .passo:last-child::after { display: none; }
+   298|        }
+   299|
+   300|        .premiacoes-section { background: var(--secondary); padding: 60px 0; }
+   301|        .premiacoes-section .section-title { color: var(--primary); }
+   302|        .cards-premios {
+   303|            display: grid;
+   304|            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+   305|            gap: 25px;
+   306|        }
+   307|        .card-premio {
+   308|            background: var(--white);
+   309|            border-radius: var(--radius-card);
+   310|            padding: 30px 25px;
+   311|            text-align: center;
+   312|            box-shadow: var(--shadow-sm);
+   313|            transition: all 0.3s ease;
+   314|            border: 2px solid transparent;
+   315|            position: relative;
+   316|        }
+   317|        .card-premio:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+   318|        .card-premio.destaque { border-color: var(--primary); transform: scale(1.03); }
+   319|        .card-premio.destaque:hover { transform: scale(1.03) translateY(-5px); }
+   320|        .card-premio .badge-destaque {
+   321|            position: absolute; top: -3px; right: 20px;
+   322|            background: var(--red); color: var(--white);
+   323|            padding: 4px 14px; border-radius: 0 0 8px 8px;
+   324|            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+   325|        }
+   326|        .premio-posicao { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+   327|        .premio-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+   328|        .premio-valor { font-family: 'Inter', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--green); margin-bottom: 5px; }
+   329|        .premio-tipo { color: var(--gray-3); font-size: 0.9rem; }
+   330|
+   331|        .jogos-section { background: var(--white); padding: 60px 0; }
+   332|        .jogos-grid {
+   333|            display: grid;
+   334|            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+   335|            gap: 12px;
+   336|            margin-bottom: 25px;
+   337|        }
+   338|        .jogo-card {
+   339|            background: var(--primary);
+   340|            color: var(--white);
+   341|            padding: 18px 10px 14px;
+   342|            border-radius: var(--radius);
+   343|            text-align: center;
+   344|            box-shadow: var(--shadow-sm);
+   345|            transition: all 0.3s ease;
+   346|            cursor: default;
+   347|            position: relative;
+   348|            overflow: hidden;
+   349|        }
+   350|        .jogo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+   351|        .jogo-card.realizado { opacity: 0.6; filter: grayscale(0.3); }
+   352|        .jogo-card .resultado-badge {
+   353|            position: absolute; top: 5px; right: 5px;
+   354|            background: var(--secondary); color: var(--primary);
+   355|            font-size: 0.5rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;
+   356|        }
+   357|        .jogo-rodada { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; opacity: 0.8; margin-bottom: 8px; letter-spacing: 0.3px; }
+   358|        .jogo-times { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 6px 0; }
+   359|        .jogo-time-col { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+   360|        .jogo-time-flag img { width: 30px; height: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+   361|        .jogo-time-nome { font-size: 0.5rem; font-weight: 500; margin-top: 3px; opacity: 0.9; white-space: nowrap; max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
+   362|        .jogo-vs { font-size: 0.6rem; font-weight: 700; opacity: 0.6; }
+   363|        .jogo-data { font-size: 0.65rem; opacity: 0.7; margin-top: 4px; }
+   364|        .jogo-placar { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; margin-top: 5px; background: rgba(255,255,255,0.15); padding: 2px 10px; border-radius: 4px; display: inline-block; }
+   365|
+   366|        .ranking-section { background: var(--primary); padding: 60px 0; }
+   367|        .ranking-container { background: var(--white); border-radius: var(--radius-card); padding: 30px; box-shadow: var(--shadow-lg); max-width: 800px; margin: 0 auto; }
+   368|        .ranking-vazio { text-align: center; padding: 35px 20px; color: var(--gray-3); }
+   369|        .ranking-vazio .emoji { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+   370|        .ranking-tabela { width: 100%; border-collapse: collapse; }
+   371|        .ranking-tabela th {
+   372|            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+   373|            color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;
+   374|            padding: 10px 8px; text-align: left; border-bottom: 3px solid var(--secondary);
+   375|        }
+   376|        .ranking-tabela th:last-child, .ranking-tabela td:last-child { text-align: center; }
+   377|        .ranking-tabela td { padding: 10px 8px; border-bottom: 1px solid var(--gray-2); font-size: 0.9rem; }
+   378|        .ranking-tabela tr:hover td { background: rgba(0,58,112,0.03); }
+   379|        .ranking-tabela .posicao { font-weight: 700; font-size: 1rem; width: 35px; }
+   380|        .ranking-tabela .posicao-1 { color: #FFD700; }
+   381|        .ranking-tabela .posicao-2 { color: #C0C0C0; }
+   382|        .ranking-tabela .posicao-3 { color: #CD7F32; }
+   383|        .ranking-tabela .nome-participante { font-weight: 600; }
+   384|        .ranking-tabela .pontos { font-weight: 800; color: var(--green); font-size: 1rem; }
+   385|        .ranking-tabela .acertos { font-size: 0.8rem; color: var(--gray-3); }
+   386|
+   387|        .regulamento-section { background: var(--gray-1); padding: 60px 0; }
+   388|        .regulamento-content { background: var(--white); border-radius: var(--radius-card); padding: 35px; box-shadow: var(--shadow-sm); max-width: 800px; margin: 0 auto; }
+   389|        .regulamento-content h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 20px; margin-bottom: 8px; }
+   390|        .regulamento-content h3:first-child { margin-top: 0; }
+   391|        .regulamento-content p, .regulamento-content li { color: var(--gray-3); font-size: 0.9rem; line-height: 1.8; }
+   392|        .regulamento-content ul { padding-left: 20px; margin: 8px 0; }
+   393|        .regulamento-content li { margin-bottom: 5px; }
+   394|        .regulamento-content li::marker { color: var(--secondary); }
+   395|
+   396|        .form-section { background: var(--primary); padding: 60px 0; }
+   397|        .form-section .section-title { color: var(--secondary); }
+   398|        .form-container { background: var(--white); border-radius: var(--radius-card); padding: 40px; max-width: 620px; margin: 0 auto; box-shadow: var(--shadow-lg); }
+   399|        .badge { display: inline-block; background: var(--primary); color: var(--white); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
+   400|
+   401|        .toggle-group { display: flex; gap: 8px; margin-bottom: 20px; }
+   402|        .toggle-btn { flex: 1; padding: 10px; border: 2px solid var(--gray-2); border-radius: var(--radius); background: transparent; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-transform: uppercase; font-size: 0.85rem; font-family: 'Inter', sans-serif; }
+   403|        .toggle-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+   404|
+   405|        .form-group { margin-bottom: 18px; }
+   406|        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--primary); font-size: 0.85rem; }
+   407|        .form-group input, .form-group select { width: 100%; padding: 12px 14px; border: 2px solid var(--gray-2); border-radius: var(--radius); font-size: 0.95rem; font-family: 'Montserrat', sans-serif; transition: all 0.3s ease; }
+   408|        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,58,112,0.1); }
+   409|        .form-group input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,70,0.1); }
+   410|        .form-group .field-error { color: var(--red); font-size: 0.75rem; margin-top: 3px; display: none; }
+   411|        .form-group .field-error.show { display: block; }
+   412|
+   413|        .error-message { display: none; background: var(--red); color: var(--white); padding: 12px; border-radius: var(--radius); margin-bottom: 18px; font-size: 0.9rem; }
+   414|        .error-message.show { display: block; }
+   415|        .success-message { display: none; background: var(--primary); color: var(--white); padding: 25px; border-radius: var(--radius); margin-bottom: 18px; text-align: center; }
+   416|        .success-message.show { display: block; }
+   417|        .success-message .emoji-big { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+   418|        .success-message h3 { font-family: 'Inter', sans-serif; font-size: 1.3rem; margin-bottom: 6px; }
+   419|        .success-message p { margin-bottom: 5px; opacity: 0.9; }
+   420|
+   421|        .submit-btn {
+   422|            width: 100%; padding: 14px;
+   423|            background: var(--primary); color: var(--white);
+   424|            border: none; border-radius: var(--radius);
+   425|            font-size: 1.1rem; font-weight: 700; font-family: 'Inter', sans-serif;
+   426|            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+   427|            transition: all 0.3s ease; margin-top: 10px;
+   428|            box-shadow: 0 8px 25px rgba(0,58,112,0.2);
+   429|            position: relative;
+   430|        }
+   431|        .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,58,112,0.3); background: var(--primary-light); }
+   432|        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+   433|        .submit-btn .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--white); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+   434|        .submit-btn.loading .btn-text { display: none; }
+   435|        .submit-btn.loading .spinner { display: block; }
+   436|        @keyframes spin { to { transform: rotate(360deg); } }
+   437|
+   438|        .btn-secundario { display: inline-block; padding: 10px 25px; background: transparent; color: var(--white); border: 2px solid var(--white); border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease; margin-top: 12px; }
+   439|        .btn-secundario:hover { background: var(--white); color: var(--primary); }
+   440|
+   441|        .palpites-container { background: var(--gray-1); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+   442|        .bet-match { background: var(--white); padding: 12px 14px; border-radius: var(--radius); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: all 0.3s ease; }
+   443|        .bet-match:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+   444|        .bet-match.filled { border-left: 4px solid var(--green); }
+   445|        .match-name { flex: 1; font-weight: 600; color: var(--primary); font-size: 0.85rem; min-width: 70px; }
+   446|        .match-flags { display: flex; align-items: center; gap: 5px; font-size: 1.1rem; }
+   447|        .match-flags img { width: 24px; height: auto; border-radius: 2px; }
+   448|        .score-inputs { display: flex; gap: 6px; align-items: center; }
+   449|        .score-inputs input { width: 45px !important; padding: 6px !important; text-align: center; font-weight: 700; font-size: 1rem; border: 2px solid var(--primary) !important; border-radius: 6px; }
+   450|        .score-separator { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+   451|
+   452|        footer { background: var(--black); color: var(--white); text-align: center; padding: 40px 20px 25px; border-top: 4px solid var(--secondary); }
+   453|        footer p { font-size: 0.9rem; margin-bottom: 8px; opacity: 0.85; }
+   454|        footer .footer-links { display: flex; justify-content: center; gap: 16px; margin: 18px 0; flex-wrap: wrap; }
+   455|        footer .footer-links a { color: var(--secondary); text-decoration: none; font-size: 0.85rem; transition: opacity 0.3s; }
+   456|        footer .footer-links a:hover { opacity: 0.7; text-decoration: underline; }
+   457|        .footer-brand { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; }
+   458|        .footer-brand img { height: 30px; width: auto; }
+   459|        .footer-brand span { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1rem; color: var(--secondary); }
+   460|
+   461|        .toast { position: fixed; bottom: 25px; right: 25px; background: var(--black); color: var(--white); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow-lg); z-index: 1000; transform: translateX(120%); transition: transform 0.4s ease; max-width: 380px; border-left: 4px solid var(--green); font-size: 0.9rem; }
+   462|        .toast.show { transform: translateX(0); }
+   463|        .toast.error { border-left-color: var(--red); }
+   464|
+   465|        @media (max-width: 768px) {
+   466|            .header-content h1 { font-size: 2rem; }
+   467|            .section-title { font-size: 1.6rem !important; }
+   468|            .form-container { padding: 20px; }
+   469|            .como-funciona { padding: 25px; }
+   470|            .regulamento-content { padding: 20px; }
+   471|            .top-bar .container { justify-content: center; text-align: center; }
+   472|            .passos { grid-template-columns: 1fr; }
+   473|            .passo::after { display: none !important; }
+   474|            .cards-premios { grid-template-columns: 1fr; }
+   475|            .card-premio.destaque { transform: none; }
+   476|            .bet-match { flex-direction: column; align-items: flex-start; gap: 6px; }
+   477|            .match-flags { align-self: center; }
+   478|            .score-inputs { width: 100%; justify-content: center; }
+   479|            .jogos-grid { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+   480|            .nav-rapida .container { gap: 4px; }
+   481|            .nav-link { font-size: 0.7rem; padding: 5px 10px; }
+   482|            .ranking-tabela th, .ranking-tabela td { padding: 6px 4px; font-size: 0.75rem; }
+   483|            .toast { left: 15px; right: 15px; bottom: 15px; max-width: none; }
+   484|        }
+   485|        @media (max-width: 480px) {
+   486|            .brand-logo { flex-direction: column; gap: 8px; }
+   487|            .brand-logo .brand-divider { display: none; }
+   488|            .header-content h1 { font-size: 1.5rem; }
+   489|            .tagline { font-size: 0.9rem; }
+   490|            .section { padding: 40px 0; }
+   491|            .countdown { gap: 6px; }
+   492|            .countdown-item { min-width: 50px; padding: 6px 8px; }
+   493|            .countdown-number { font-size: 1.2rem; }
+   494|        }
+   495|    </style>
+   496|</head>
+   497|<body>
+   498|
+   499|    <!-- TOP BAR -->
+   500|    <div class="top-bar">
+   501|        <div class="container">
+   502|            <span>⚡ DISTRIBUIDORA DE MATERIAIS ELÉTRICOS</span>
+   503|            <span>📞 WHATSAPP: <a href="https://wa.me/5508003328000" target="_blank">0800 332 8000</a></span>
+   504|        </div>
+   505|    </div>
+   506|
+   507|    <!-- HEADER -->
+   508|    <header>
+   509|        <div class="container">
+   510|            <div class="brand-logo">
+   511|                <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:45px;width:auto;">
+   512|                <div class="brand-divider"></div>
+   513|                <span class="brand-text">🏆 Bolão Copa 2026</span>
+   514|            </div>
+   515|
+   516|            <div class="header-content">
+   517|                <h1>Bolão Copa do Mundo 2026</h1>
+   518|                <p class="tagline">Faça seus palpites nos jogos do Brasil e concorra a R$ 500 em vale-compras!</p>
+   519|
+   520|                <div class="countdown-container">
+   521|                    <div class="countdown-label">⏱ Próximo jogo do Brasil em</div>
+   522|                    <div class="countdown" id="countdown">
+   523|                        <div class="countdown-item">
+   524|                            <span class="countdown-number" id="countdown-dias">--</span>
+   525|                            <span class="countdown-text">Dias</span>
+   526|                        </div>
+   527|                        <div class="countdown-item">
+   528|                            <span class="countdown-number" id="countdown-horas">--</span>
+   529|                            <span class="countdown-text">Horas</span>
+   530|                        </div>
+   531|                        <div class="countdown-item">
+   532|                            <span class="countdown-number" id="countdown-minutos">--</span>
+   533|                            <span class="countdown-text">Min</span>
+   534|                        </div>
+   535|                        <div class="countdown-item">
+   536|                            <span class="countdown-number" id="countdown-segundos">--</span>
+   537|                            <span class="countdown-text">Seg</span>
+   538|                        </div>
+   539|                    </div>
+   540|                </div>
+   541|
+   542|                <button class="cta-button" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
+   543|                    Quero Participar!
+   544|                </button>
+   545|            </div>
+   546|        </div>
+   547|    </header>
+   548|
+   549|    <!-- NAVEGAÇÃO RÁPIDA -->
+   550|    <nav class="nav-rapida" aria-label="Navegação rápida">
+   551|        <div class="container">
+   552|            <a href="#comoFunciona" class="nav-link">⚡ Como Funciona</a>
+   553|            <a href="#premiacoes" class="nav-link">🏆 Prêmios</a>
+   554|            <a href="#jogos" class="nav-link">⚽ Jogos</a>
+   555|            <a href="#ranking" class="nav-link">📊 Ranking</a>
+   556|            <a href="#regulamento" class="nav-link">📜 Regras</a>
+   557|            <a href="#formSection" class="nav-link">🎯 Cadastro</a>
+   558|        </div>
+   559|    </nav>
+   560|
+   561|    <!-- COMO FUNCIONA -->
+   562|    <section class="section" id="comoFunciona">
+   563|        <div class="container">
+   564|            <h2 class="section-title">⚡ Como Funciona?</h2>
+   565|            <div class="como-funciona reveal">
+   566|                <div class="passos">
+   567|                    <div class="passo">
+   568|                        <div class="passo-numero">1</div>
+   569|                        <h3 class="passo-titulo">Cadastre-se</h3>
+   570|                        <p class="passo-descricao">Preencha seus dados e escolha CPF ou CNPJ</p>
+   571|                    </div>
+   572|                    <div class="passo">
+   573|                        <div class="passo-numero">2</div>
+   574|                        <h3 class="passo-titulo">Faça Palpites</h3>
+   575|                        <p class="passo-descricao">Acerte os placares dos jogos do Brasil na Copa</p>
+   576|                    </div>
+   577|                    <div class="passo">
+   578|                        <div class="passo-numero">3</div>
+   579|                        <h3 class="passo-titulo">Acumule Pontos</h3>
+   580|                        <p class="passo-descricao">Cada acerto vale pontos. Quem acerta mais, ganha</p>
+   581|                    </div>
+   582|                    <div class="passo">
+   583|                        <div class="passo-numero">4</div>
+   584|                        <h3 class="passo-titulo">Ganhe Prêmios</h3>
+   585|                        <p class="passo-descricao">Os melhores colocados levam vale-compras!</p>
+   586|                    </div>
+   587|                </div>
+   588|            </div>
+   589|        </div>
+   590|    </section>
+   591|
+   592|    <!-- PREMIAÇÕES -->
+   593|    <section class="premiacoes-section" id="premiacoes">
+   594|        <div class="container">
+   595|            <h2 class="section-title">🏆 Premiações</h2>
+   596|            <div class="cards-premios">
+   597|                <div class="card-premio">
+   598|                    <div class="premio-posicao">2º Lugar</div>
+   599|                    <span class="premio-emoji">🥈</span>
+   600|                    <div class="premio-valor">R$ 300</div>
+   601|                    <div class="premio-tipo">em Vale-Compras</div>
+   602|                </div>
+   603|                <div class="card-premio destaque">
+   604|                    <span class="badge-destaque">🎯 Melhor</span>
+   605|                    <div class="premio-posicao">1º Lugar</div>
+   606|                    <span class="premio-emoji">🥇</span>
+   607|                    <div class="premio-valor" style="font-size:2.6rem;">R$ 500</div>
+   608|                    <div class="premio-tipo">em Vale-Compras</div>
+   609|                </div>
+   610|                <div class="card-premio">
+   611|                    <div class="premio-posicao">3º Lugar</div>
+   612|                    <span class="premio-emoji">🥉</span>
+   613|                    <div class="premio-valor">R$ 200</div>
+   614|                    <div class="premio-tipo">em Vale-Compras</div>
+   615|                </div>
+   616|            </div>
+   617|        </div>
+   618|    </section>
+   619|
+   620|    <!-- JOGOS DO BRASIL -->
+   621|    <section class="jogos-section" id="jogos">
+   622|        <div class="container">
+   623|            <h2 class="section-title">⚽ Jogos do Brasil na Copa 2026</h2>
+   624|            <p class="section-subtitle">Confira os jogos e resultados</p>
+   625|            <div class="jogos-grid" id="jogosGrid"></div>
+   626|        </div>
+   627|    </section>
+   628|
+   629|    <!-- RANKING -->
+   630|    <section class="ranking-section" id="ranking">
+   631|        <div class="container">
+   632|            <h2 class="section-title section-title-light">📊 Ranking do Bolão</h2>
+   633|            <div class="ranking-container reveal" id="rankingContainer">
+   634|                <div class="ranking-vazio" id="rankingVazio">
+   635|                    <span class="emoji">📋</span>
+   636|                    <p><strong>Ninguém participou ainda!</strong></p>
+   637|                    <p style="margin-top:6px;">Seja o primeiro a fazer seus palpites!</p>
+   638|                </div>
+   639|                <div id="rankingTabelaWrapper" style="display:none;">
+   640|                    <table class="ranking-tabela">
+   641|                        <thead>
+   642|                            <tr>
+   643|                                <th>#</th>
+   644|                                <th>Participante</th>
+   645|                                <th>Palpites</th>
+   646|                                <th>Pontos</th>
+   647|                            </tr>
+   648|                        </thead>
+   649|                        <tbody id="rankingBody"></tbody>
+   650|                    </table>
+   651|                </div>
+   652|            </div>
+   653|        </div>
+   654|    </section>
+   655|
+   656|    <!-- REGULAMENTO -->
+   657|    <section class="regulamento-section" id="regulamento">
+   658|        <div class="container">
+   659|            <h2 class="section-title">📜 Regulamento</h2>
+   660|            <div class="regulamento-content reveal">
+   661|                <h3>📋 Como participar</h3>
+   662|                <p>O bolão é válido para <strong>clientes Planeta Energia</strong>. Cada CPF/CNPJ pode participar <strong>uma única vez</strong>.</p>
+   663|                <h3>⚽ Pontuação</h3>
+   664|                <ul>
+   665|                    <li><strong>Acerto do placar exato:</strong> 5 pontos</li>
+   666|                    <li><strong>Acerto do vencedor ou empate:</strong> 3 pontos</li>
+   667|                    <li><strong>Erro completo:</strong> 0 pontos</li>
+   668|                </ul>
+   669|                <h3>🏆 Desempate</h3>
+   670|                <p>Em caso de empate, vence quem tiver mais <strong>placares exatos</strong>. Persistindo o empate, a data de inscrição mais antiga define o vencedor.</p>
+   671|                <h3>📅 Período</h3>
+   672|                <p>Os palpites devem ser enviados <strong>antes do início do primeiro jogo do Brasil</strong> na Copa do Mundo 2026.</p>
+   673|                <h3>🎁 Prêmios</h3>
+   674|                <p>Os prêmios serão entregues em forma de <strong>vale-compras</strong> na loja Planeta Energia, válidos por 30 dias após o término da Copa.</p>
+   675|                <h3>⚠️ Disposições Gerais</h3>
+   676|                <p>Casos omissos serão resolvidos pela organização. A participação no bolão implica aceitação total deste regulamento.</p>
+   677|            </div>
+   678|        </div>
+   679|    </section>
+   680|
+   681|    <!-- FORMULÁRIO -->
+   682|    <section class="form-section" id="formSection">
+   683|        <div class="container">
+   684|            <h2 class="section-title">🎯 Faça Seus Palpites</h2>
+   685|            <div class="form-container reveal">
+   686|                <div class="badge">📢 Cadastro único por CPF/CNPJ</div>
+   687|                <div class="error-message" id="errorMessage"></div>
+   688|                <div class="success-message" id="successMessage">
+   689|                    <span class="emoji-big">🎉</span>
+   690|                    <h3>Parabéns!</h3>
+   691|                    <p>Seus palpites foram registrados com sucesso!</p>
+   692|                    <p style="font-size:0.8rem;margin-top:8px;opacity:0.8;">Boa sorte na Copa do Mundo 2026! 🇧🇷🏆</p>
+   693|                    <button class="btn-secundario" onclick="resetarFormulario()">📝 Novo Cadastro</button>
+   694|                </div>
+   695|                <form id="cadastroForm" novalidate>
+   696|                    <div class="toggle-group" role="group" aria-label="Tipo de documento">
+   697|                        <button type="button" class="toggle-btn active" data-type="cpf" aria-pressed="true">🧑 CPF</button>
+   698|                        <button type="button" class="toggle-btn" data-type="cnpj" aria-pressed="false">🏢 CNPJ</button>
+   699|                    </div>
+   700|                    <div class="form-group">
+   701|                        <label for="nome">Nome Completo *</label>
+   702|                        <input type="text" id="nome" name="nome" placeholder="João Silva" required autocomplete="name">
+   703|                        <div class="field-error" id="erroNome">Por favor, preencha seu nome</div>
+   704|                    </div>
+   705|                    <div class="form-group">
+   706|                        <label for="documento" id="labelDocumento">CPF *</label>
+   707|                        <input type="text" id="documento" name="documento" placeholder="000.000.000-00" required maxlength="18" autocomplete="off">
+   708|                        <div class="field-error" id="erroDocumento">Documento inválido</div>
+   709|                    </div>
+   710|                    <div class="form-group" id="empresaGroup" style="display:none;">
+   711|                        <label for="empresa">Nome da Empresa *</label>
+   712|                        <input type="text" id="empresa" name="empresa" placeholder="Sua Empresa LTDA" autocomplete="organization">
+   713|                        <div class="field-error" id="erroEmpresa">Preencha o nome da empresa</div>
+   714|                    </div>
+   715|                    <div class="form-group">
+   716|                        <label for="telefone">Telefone *</label>
+   717|                        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required maxlength="15" autocomplete="tel">
+   718|                        <div class="field-error" id="erroTelefone">Telefone inválido</div>
+   719|                    </div>
+   720|                    <div class="form-group">
+   721|                        <label>Seus Palpites * <span style="font-weight:400;text-transform:none;color:var(--gray-3);font-size:0.75rem;">(preencha o 1º jogo — os demais serão liberados)</span></label>
+   722|                        <div class="palpites-container" id="palpitesContainer"></div>
+   723|                        <div class="field-error" id="erroPalpites">Preencha o 1º jogo (Brasil × Marrocos) antes de enviar</div>
+   724|                    </div>
+   725|                    <button type="button" class="submit-btn" id="submitBtn" onclick="enviarPalpites()">
+   726|                        <span class="btn-text">🚀 Enviar Palpites</span>
+   727|                        <span class="spinner"></span>
+   728|                    </button>
+   729|                    <input type="hidden" id="tipoDocumento" value="cpf">
+   730|                </form>
+   731|            </div>
+   732|        </div>
+   733|    </section>
+   734|
+   735|    <!-- FOOTER -->
+   736|    <footer>
+   737|        <div class="footer-brand">
+   738|            <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia" style="height:30px;width:auto;">
+   739|            <span>× Bolão Copa 2026</span>
+   740|        </div>
+   741|        <div class="footer-links">
+   742|            <a href="#comoFunciona">⚡ Como Funciona</a>
+   743|            <a href="#premiacoes">🏆 Prêmios</a>
+   744|            <a href="#regulamento">📜 Regulamento</a>
+   745|            <a href="#formSection">🎯 Participar</a>
+   746|            <a href="bolao-copa-consulta.html" target="_blank">🔍 Consultar Palpites</a>
+   747|            <a href="bolao-copa-admin.html" target="_blank">⚙️ Admin</a>
+   748|        </div>
+   749|        <p>💡 <strong>Dica:</strong> Quanto mais placares você acertar, maior a pontuação!</p>
+   750|        <p>⚠️ Cada CPF/CNPJ pode participar apenas uma vez</p>
+   751|        <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.6;">
+   752|            &copy; 2026 - Planeta Energia | Bolão Virtual Copa do Mundo 🏆
+   753|        </p>
+   754|        <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">
+   755|            Loja Física: Av. Senador Lemos, 2247 — Telégrafo, Belém-PA
+   756|        </p>
+   757|    </footer>
+   758|
+   759|    <div class="toast" id="toast"></div>
+   760|
+   761|    <script>
+   762|        // ============================================
+   763|        // SUPABASE CONFIG
+   764|        // ============================================
+   765|        const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
+   766|        const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
+   767|
+   768|        async function supabaseGet(table, opts = {}) {
+   769|            const params = new URLSearchParams();
+   770|            if (opts.select) params.set('select', opts.select);
+   771|            if (opts.order) params.set('order', opts.order);
+   772|            if (opts.limit) params.set('limit', opts.limit);
+   773|            const qs = params.toString();
+   774|            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`, {
+   775|                headers: { apikey: SUPABASE_ANON_KEY, Accept: 'application/json' }
+   776|            });
+   777|            if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
+   778|            return res.json();
+   779|        }
+   780|
+   781|        async function supabaseInsert(table, body) {
+   782|            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+   783|                method: 'POST',
+   784|                headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+   785|                body: JSON.stringify(body)
+   786|            });
+   787|            if (!res.ok) {
+   788|                const err = await res.text();
+   789|                throw new Error(err);
+   790|            }
+   791|            return true;
+   792|        }
+   793|
+   794|        // ============================================
+   795|        // DADOS DOS JOGOS
+   796|        // ============================================
+   797|        function flagImg(code, alt) {
+   798|            return `<img src="https://flagcdn.com/w80/${code.toLowerCase()}.png" alt="${alt}" style="width:30px;height:auto;vertical-align:middle;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2);">`;
+   799|        }
+   800|        const JOGOS = [
+   801|            { id: 1,  rodada: '1ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Marrocos',    flagCasa: 'br', flagFora: 'ma', data: '13/06/2026 22:00', local: 'Nova York/Nova Jersey', grupo: 'Grupo C' },
+   802|            { id: 2,  rodada: '2ª Rodada - Grupo C', paisCasa: 'Brasil',   paisFora: 'Haiti',       flagCasa: 'br', flagFora: 'ht', data: '20/06/2026 00:30', local: 'Filadélfia',             grupo: 'Grupo C' },
+   803|            { id: 3,  rodada: '3ª Rodada - Grupo C', paisCasa: 'Escócia',  paisFora: 'Brasil',      flagCasa: 'gb-sct', flagFora: 'br', data: '24/06/2026 22:00', local: 'Miami',                 grupo: 'Grupo C' },
+   804|            { id: 4,  rodada: '2ª Fase (32 avos)',   paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '29/06/2026 17:00', local: 'A definir',             grupo: '' },
+   805|            { id: 5,  rodada: 'Oitavas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '04/07/2026 21:00', local: 'A definir',             grupo: '' },
+   806|            { id: 6,  rodada: 'Quartas de Final',    paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '09/07/2026 20:00', local: 'A definir',             grupo: '' },
+   807|            { id: 7,  rodada: 'Semifinal',           paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '14/07/2026 19:00', local: 'A definir',             grupo: '' },
+   808|            { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir',             grupo: '' },
+   809|        ];
+   810|
+   811|        let tipoDocumento = 'cpf';
+   812|        let enviando = false;
+   813|        let resultadosCache = {};
+   814|        let liberadosCache = [1];
+   815|
+   816|        document.addEventListener('DOMContentLoaded', async function() {
+   817|            await carregarDadosPublicos();
+   818|            renderizarJogos();
+   819|            renderizarPalpites();
+   820|            setupToggle();
+   821|            setupMascaras();
+   822|            setupValidacao();
+   823|            atualizarRanking();
+   824|            iniciarCountdown();
+   825|            setupRevealAnimations();
+   826|        });
+   827|
+   828|        async function carregarResultados() {
+   829|            try {
+   830|                const data = await supabaseGet('resultados', { select: '*' });
+   831|                resultadosCache = {};
+   832|                data.forEach(r => { resultadosCache[r.jogo_id] = { casa: r.gols_casa, fora: r.gols_fora }; });
+   833|            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
+   834|        }
+   835|
+   836|        async function carregarLiberados() {
+   837|            try {
+   838|                const data = await supabaseGet('jogos_liberados', { select: '*' });
+   839|                liberadosCache = data.filter(j => j.liberado).map(j => j.jogo_id);
+   840|            } catch (e) { console.warn('Erro ao carregar jogos liberados:', e); }
+   841|        }
+   842|
+   843|        function setupRevealAnimations() {
+   844|            const observer = new IntersectionObserver((entries) => {
+   845|                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } });
+   846|            }, { threshold: 0.1 });
+   847|            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+   848|        }
+   849|
+   850|        function iniciarCountdown() {
+   851|            const primeiroJogo = new Date('2026-06-13T22:00:00-03:00');
+   852|            function atualizar() {
+   853|                const agora = new Date();
+   854|                const diff = Math.max(0, primeiroJogo - agora);
+   855|                document.getElementById('countdown-dias').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
+   856|                document.getElementById('countdown-horas').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+   857|                document.getElementById('countdown-minutos').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
+   858|                document.getElementById('countdown-segundos').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
+   859|            }
+   860|            atualizar();
+   861|            setInterval(atualizar, 1000);
+   862|        }
+   863|
+   864|        function renderizarJogos() {
+   865|            const grid = document.getElementById('jogosGrid');
+   866|            grid.innerHTML = JOGOS.map(j => {
+   867|                const res = resultadosCache[j.id];
+   868|                const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
+   869|                return `<div class="jogo-card ${res ? 'realizado' : ''}">
+   870|                    ${res ? '<span class="resultado-badge">✅ Realizado</span>' : ''}
+   871|                    <div class="jogo-rodada">${j.rodada}</div>
+   872|                    <div class="jogo-times">
+   873|                        <div class="jogo-time-col">
+   874|                            <div class="jogo-time-flag">${flagImg(j.flagCasa, j.paisCasa)}</div>
+   875|                            <div class="jogo-time-nome">${j.paisCasa}</div>
+   876|                        </div>
+   877|                        <div class="jogo-vs">VS</div>
+   878|                        <div class="jogo-time-col">
+   879|                            <div class="jogo-time-flag">${flagForaHtml}</div>
+   880|                            <div class="jogo-time-nome">${j.paisFora}</div>
+   881|                        </div>
+   882|                    </div>
+   883|                    <div class="jogo-data">📅 ${j.data}</div>
+   884|                    ${res ? `<div class="jogo-placar">${res.casa} × ${res.fora}</div>` : ''}
+   885|                </div>`;
+   886|            }).join('');
+   887|        }
+   888|
+   889|        function renderizarPalpites() {
+   890|            const container = document.getElementById('palpitesContainer');
+   891|            container.innerHTML = JOGOS.map(j => {
+   892|                const ativo = liberadosCache.includes(j.id);
+   893|                const flagForaHtml = j.flagFora ? flagImg(j.flagFora, j.paisFora) : '<span style="font-size:1.2rem;">❓</span>';
+   894|                return `<div class="bet-match" style="${ativo ? '' : 'opacity:0.4;pointer-events:none;'}">
+   895|                    <div class="match-flags">${flagImg(j.flagCasa, j.paisCasa)}<span style="font-size:0.7rem;font-weight:600;">×</span>${flagForaHtml}</div>
+   896|                    <div class="match-name">${j.paisCasa} × ${j.paisFora}<div style="font-weight:400;font-size:0.7rem;color:var(--gray-3);">${j.rodada}</div></div>
+   897|                    <div class="score-inputs">
+   898|                        <input type="number" min="0" max="20" class="palpite-casa" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
+   899|                        <span class="score-separator">×</span>
+   900|                        <input type="number" min="0" max="20" class="palpite-fora" data-jogo="${j.id}" placeholder="-" ${ativo ? '' : 'disabled'}>
+   901|                    </div>
+   902|                    <div style="font-size:0.6rem;color:var(--gray-3);white-space:nowrap;">${ativo ? '' : '🔒 Bloqueado'}</div>
+   903|                </div>`;
+   904|            }).join('');
+   905|        }
+   906|
+   907|        function setupToggle() {
+   908|            const botoes = document.querySelectorAll('.toggle-btn');
+   909|            botoes.forEach(btn => {
+   910|                btn.addEventListener('click', function() {
+   911|                    botoes.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+   912|                    this.classList.add('active'); this.setAttribute('aria-pressed','true');
+   913|                    tipoDocumento = this.dataset.type;
+   914|                    document.getElementById('tipoDocumento').value = tipoDocumento;
+   915|                    document.getElementById('labelDocumento').textContent = tipoDocumento.toUpperCase() + ' *';
+   916|                    document.getElementById('documento').placeholder = tipoDocumento === 'cpf' ? '000.000.000-00' : '00.000.000/0000-00';
+   917|                    document.getElementById('documento').value = '';
+   918|                    document.getElementById('erroDocumento').classList.remove('show');
+   919|                    document.getElementById('empresaGroup').style.display = tipoDocumento === 'cnpj' ? 'block' : 'none';
+   920|                });
+   921|            });
+   922|        }
+   923|
+   924|        function setupMascaras() {
+   925|            const docInput = document.getElementById('documento');
+   926|            docInput.addEventListener('input', function() {
+   927|                let val = this.value.replace(/\D/g,'');
+   928|                if (tipoDocumento === 'cpf') {
+   929|                    if (val.length > 11) val = val.slice(0,11);
+   930|                    let m = '';
+   931|                    for (let i = 0; i < val.length; i++) { if (i === 3 || i === 6) m += '.'; if (i === 9) m += '-'; m += val[i]; }
+   932|                    this.value = m;
+   933|                } else {
+   934|                    if (val.length > 14) val = val.slice(0,14);
+   935|                    let m = '';
+   936|                    for (let i = 0; i < val.length; i++) { if (i === 2 || i === 5) m += '.'; if (i === 8) m += '/'; if (i === 12) m += '-'; m += val[i]; }
+   937|                    this.value = m;
+   938|                }
+   939|            });
+   940|            const telInput = document.getElementById('telefone');
+   941|            telInput.addEventListener('input', function() {
+   942|                let val = this.value.replace(/\D/g,'');
+   943|                if (val.length > 11) val = val.slice(0,11);
+   944|                let m = '';
+   945|                for (let i = 0; i < val.length; i++) { if (i === 0) m += '('; if (i === 2) m += ') '; if (i === 7) m += '-'; m += val[i]; }
+   946|                this.value = m;
+   947|            });
+   948|        }
+   949|
+   950|        function setupValidacao() {
+   951|            ['nome','documento','telefone'].forEach(id => {
+   952|                document.getElementById(id).addEventListener('blur', function() {
+   953|                    const erroId = 'erro' + id.charAt(0).toUpperCase() + id.slice(1);
+   954|                    if (!this.value.trim()) { this.classList.add('error'); document.getElementById(erroId).classList.add('show'); }
+   955|                    else { this.classList.remove('error'); document.getElementById(erroId).classList.remove('show'); }
+   956|                });
+   957|            });
+   958|        }
+   959|
+   960|        function validarCPF(cpf) {
+   961|            const digitos = cpf.replace(/\D/g,'');
+   962|            if (digitos.length !== 11) return false;
+   963|            if (/^(\d)\1{10}$/.test(digitos)) return false;
+   964|            let soma = 0;
+   965|            for (let i = 0; i < 9; i++) soma += parseInt(digitos[i]) * (10 - i);
+   966|            let resto = (soma * 10) % 11;
+   967|            if (resto === 10) resto = 0;
+   968|            if (resto !== parseInt(digitos[9])) return false;
+   969|            soma = 0;
+   970|            for (let i = 0; i < 10; i++) soma += parseInt(digitos[i]) * (11 - i);
+   971|            resto = (soma * 10) % 11;
+   972|            if (resto === 10) resto = 0;
+   973|            if (resto !== parseInt(digitos[10])) return false;
+   974|            return true;
+   975|        }
+   976|
+   977|        function validarCNPJ(cnpj) {
+   978|            const digitos = cnpj.replace(/\D/g,'');
+   979|            if (digitos.length !== 14) return false;
+   980|            if (/^(\d)\1{13}$/.test(digitos)) return false;
+   981|            const pesos1 = [5,4,3,2,9,8,7,6,5,4,3,2];
+   982|            let soma = 0;
+   983|            for (let i = 0; i < 12; i++) soma += parseInt(digitos[i]) * pesos1[i];
+   984|            let resto = soma % 11;
+   985|            let dig1 = resto < 2 ? 0 : 11 - resto;
+   986|            if (dig1 !== parseInt(digitos[12])) return false;
+   987|            const pesos2 = [6,5,4,3,2,9,8,7,6,5,4,3,2];
+   988|            soma = 0;
+   989|            for (let i = 0; i < 13; i++) soma += parseInt(digitos[i]) * pesos2[i];
+   990|            resto = soma % 11;
+   991|            let dig2 = resto < 2 ? 0 : 11 - resto;
+   992|            if (dig2 !== parseInt(digitos[13])) return false;
+   993|            return true;
+   994|        }
+   995|
+   996|        function validarDocumento(val) {
+   997|            const digitos = val.replace(/\D/g,'');
+   998|            if (tipoDocumento === 'cpf') return validarCPF(digitos);
+   999|            else return validarCNPJ(digitos);
+  1000|        }
+  1001|
+  1002|        function validarFormulario() {
+  1003|            let valido = true;
+  1004|            const nome = document.getElementById('nome').value.trim();
+  1005|            const doc = document.getElementById('documento').value.trim();
+  1006|            const tel = document.getElementById('telefone').value.trim();
+  1007|            const empresa = document.getElementById('empresa').value.trim();
+  1008|            if (!nome) { document.getElementById('erroNome').classList.add('show'); document.getElementById('nome').classList.add('error'); valido = false; }
+  1009|            else { document.getElementById('erroNome').classList.remove('show'); document.getElementById('nome').classList.remove('error'); }
+  1010|            if (!doc || !validarDocumento(doc)) { document.getElementById('erroDocumento').classList.add('show'); document.getElementById('documento').classList.add('error'); valido = false; }
+  1011|            else { document.getElementById('erroDocumento').classList.remove('show'); document.getElementById('documento').classList.remove('error'); }
+  1012|            if (!tel || tel.replace(/\D/g,'').length < 10) { document.getElementById('erroTelefone').classList.add('show'); document.getElementById('telefone').classList.add('error'); valido = false; }
+  1013|            else { document.getElementById('erroTelefone').classList.remove('show'); document.getElementById('telefone').classList.remove('error'); }
+  1014|            if (tipoDocumento === 'cnpj' && !empresa) { document.getElementById('erroEmpresa').classList.add('show'); document.getElementById('empresa').classList.add('error'); valido = false; }
+  1015|            else { document.getElementById('erroEmpresa').classList.remove('show'); document.getElementById('empresa').classList.remove('error'); }
+  1016|            const casa1 = document.querySelector('.palpite-casa[data-jogo="1"]');
+  1017|            const fora1 = document.querySelector('.palpite-fora[data-jogo="1"]');
+  1018|            if (!casa1 || !fora1 || casa1.value === '' || fora1.value === '') { document.getElementById('erroPalpites').classList.add('show'); valido = false; }
+  1019|            else { document.getElementById('erroPalpites').classList.remove('show'); }
+  1020|            return valido;
+  1021|        }
+  1022|
+  1023|        async function enviarPalpites() {
+  1024|            if (enviando) return;
+  1025|            document.getElementById('errorMessage').classList.remove('show');
+  1026|            document.getElementById('erroPalpites').classList.remove('show');
+  1027|            if (!validarFormulario()) return;
+  1028|            enviando = true;
+  1029|            const btn = document.getElementById('submitBtn');
+  1030|            btn.classList.add('loading'); btn.disabled = true;
+  1031|            const palpites = [];
+  1032|            document.querySelectorAll('.palpite-casa').forEach(input => {
+  1033|                const jogoId = parseInt(input.dataset.jogo);
+  1034|                const fora = document.querySelector(`.palpite-fora[data-jogo="${jogoId}"]`);
+  1035|                if (input.value !== '' && fora && fora.value !== '') { palpites.push({ jogoId, casa: parseInt(input.value), fora: parseInt(fora.value) }); }
+  1036|            });
+  1037|            const dados = {
+  1038|                nome: document.getElementById('nome').value.trim(),
+  1039|                documento: document.getElementById('documento').value.trim().replace(/\D/g,''),
+  1040|                tipo_documento: tipoDocumento,
+  1041|                empresa: document.getElementById('empresa').value.trim(),
+  1042|                telefone: document.getElementById('telefone').value.trim(),
+  1043|                palpites
+  1044|            };
+  1045|            try {
+  1046|                await supabaseInsert('participantes', dados);
+  1047|                btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+  1048|                document.getElementById('cadastroForm').style.display = 'none';
+  1049|                document.getElementById('successMessage').classList.add('show');
+  1050|                await atualizarRanking();
+  1051|                mostrarToast('🎉 Palpites registrados com sucesso!');
+  1052|            } catch (e) {
+  1053|                btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+  1054|                const msg = e.message;
+  1055|                if (msg.includes('duplicate') || msg.includes('23505')) {
+  1056|                    mostrarErro('Este CPF/CNPJ já está cadastrado! Cada documento pode participar apenas uma vez.');
+  1057|                } else {
+  1058|                    mostrarErro('Erro ao registrar. Tente novamente.');
+  1059|                }
+  1060|            }
+  1061|        }
+  1062|
+  1063|        function mostrarErro(msg) {
+  1064|            const el = document.getElementById('errorMessage');
+  1065|            el.textContent = '⚠️ ' + msg;
+  1066|            el.classList.add('show');
+  1067|        }
+  1068|
+  1069|        function resetarFormulario() {
+  1070|            document.getElementById('cadastroForm').reset();
+  1071|            document.getElementById('cadastroForm').style.display = 'block';
+  1072|            document.getElementById('successMessage').classList.remove('show');
+  1073|            document.querySelectorAll('.field-error').forEach(e => e.classList.remove('show'));
+  1074|            document.querySelectorAll('.error').forEach(e => e.classList.remove('error'));
+  1075|        }
+  1076|
+  1077|        async function atualizarRanking() {
+  1078|            try {
+  1079|                const participantes = await supabaseGet('participantes', { select: 'nome,palpites', order: 'id.asc' });
+  1080|                const vazio = document.getElementById('rankingVazio');
+  1081|                const wrapper = document.getElementById('rankingTabelaWrapper');
+  1082|                const body = document.getElementById('rankingBody');
+  1083|                if (!participantes || participantes.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
+  1084|                vazio.style.display = 'none'; wrapper.style.display = 'block';
+  1085|                const ordenados = participantes.sort((a,b) => (b.pontos||0) - (a.pontos||0));
+  1086|                body.innerHTML = ordenados.map((p, i) => {
+  1087|                    const posClass = i < 3 ? `posicao-${i+1}` : '';
+  1088|                    return `<tr><td class="posicao ${posClass}">${i+1}º</td><td class="nome-participante">${p.nome}</td><td class="acertos">${(p.palpites && p.palpites.length) || 0} palpites</td><td class="pontos">${p.pontos || 0} pts</td></tr>`;
+  1089|                }).join('');
+  1090|            } catch (e) { console.warn('Erro ao carregar ranking:', e); }
+  1091|        }
+  1092|
+  1093|        function mostrarToast(msg, tipo = '') {
+  1094|            const toast = document.getElementById('toast');
+  1095|            toast.textContent = msg; toast.className = 'toast ' + tipo;
+  1096|            toast.classList.add('show');
+  1097|            setTimeout(() => toast.classList.remove('show'), 4000);
+  1098|        }
+  1099|        window.atualizarRanking = atualizarRanking;
+  1100|        window.mostrarToast = mostrarToast;
+  1101|    </script>
+  1102|</body>
+  1103|</html>
+  1104|

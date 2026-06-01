@@ -1,6 +1,4 @@
 // GET /health — Health check da aplicação
-// Função autocontida
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -36,9 +34,8 @@ serve(async (req) => {
         status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
       })
     }
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select().catch(() => {})
+    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
 
-    // Testar banco
     const start = Date.now()
     let dbConnected = false
     let latencyMs = 0

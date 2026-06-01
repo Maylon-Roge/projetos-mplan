@@ -1,13 +1,9 @@
 // POST /cadastrar — Cadastro de participante com palpites
-// Função autocontida (sem dependências externas)
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-
-// Rate limit: 10 cadastros/hora por IP
 const RATE_LIMIT = { max: 10, windowMinutes: 60, name: 'cadastrar' }
 
 function corsHeaders() {
@@ -19,7 +15,6 @@ function corsHeaders() {
 }
 
 serve(async (req) => {
-  // CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders() })
   }
@@ -34,7 +29,6 @@ serve(async (req) => {
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
-    // Rate limit check
     const windowStart = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
     const { count } = await supabase
       .from('rate_limits')
@@ -50,10 +44,8 @@ serve(async (req) => {
       )
     }
 
-    // Registrar requisição para rate limit
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select().catch(() => {})
+    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
 
-    // Validar Content-Type
     const contentType = req.headers.get('content-type') || ''
     if (!contentType.includes('application/json')) {
       return new Response(
@@ -62,11 +54,9 @@ serve(async (req) => {
       )
     }
 
-    // Parsear body
     const body = await req.json()
     const errors = []
 
-    // Validações
     if (!body.nome || body.nome.trim().length < 3) errors.push('Nome deve ter no mínimo 3 caracteres')
     if (body.nome && body.nome.length > 255) errors.push('Nome deve ter no máximo 255 caracteres')
 
@@ -90,7 +80,20 @@ serve(async (req) => {
       )
     }
 
-    // Inserir no banco (trigger de CPF valida os dígitos)
+    // Verificar duplicata antes de inserir
+    const { data: existing } = await supabase
+      .from('participantes')
+      .select('id')
+      .eq('documento', doc)
+      .maybeSingle()
+
+    if (existing) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Este CPF/CNPJ já está cadastrado' }),
+        { status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+      )
+    }
+
     const { data, error } = await supabase
       .from('participantes')
       .insert({

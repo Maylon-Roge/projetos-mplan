@@ -41,7 +41,8 @@ serve(async (req) => {
         status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
       })
     }
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select().catch(() => {})
+    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
+      .catch(e => console.error('rate_limits error:', e))
 
     // Buscar resultados
     const { data: resultados } = await supabase

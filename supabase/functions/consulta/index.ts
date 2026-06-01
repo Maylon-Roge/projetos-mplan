@@ -1,6 +1,4 @@
 // GET /consulta?documento=XXX — Consulta de participante por CPF/CNPJ
-// Função autocontida (sem dependências externas)
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -30,7 +28,6 @@ serve(async (req) => {
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
-    // Rate limit
     const windowStart = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
     const { count } = await supabase
       .from('rate_limits').select('*', { count: 'exact', head: true })
@@ -41,9 +38,8 @@ serve(async (req) => {
         status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
       })
     }
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select().catch(() => {})
+    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
 
-    // Extrair documento
     const url = new URL(req.url)
     const documentoRaw = url.searchParams.get('documento')
     if (!documentoRaw) {
@@ -59,7 +55,6 @@ serve(async (req) => {
       })
     }
 
-    // Buscar participante
     const { data: p, error } = await supabase
       .from('participantes').select('*').eq('documento', documento).single()
 
@@ -69,7 +64,7 @@ serve(async (req) => {
       })
     }
 
-    // Mascarar documento
+    // Mascarar documento para não expor dados sensíveis
     let docMask = p.documento
     if (p.tipo_documento === 'cpf') {
       docMask = p.documento.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '***.$2.$3-**')
@@ -82,6 +77,11 @@ serve(async (req) => {
       data: {
         nome: p.nome,
         documento: docMask,
+        documento_raw: p.documento,
+        tipo_documento: p.tipo_documento || 'cpf',
+        empresa: p.empresa || '',
+        telefone: p.telefone || '',
+        created_at: p.created_at || null,
         palpites: p.palpites || [],
         pontos: p.pontos || 0,
         acertos_exatos: p.acertos_exatos || 0,

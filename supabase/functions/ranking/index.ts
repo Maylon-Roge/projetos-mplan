@@ -1,6 +1,4 @@
 // GET /ranking — Ranking público (sem dados sensíveis)
-// Função autocontida
-
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -30,7 +28,6 @@ serve(async (req) => {
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
 
-    // Rate limit
     const windowStart = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
     const { count } = await supabase
       .from('rate_limits').select('*', { count: 'exact', head: true })
@@ -41,17 +38,28 @@ serve(async (req) => {
         status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
       })
     }
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select().catch(() => {})
+    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
 
-    // Parâmetros
     const url = new URL(req.url)
     const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '100') || 100, 1), 1000)
     const offset = Math.max(parseInt(url.searchParams.get('offset') || '0') || 0, 0)
+    const includeData = url.searchParams.get('include_data') === 'true'
 
-    // Total
+    // Retorna resultados e jogos_liberados quando solicitado
+    const extras: Record<string, any> = {}
+    if (includeData) {
+      try {
+        const { data: resultados } = await supabase.from('resultados').select('*')
+        const { data: jogosLiberados } = await supabase.from('jogos_liberados').select('*')
+        if (resultados) extras.resultados = resultados
+        if (jogosLiberados) extras.jogos_liberados = jogosLiberados
+      } catch (e) {
+        console.error('Erro ao carregar dados extras:', e)
+      }
+    }
+
     const { count: total } = await supabase.from('participantes').select('*', { count: 'exact', head: true })
 
-    // Ranking ordenado
     const { data: participantes, error } = await supabase
       .from('participantes')
       .select('nome, palpites, pontos, acertos_exatos')
@@ -76,7 +84,7 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({
       success: true,
-      data: { ranking, total_participantes: total || 0, timestamp: new Date().toISOString() }
+      data: { ranking, total_participantes: total || 0, timestamp: new Date().toISOString(), ...extras }
     }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
   } catch (error) {
     console.error('ranking error:', error)

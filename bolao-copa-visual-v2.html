@@ -747,7 +747,7 @@
             <a href="bolao-copa-admin.html" target="_blank">⚙️ Admin</a>
         </div>
         <p>💡 <strong>Dica:</strong> Quanto mais placares você acertar, maior a pontuação!</p>
-        <p>⚠️ Cada CPF/CNPJ pode participar apenas uma vez</p>
+        <p>⚠️ Um jogo é liberado por rodada. Aguarde a próxima rodada para palpitar!</p>
         <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.6;">
             &copy; 2026 - Planeta Energia | Bolão Virtual Copa do Mundo 🏆
         </p>
@@ -760,36 +760,9 @@
 
     <script>
         // ============================================
-        // SUPABASE CONFIG
+        // EDGE FUNCTIONS CONFIG (sem chave anônima!)
         // ============================================
-        const SUPABASE_URL = 'https://shyvzreadwnvgovgrqek.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
-
-        async function supabaseGet(table, opts = {}) {
-            const params = new URLSearchParams();
-            if (opts.select) params.set('select', opts.select);
-            if (opts.order) params.set('order', opts.order);
-            if (opts.limit) params.set('limit', opts.limit);
-            const qs = params.toString();
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${qs ? '?'+qs : ''}`, {
-                headers: { apikey: SUPABASE_ANON_KEY, Accept: 'application/json' }
-            });
-            if (!res.ok) throw new Error(`Supabase GET ${table}: ${res.status}`);
-            return res.json();
-        }
-
-        async function supabaseInsert(table, body) {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-                method: 'POST',
-                headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-                body: JSON.stringify(body)
-            });
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error(err);
-            }
-            return true;
-        }
+        const API_BASE = 'https://shyvzreadwnvgovgrqek.supabase.co/functions/v1';
 
         // ============================================
         // DADOS DOS JOGOS
@@ -814,7 +787,7 @@
         let liberadosCache = [1];
 
         document.addEventListener('DOMContentLoaded', async function() {
-            await Promise.all([carregarResultados(), carregarLiberados()]);
+            await carregarDadosPublicos();
             renderizarJogos();
             renderizarPalpites();
             setupToggle();
@@ -825,19 +798,21 @@
             setupRevealAnimations();
         });
 
-        async function carregarResultados() {
+        async function carregarDadosPublicos() {
             try {
-                const data = await supabaseGet('resultados', { select: '*' });
-                resultadosCache = {};
-                data.forEach(r => { resultadosCache[r.jogo_id] = { casa: r.gols_casa, fora: r.gols_fora }; });
-            } catch (e) { console.warn('Erro ao carregar resultados:', e); }
-        }
-
-        async function carregarLiberados() {
-            try {
-                const data = await supabaseGet('jogos_liberados', { select: '*' });
-                liberadosCache = data.filter(j => j.liberado).map(j => j.jogo_id);
-            } catch (e) { console.warn('Erro ao carregar jogos liberados:', e); }
+                const res = await fetch(API_BASE + '/ranking?limit=1&include_data=true', { headers: { Accept: 'application/json' } });
+                const data = await res.json();
+                if (data.success && data.data) {
+                    resultadosCache = {};
+                    if (data.data.resultados) {
+                        data.data.resultados.forEach(function(r) { resultadosCache[r.jogo_id] = { casa: r.gols_casa, fora: r.gols_fora }; });
+                    }
+                    liberadosCache = [];
+                    if (data.data.jogos_liberados) {
+                        liberadosCache = data.data.jogos_liberados.filter(function(j) { return j.liberado; }).map(function(j) { return j.jogo_id; });
+                    }
+                }
+            } catch (e) { console.warn('Erro ao carregar dados públicos:', e); }
         }
 
         function setupRevealAnimations() {
@@ -1043,17 +1018,25 @@
                 palpites
             };
             try {
-                await supabaseInsert('participantes', dados);
+                const res = await fetch(API_BASE + '/cadastrar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const result = await res.json();
                 btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+                if (!result.success) {
+                    mostrarErro(result.error || 'Erro ao registrar. Tente novamente.');
+                    return;
+                }
                 document.getElementById('cadastroForm').style.display = 'none';
                 document.getElementById('successMessage').classList.add('show');
                 await atualizarRanking();
                 mostrarToast('🎉 Palpites registrados com sucesso!');
             } catch (e) {
                 btn.classList.remove('loading'); btn.disabled = false; enviando = false;
-                const msg = e.message;
-                if (msg.includes('duplicate') || msg.includes('23505')) {
-                    mostrarErro('Este CPF/CNPJ já está cadastrado! Cada documento pode participar apenas uma vez.');
+                if (e.message && (e.message.includes('duplicate') || e.message.includes('409'))) {
+                    mostrarErro('Um jogo é liberado por rodada. Aguarde a próxima rodada para palpitar!');
                 } else {
                     mostrarErro('Erro ao registrar. Tente novamente.');
                 }
@@ -1076,16 +1059,16 @@
 
         async function atualizarRanking() {
             try {
-                const participantes = await supabaseGet('participantes', { select: 'nome,palpites', order: 'id.asc' });
+                const res = await fetch(API_BASE + '/ranking?limit=100&offset=0', { headers: { Accept: 'application/json' } });
+                const json = await res.json();
                 const vazio = document.getElementById('rankingVazio');
                 const wrapper = document.getElementById('rankingTabelaWrapper');
                 const body = document.getElementById('rankingBody');
-                if (!participantes || participantes.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
+                if (!json.success || !json.data.ranking || json.data.ranking.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
                 vazio.style.display = 'none'; wrapper.style.display = 'block';
-                const ordenados = participantes.sort((a,b) => (b.pontos||0) - (a.pontos||0));
-                body.innerHTML = ordenados.map((p, i) => {
-                    const posClass = i < 3 ? `posicao-${i+1}` : '';
-                    return `<tr><td class="posicao ${posClass}">${i+1}º</td><td class="nome-participante">${p.nome}</td><td class="acertos">${(p.palpites && p.palpites.length) || 0} palpites</td><td class="pontos">${p.pontos || 0} pts</td></tr>`;
+                body.innerHTML = json.data.ranking.map(function(p, i) {
+                    var posClass = i < 3 ? 'posicao-' + (i+1) : '';
+                    return '<tr><td class="posicao ' + posClass + '">' + (i+1) + 'º</td><td class="nome-participante">' + p.nome + '</td><td class="acertos">' + (p.pontos || 0) + ' pts</td><td class="pontos">' + (p.acertos_exatos || 0) + ' exatos</td></tr>';
                 }).join('');
             } catch (e) { console.warn('Erro ao carregar ranking:', e); }
         }
