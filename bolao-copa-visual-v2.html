@@ -1033,8 +1033,8 @@
                 document.getElementById('successMessage').classList.add('show');
                 // Se merge=true, o CPF já existia e os novos palpites foram adicionados
                 if (result.data && result.data.merge) {
-                    document.querySelector('#successMessage p')?.textContent =
-                        '✅ Novos palpites adicionados com sucesso! Seus palpites anteriores foram mantidos.';
+                    const msgEl = document.querySelector('#successMessage p');
+                    if (msgEl) msgEl.textContent = '✅ Novos palpites adicionados com sucesso! Seus palpites anteriores foram mantidos.';
                 }
                 await atualizarRanking();
                 mostrarToast('🎉 Palpites registrados com sucesso!');
