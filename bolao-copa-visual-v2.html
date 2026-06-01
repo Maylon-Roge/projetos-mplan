@@ -1026,7 +1026,12 @@
                 const result = await res.json();
                 btn.classList.remove('loading'); btn.disabled = false; enviando = false;
                 if (!result.success) {
-                    mostrarErro(result.error || 'Erro ao registrar. Tente novamente.');
+                    // Se o servidor rejeitou por CPF duplicado (409), mostra mensagem amigável
+                    if (result.error && (result.error.includes('cadastrado') || result.error.includes('duplicat'))) {
+                        mostrarErro('Um jogo é liberado por rodada. Aguarde a próxima rodada para palpitar!');
+                    } else {
+                        mostrarErro(result.error || 'Erro ao registrar. Tente novamente.');
+                    }
                     return;
                 }
                 document.getElementById('cadastroForm').style.display = 'none';
@@ -1035,11 +1040,7 @@
                 mostrarToast('🎉 Palpites registrados com sucesso!');
             } catch (e) {
                 btn.classList.remove('loading'); btn.disabled = false; enviando = false;
-                if (e.message && (e.message.includes('duplicate') || e.message.includes('409'))) {
-                    mostrarErro('Um jogo é liberado por rodada. Aguarde a próxima rodada para palpitar!');
-                } else {
-                    mostrarErro('Erro ao registrar. Tente novamente.');
-                }
+                mostrarErro('Erro ao registrar. Tente novamente.');
             }
         }
 
