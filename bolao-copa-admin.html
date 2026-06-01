@@ -916,17 +916,19 @@ function mostrarModalLimpar(){mostrarModal('Tem certeza que deseja limpar TODOS 
 async function limparTodosDados() {
     if (!adminToken) { mostrarToast('Faça login novamente!', 'error'); return; }
     try {
-        // Clear all resultados
-        for (const jogo of JOGOS) {
-            try {
-                await callAdminAPI('salvar_resultado', { jogo_id: jogo.id, gols_casa: null, gols_fora: null });
-            } catch(_){}
-        }
-        // Clear all jogos_liberados
-        for (const jogo of JOGOS) {
-            try {
-                await callAdminAPI('liberar_jogo', { jogo_id: jogo.id, liberado: false });
-            } catch(_){}
+        // Single call to dedicated limpar-dados function
+        const body = { confirm: true };
+        const res = await fetch(API_BASE + '/limpar-dados', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + adminToken
+            },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!data.success) {
+            throw new Error(data.error || 'Erro ao limpar dados');
         }
         cachedResultados = {};
         cachedJogosLiberados = [];
@@ -934,7 +936,7 @@ async function limparTodosDados() {
         renderizarParticipantes();
         calcularApuracao();
         document.getElementById('relatorioFinalCard').style.display='none';
-        mostrarToast('🗑️ Todos os dados foram removidos! (participantes mantidos no banco)', 'info');
+        mostrarToast('🗑️ Todos os dados foram removidos com sucesso! (' + (data.data?.resultados_limpos || 0) + ' resultados, ' + (data.data?.jogos_liberados_zerados || 0) + ' jogos)', 'info');
     } catch (e) {
         mostrarToast('Erro ao limpar dados: ' + e.message, 'error');
     }
