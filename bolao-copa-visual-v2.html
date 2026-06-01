@@ -1028,7 +1028,7 @@
                 if (!result.success) {
                     // Se o servidor rejeitou por CPF duplicado (409), mostra mensagem amigável
                     if (result.error && (result.error.includes('cadastrado') || result.error.includes('duplicat'))) {
-                        mostrarErro('Um jogo é liberado por rodada. Aguarde a próxima rodada para palpitar!');
+                        mostrarErro('Este cpf já está participando nessa rodada, apenas um cpf ou cnpj por rodada.');
                     } else {
                         mostrarErro(result.error || 'Erro ao registrar. Tente novamente.');
                     }
