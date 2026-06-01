@@ -1,8 +1,7 @@
-// POST /cadastrar — Cadastro/atualização de participante com palpites
-// REGRA: cada CPF/CNPJ pode palpitar em MÚLTIPLAS RODADAS
-//   - Mesmo CPF na mesma rodada → MERGE (atualiza palpites, mantém resultados antigos)
-//   - Mesmo CPF em rodada diferente → MERGE (adiciona novos palpites, mantém antigos)
-//   - NUNCA rejeita CPF duplicado — sempre faz merge dos palpites
+// POST /cadastrar — Cadastro de participante com palpites
+// REGRA: cada CPF/CNPJ pode palpitar UMA VEZ por jogo (rodada)
+//   - Mesmo CPF em jogo NOVO → MERGE (adiciona novos palpites)
+//   - Mesmo CPF no MESMO jogo → REJEITA (já palpitou nesta rodada)
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -84,26 +83,35 @@ serve(async (req) => {
       )
     }
 
-    // Verificar se o CPF já existe — se sim, MERGE dos palpites
+    // Verificar se o CPF já existe
     const { data: existing } = await supabase
       .from('participantes')
-      .select('id, palpites, pontos, acertos_exatos')
+      .select('id, palpites')
       .eq('documento', doc)
       .maybeSingle()
 
     if (existing) {
-      // MERGE: mantém palpites antigos + adiciona novos (sem duplicar jogos)
       const palpitesAntigos = existing.palpites || []
       const palpitesNovos = body.palpites || []
-      const jogosExistentes = new Set(palpitesAntigos.map(p => p.jogoId))
 
-      // Só adiciona palpites para jogos que o participante AINDA NÃO palpitou
-      for (const novo of palpitesNovos) {
-        if (!jogosExistentes.has(novo.jogoId)) {
-          palpitesAntigos.push(novo)
-          jogosExistentes.add(novo.jogoId)
-        }
+      // Extrair IDs dos jogos já palpitados
+      const jogosAntigos = new Set(palpitesAntigos.map(p => p.jogoId))
+      const jogosNovos = palpitesNovos.map(p => p.jogoId)
+
+      // Verificar se algum jogo novo já foi palpitado antes (mesma rodada)
+      const conflitos = jogosNovos.filter(id => jogosAntigos.has(id))
+      if (conflitos.length > 0) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: `Você já palpitou no jogo ${conflitos.join(', ')} nesta rodada. Aguarde a próxima rodada para novos palpites.`
+          }),
+          { status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+        )
       }
+
+      // Sem conflitos: MERGE — adiciona novos palpites aos antigos
+      const palpitesMerge = [...palpitesAntigos, ...palpitesNovos]
 
       const { error: updateError } = await supabase
         .from('participantes')
@@ -112,7 +120,7 @@ serve(async (req) => {
           tipo_documento: body.tipo_documento,
           empresa: body.empresa?.trim() || '',
           telefone: body.telefone.trim(),
-          palpites: palpitesAntigos,
+          palpites: palpitesMerge,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existing.id)
@@ -150,7 +158,7 @@ serve(async (req) => {
 
     if (error) {
       if (error.code === '23505') {
-        // Concorrência: outro request inseriu no mesmo instante — trata como merge
+        // Concorrência: inserção simultânea — tenta merge
         const { data: retryExisting } = await supabase
           .from('participantes')
           .select('id, palpites')
@@ -160,12 +168,16 @@ serve(async (req) => {
         if (retryExisting) {
           const merged = [...(retryExisting.palpites || [])]
           const existingIds = new Set(merged.map(p => p.jogoId))
-          for (const p of (body.palpites || [])) {
-            if (!existingIds.has(p.jogoId)) {
-              merged.push(p)
-              existingIds.add(p.jogoId)
-            }
+          const novos = (body.palpites || []).filter(p => !existingIds.has(p.jogoId))
+
+          if (novos.length === 0) {
+            return new Response(
+              JSON.stringify({ success: false, error: 'Você já palpitou neste jogo. Aguarde a próxima rodada.' }),
+              { status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+            )
           }
+
+          merged.push(...novos)
           await supabase.from('participantes').update({ palpites: merged }).eq('id', retryExisting.id)
 
           return new Response(

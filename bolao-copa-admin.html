@@ -601,7 +601,13 @@ async function callAdminAPI(operacao, extra) {
         body: JSON.stringify(body)
     });
     const data = await res.json();
-    if (!data.success) throw new Error(data.error || 'Erro na operação');
+    if (!data.success) {
+        // Token expirado ou não logado — mensagem clara
+        if (res.status === 401 || data.code?.startsWith('UNAUTHORIZED')) {
+            throw new Error('Sessão expirada. Faça login novamente.');
+        }
+        throw new Error(data.error || 'Erro na operação');
+    }
     return data;
 }
 
