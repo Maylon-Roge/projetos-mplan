@@ -1,4 +1,8 @@
-// POST /cadastrar — Cadastro de participante com palpites
+// POST /cadastrar — Cadastro/atualização de participante com palpites
+// REGRA: cada CPF/CNPJ pode palpitar em MÚLTIPLAS RODADAS
+//   - Mesmo CPF na mesma rodada → MERGE (atualiza palpites, mantém resultados antigos)
+//   - Mesmo CPF em rodada diferente → MERGE (adiciona novos palpites, mantém antigos)
+//   - NUNCA rejeita CPF duplicado — sempre faz merge dos palpites
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -80,20 +84,57 @@ serve(async (req) => {
       )
     }
 
-    // Verificar duplicata antes de inserir
+    // Verificar se o CPF já existe — se sim, MERGE dos palpites
     const { data: existing } = await supabase
       .from('participantes')
-      .select('id')
+      .select('id, palpites, pontos, acertos_exatos')
       .eq('documento', doc)
       .maybeSingle()
 
     if (existing) {
+      // MERGE: mantém palpites antigos + adiciona novos (sem duplicar jogos)
+      const palpitesAntigos = existing.palpites || []
+      const palpitesNovos = body.palpites || []
+      const jogosExistentes = new Set(palpitesAntigos.map(p => p.jogoId))
+
+      // Só adiciona palpites para jogos que o participante AINDA NÃO palpitou
+      for (const novo of palpitesNovos) {
+        if (!jogosExistentes.has(novo.jogoId)) {
+          palpitesAntigos.push(novo)
+          jogosExistentes.add(novo.jogoId)
+        }
+      }
+
+      const { error: updateError } = await supabase
+        .from('participantes')
+        .update({
+          nome: body.nome.trim(),
+          tipo_documento: body.tipo_documento,
+          empresa: body.empresa?.trim() || '',
+          telefone: body.telefone.trim(),
+          palpites: palpitesAntigos,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existing.id)
+
+      if (updateError) {
+        console.error('Update error:', updateError)
+        return new Response(
+          JSON.stringify({ success: false, error: 'Erro ao atualizar cadastro' }),
+          { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+        )
+      }
+
       return new Response(
-        JSON.stringify({ success: false, error: 'Este CPF/CNPJ já está cadastrado' }),
-        { status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+        JSON.stringify({
+          success: true,
+          data: { id: existing.id, nome: body.nome.trim(), merge: true, palpites_adicionados: palpitesNovos.length }
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
       )
     }
 
+    // CPF NOVO — inserir normalmente
     const { data, error } = await supabase
       .from('participantes')
       .insert({
@@ -109,10 +150,29 @@ serve(async (req) => {
 
     if (error) {
       if (error.code === '23505') {
-        return new Response(
-          JSON.stringify({ success: false, error: 'Este CPF/CNPJ já está cadastrado' }),
-          { status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-        )
+        // Concorrência: outro request inseriu no mesmo instante — trata como merge
+        const { data: retryExisting } = await supabase
+          .from('participantes')
+          .select('id, palpites')
+          .eq('documento', doc)
+          .single()
+
+        if (retryExisting) {
+          const merged = [...(retryExisting.palpites || [])]
+          const existingIds = new Set(merged.map(p => p.jogoId))
+          for (const p of (body.palpites || [])) {
+            if (!existingIds.has(p.jogoId)) {
+              merged.push(p)
+              existingIds.add(p.jogoId)
+            }
+          }
+          await supabase.from('participantes').update({ palpites: merged }).eq('id', retryExisting.id)
+
+          return new Response(
+            JSON.stringify({ success: true, data: { id: retryExisting.id, nome: body.nome.trim(), merge: true } }),
+            { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+          )
+        }
       }
       if (error.message?.includes('CPF inválido') || error.message?.includes('CNPJ inválido')) {
         return new Response(
@@ -128,7 +188,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, data: { id: data.id, nome: data.nome } }),
+      JSON.stringify({ success: true, data: { id: data.id, nome: data.nome, merge: false } }),
       { status: 201, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
     )
   } catch (error) {
