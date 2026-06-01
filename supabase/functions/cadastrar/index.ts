@@ -121,7 +121,6 @@ serve(async (req) => {
           empresa: body.empresa?.trim() || '',
           telefone: body.telefone.trim(),
           palpites: palpitesMerge,
-          updated_at: new Date().toISOString(),
         })
         .eq('id', existing.id)
 
