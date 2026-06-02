@@ -1438,14 +1438,7 @@
         return true;
     }
 
-    // Mock de CNPJs para auto-preenche (enquanto API da ReceitaWS está bloqueada)
-    const CNPJ_MOCK = {
-      '27100625000262': 'NATURA &CO',
-      '11222333000181': 'Masterplan Marcenaria',
-      '42524761000189': 'Planeta Energia Comércio',
-    }
-
-    // Busca dados de CNPJ na API pública da ReceitaWS
+    // Valida CNPJ e prepara campo empresa para digitação manual
     async function buscarDadosCNPJ(cnpj) {
         var digitos = cnpj.replace(/\D/g, '');
         if (digitos.length !== 14) return null;
@@ -1453,73 +1446,14 @@
         var statusEl = document.getElementById('cnpjStatus');
         var empresaField = document.getElementById('empresa');
 
-        // Verifica se existe nos mocks (auto-preenche instantâneo)
-        if (CNPJ_MOCK[digitos]) {
-            var nomeEmpresa = CNPJ_MOCK[digitos];
-            empresaField.value = nomeEmpresa;
-            document.getElementById('nome').value = nomeEmpresa;
-            document.getElementById('nome').classList.remove('error');
-            document.getElementById('erroNome').classList.remove('show');
-            statusEl.style.display = 'block';
-            statusEl.innerHTML = '✅ CNPJ válido — ' + nomeEmpresa;
-            statusEl.style.color = 'var(--green)';
-            empresaField.readOnly = true;
-            console.log('📡 CNPJ preenchido via MOCK:', nomeEmpresa);
-            return { nome: nomeEmpresa };
-        }
-
-        console.log('📡 buscarDadosCNPJ chamado para:', digitos);
         statusEl.style.display = 'block';
-        statusEl.innerHTML = '🔍 Consultando CNPJ...';
-        statusEl.style.color = 'var(--gray-300)';
-
-        try {
-            var controller = new AbortController();
-            var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
-            var res = await fetch(API_BASE + '/consultar-cnpj', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cnpj: digitos }),
-                signal: controller.signal,
-            });
-            clearTimeout(timeoutId);
-            console.log('📡 API respondeu status:', res.status);
-            if (!res.ok) throw new Error('Falha na consulta');
-            var data = await res.json();
-            console.log('📡 Dados recebidos:', data.status, data.nome);
-
-            if (data.status === 'ERROR') {
-                statusEl.innerHTML = '⚠️ CNPJ não encontrado na base (preencha manualmente)';
-                statusEl.style.color = 'var(--yellow-dark)';
-                empresaField.value = '';
-                empresaField.readOnly = false;
-                empresaField.placeholder = 'Digite o nome da empresa';
-                return null;
-            }
-
-            var nomeEmpresa = data.nome || data.fantasia || '';
-            if (nomeEmpresa) {
-                empresaField.value = nomeEmpresa;
-                console.log('📡 Empresa preenchida:', nomeEmpresa);
-                document.getElementById('nome').value = nomeEmpresa;
-                document.getElementById('nome').classList.remove('error');
-                document.getElementById('erroNome').classList.remove('show');
-            }
-
-            statusEl.innerHTML = '✅ CNPJ válido — ' + (data.fantasia || data.nome || '');
-            statusEl.style.color = 'var(--green)';
-            empresaField.readOnly = true;
-            return data;
-        } catch (e) {
-            console.warn('📡 Erro na API CNPJ:', e.message);
-            statusEl.innerHTML = '✅ CNPJ válido (preencha o nome da empresa manualmente)';
-            statusEl.style.color = 'var(--green)';
-            empresaField.value = '';
-            empresaField.readOnly = false;
-            empresaField.placeholder = 'Digite o nome da empresa';
-            empresaField.focus();
-            return null;
-        }
+        statusEl.innerHTML = '✅ CNPJ válido';
+        statusEl.style.color = 'var(--green)';
+        empresaField.value = '';
+        empresaField.readOnly = false;
+        empresaField.placeholder = 'Digite o nome da empresa';
+        empresaField.focus();
+        return null;
     }
 
     function validarDocumento(val) {
