@@ -1471,9 +1471,9 @@
             statusEl.style.color = 'var(--green)';
             return data;
         } catch (e) {
-            // Se API falhar (rate limit), permite cadastro manual
-            statusEl.innerHTML = '✅ CNPJ válido (consulta offline)';
-            statusEl.style.color = 'var(--green)';
+            console.warn('Erro ao consultar CNPJ:', e);
+            statusEl.innerHTML = '❌ CNPJ inválido ou erro na consulta';
+            statusEl.style.color = 'var(--red)';
             return null;
         }
     }
