@@ -1589,6 +1589,8 @@
         } else {
             document.getElementById('errorMessage').classList.remove('show');
             this.classList.remove('error');
+            // ✅ Abre modal de confirmação automaticamente
+            abrirModalConfirmacaoTelefone(tel);
         }
     });
 
