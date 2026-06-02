@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolão Copa do Mundo 2026 🏆 - Planeta Energia</title>
-    <meta name="description" content="Participe do Bolão Virtual da Copa do Mundo 2026. Faça seus palpites, acumule pontos e concorra a R$ 500 em vale-compras!">
+    <meta name="description" content="Participe do Bolão Virtual da Copa do Mundo 2026. Faça seus palpites e ganhe 20% de desconto na Planeta Energia!">
     <meta property="og:title" content="Bolão Copa do Mundo 2026 🏆 - Planeta Energia">
-    <meta property="og:description" content="Faça seus palpites e concorra a R$ 500 em vale-compras!">
+    <meta property="og:description" content="Faça seus palpites e ganhe 20% de desconto na Planeta Energia!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://maylon-roge.github.io/projetos-mplan/bolao-copa-visual-v2.html">
     <meta property="og:image" content="https://maylon-roge.github.io/projetos-mplan/assets/bolao-og.jpg">
@@ -458,67 +458,46 @@
         .step-card .step-icon { font-size: 1rem; }
 
         /* ============================================
-           PRÊMIOS
+           BENEFÍCIOS (Como Ganhar?)
            ============================================ */
-        .prize-section {
-            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-            position: relative;
-            overflow: hidden;
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
         }
-        .prize-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
-        }
-        .prize-section .section-title { color: var(--yellow); }
-        .prize-section .section-subtitle { color: rgba(255,255,255,0.7); }
-        .prize-section .section-title-decorator .line,
-        .prize-section .section-title-decorator .diamond { background: var(--white); }
-
-        .prize-card {
+        .benefit-card {
+            background: var(--white);
+            border: 2px solid var(--blue);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
             text-align: center;
-            padding: 50px 40px;
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255,255,255,0.15);
-            border-radius: var(--radius-xl);
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
-        .prize-card::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: var(--radius-xl);
-            background: linear-gradient(135deg, var(--gold), transparent, var(--gold));
-            opacity: 0.2;
-            z-index: -1;
+        .benefit-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--yellow);
         }
-        .prize-icon {
-            font-size: 4.5rem;
-            margin-bottom: 12px;
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
             display: block;
         }
-        .prize-value {
-            font-family: var(--font-title);
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--gold);
-            text-shadow: 0 2px 10px rgba(255,215,0,0.3);
+        .benefit-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 12px;
         }
-        .prize-label {
-            color: rgba(255,255,255,0.8);
-            font-size: 1rem;
-            margin-top: 6px;
-            font-weight: 500;
+        .benefit-card p {
+            font-size: 0.88rem;
+            color: var(--gray-400);
+            line-height: 1.7;
         }
-        .prize-card p {
-            margin-top: 16px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
+        .benefit-card p strong {
+            color: var(--blue);
         }
 
         /* ============================================
@@ -844,63 +823,6 @@
         }
 
         /* ============================================
-           RANKING
-           ============================================ */
-        .ranking-section { background: var(--gray-100); }
-        .ranking-table-wrapper {
-            overflow-x: auto;
-            margin-top: 20px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-        }
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            overflow: hidden;
-            background: var(--white);
-        }
-        .ranking-table thead {
-            background: linear-gradient(135deg, var(--blue), var(--blue-light));
-            color: var(--white);
-        }
-        .ranking-table th {
-            padding: 16px 20px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-align: left;
-        }
-        .ranking-table td {
-            padding: 14px 20px;
-            font-size: 0.88rem;
-            border-bottom: 1px solid var(--gray-200);
-            transition: var(--transition);
-        }
-        .ranking-table tbody tr:nth-child(even) { background: var(--gray-100); }
-        .ranking-table tbody tr:hover { background: #e8f0fe; }
-        .ranking-table .pos-1 {
-            background: linear-gradient(90deg, #fff9e6, #fffbe8) !important;
-        }
-        .ranking-table .pos-2 {
-            background: linear-gradient(90deg, #f5f5f5, #fafafa) !important;
-        }
-        .ranking-table .pos-3 {
-            background: linear-gradient(90deg, #fef0e6, #fff4eb) !important;
-        }
-        .pos-medal { font-size: 1.3rem; }
-        .ranking-empty {
-            text-align: center;
-            padding: 50px 20px;
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            color: var(--gray-400);
-            font-size: 0.95rem;
-            border: 2px dashed var(--gray-200);
-        }
-
-        /* ============================================
            FOOTER
            ============================================ */
         footer {
@@ -1006,6 +928,7 @@
             .hero-stat-value { font-size: 1.4rem; }
 
             .steps-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
             .rules-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
             .form-card { padding: 24px; }
@@ -1014,11 +937,7 @@
             .footer-brand p { max-width: 100%; }
             .section-title { font-size: 1.5rem; }
             .section-padding { padding: 50px 0; }
-            .prize-value { font-size: 2rem; }
-            .prize-card { padding: 30px 20px; }
             .toast { bottom: 15px; right: 15px; left: 15px; text-align: center; max-width: none; }
-            .ranking-table th,
-            .ranking-table td { padding: 10px 12px; font-size: 0.78rem; }
         }
 
         @media (max-width: 480px) {
@@ -1057,7 +976,6 @@
         <nav id="mainNav">
             <a href="#home" class="active" onclick="navegar('home')">Inicial</a>
             <a href="#palpites" onclick="navegar('palpites')">Jogos</a>
-            <a href="#ranking" onclick="navegar('ranking')">Ranking</a>
             <a href="#regras" onclick="navegar('regras')">Regras</a>
             <a href="#cadastro" onclick="navegar('cadastro')">Cadastro</a>
             <a href="bolao-copa-admin.html" target="_blank" class="nav-admin">⚙️ Admin</a>
@@ -1075,23 +993,22 @@
             BOLÃO DA COPA
             <span>Planeta Energia</span>
         </h1>
-        <p>Faça seus palpites nos jogos do Brasil, acumule pontos e<br>concorra a <strong>R$ 500 em vale-compras</strong>!</p>
+        <p>Faça seus palpites nos jogos do Brasil, acerte o placar exato e<br>ganhe <strong>20% de desconto</strong> na Planeta Energia!</p>
         <div class="hero-buttons">
             <a href="#cadastro" class="btn btn-primary btn-lg" onclick="navegar('cadastro')">📝 Quero Participar!</a>
-            <a href="#ranking" class="btn btn-secondary" onclick="navegar('ranking')">📊 Ver Ranking</a>
         </div>
         <div class="hero-stats">
             <div class="hero-stat">
-                <div class="hero-stat-value">R$ 500</div>
-                <div class="hero-stat-label">em Prêmios</div>
+                <div class="hero-stat-value">20%</div>
+                <div class="hero-stat-label">de Desconto</div>
             </div>
             <div class="hero-stat">
                 <div class="hero-stat-value">8</div>
                 <div class="hero-stat-label">Jogos do Brasil</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">🏆</div>
-                <div class="hero-stat-label">Vale-Compras</div>
+                <div class="hero-stat-value">🎯</div>
+                <div class="hero-stat-label">Acerto Exato</div>
             </div>
         </div>
     </div>
@@ -1122,30 +1039,42 @@
             </div>
             <div class="step-card">
                 <div class="step-number">3</div>
-                <h3>🏆 Ganhe Prêmios</h3>
-                <p>O participante com mais pontos no final da copa ganha R$ 500 em vale-compras!</p>
+                <h3>🎯 Ganhe Descontos</h3>
+                <p>Acertou o placar exato de um jogo? Você ganha <strong>20% de desconto</strong> na sua próxima compra na Planeta Energia!</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ═══════════════════════════════════════ -->
-<!-- PRÊMIOS                                -->
+<!-- COMO GANHAR?                          -->
 <!-- ═══════════════════════════════════════ -->
-<section class="section-padding prize-section">
+<section class="section-padding" style="background:var(--white);">
     <div class="container">
-        <h2 class="section-title">🏆 Prêmios</h2>
+        <h2 class="section-title">🎯 Como <span class="highlight">Ganhar?</span></h2>
         <div class="section-title-decorator">
             <span class="line"></span>
             <span class="diamond"></span>
             <span class="line"></span>
         </div>
-        <p class="section-subtitle">O melhor palpiteiro leva um super prêmio!</p>
-        <div class="prize-card">
-            <span class="prize-icon">🏆</span>
-            <div class="prize-value">R$ 500</div>
-            <div class="prize-label">em vale-compras Planeta Energia</div>
-            <p>Válido para o 1º colocado na classificação final.</p>
+        <p class="section-subtitle">Acerte o placar exato e ganhe descontos na Planeta Energia!</p>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">🎯</div>
+                <h3>Acerte o Placar Exato</h3>
+                <p>Se você acertar o resultado final de um jogo do Brasil (ex: Brasil 2x1), você ganha <strong>20% de desconto</strong> na sua próxima compra!</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🛍️</div>
+                <h3>Desconto na Próxima Compra</h3>
+                <p>O desconto de <strong>20%</strong> é válido para sua próxima compra na <strong>Planeta Energia</strong>. O cupom é gerado automaticamente e válido por 30 dias.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🔄</div>
+                <h3>Uma Chance por Rodada</h3>
+                <p>Cada rodada é <strong>independente</strong>! Acertou em uma? Na próxima você pode tentar novamente. Não acumulativo — máximo de 20% por rodada.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -1161,31 +1090,31 @@
             <span class="diamond"></span>
             <span class="line"></span>
         </div>
-        <p class="section-subtitle">Saiba como funciona a pontuação e participação</p>
+        <p class="section-subtitle">Saiba como ganhar descontos acertando os placares</p>
         <div class="rules-grid">
             <div class="rule-item">
-                <span class="icon">✅</span>
-                <div class="text"><strong>Placar Exato:</strong> Acertar o placar exato do jogo do Brasil vale <strong>5 pontos</strong>.</div>
+                <span class="icon">🎯</span>
+                <div class="text"><strong>Placar Exato = 20% de Desconto:</strong> Acertar o resultado exato do jogo do Brasil (ex: Brasil 2x1) garante <strong>20% de desconto</strong> na sua próxima compra!</div>
             </div>
             <div class="rule-item">
-                <span class="icon">🎯</span>
-                <div class="text"><strong>Vencedor:</strong> Acertar apenas quem ganhou (ou empate) vale <strong>3 pontos</strong>.</div>
+                <span class="icon">🛍️</span>
+                <div class="text"><strong>Válido na Próxima Compra:</strong> O cupom de 20% de desconto é válido para sua <strong>próxima compra</strong> na Planeta Energia. Não acumulativo.</div>
+            </div>
+            <div class="rule-item">
+                <span class="icon">🔄</span>
+                <div class="text"><strong>Por Rodada (não acumulativo):</strong> Cada rodada é independente. Acertou em uma? Na próxima rodada você pode tentar novamente! Máximo de <strong>20% por rodada</strong>.</div>
+            </div>
+            <div class="rule-item">
+                <span class="icon">👥</span>
+                <div class="text"><strong>Múltiplos Ganhadores:</strong> Se mais de uma pessoa acertar o placar exato, <strong>todas ganham</strong> o cupom de 20% de desconto!</div>
             </div>
             <div class="rule-item">
                 <span class="icon">📅</span>
-                <div class="text"><strong>Por Rodada:</strong> Cada CPF/CNPJ pode palpitar <strong>uma vez por rodada</strong>. Em rodadas diferentes, seus palpites anteriores são mantidos.</div>
+                <div class="text"><strong>Participação:</strong> Cada CPF/CNPJ pode palpitar <strong>uma vez por rodada</strong>. Em rodadas diferentes, seus palpites anteriores são mantidos.</div>
             </div>
             <div class="rule-item">
                 <span class="icon">🔒</span>
-                <div class="text"><strong>Bloqueio:</strong> Após palpitar em um jogo, você <strong>não pode alterar</strong> aquele palpite. Aguarde a próxima rodada.</div>
-            </div>
-            <div class="rule-item">
-                <span class="icon">👤</span>
-                <div class="text"><strong>Participação:</strong> Aberto para <strong>pessoas físicas (CPF)</strong> e <strong>jurídicas (CNPJ)</strong>. Necessário informar nome, documento e telefone.</div>
-            </div>
-            <div class="rule-item">
-                <span class="icon">📞</span>
-                <div class="text"><strong>Dúvidas?</strong> Fale conosco pelo WhatsApp: <strong><a href="https://wa.me/5508003328000" target="_blank">0800 332 8000</a></strong></div>
+                <div class="text"><strong>Bloqueio:</strong> Após palpitar em um jogo, você <strong>não pode alterar</strong> aquele palpite. Escolha com cuidado!</div>
             </div>
         </div>
     </div>
@@ -1273,41 +1202,7 @@
 </section>
 
 <!-- ═══════════════════════════════════════ -->
-<!-- RANKING                                -->
-<!-- ═══════════════════════════════════════ -->
-<section class="section-padding ranking-section" id="ranking">
-    <div class="container">
-        <h2 class="section-title">📊 Ranking</h2>
-        <div class="section-title-decorator">
-            <span class="line"></span>
-            <span class="diamond"></span>
-            <span class="line"></span>
-        </div>
-        <p class="section-subtitle">Classificação dos participantes</p>
-
-        <div class="ranking-empty" id="rankingVazio" style="display:block;">
-            ⏳ Nenhum participante cadastrado ainda.<br>
-            <span style="font-size:0.85rem;">Seja o primeiro a participar!</span>
-        </div>
-
-        <div class="ranking-table-wrapper" id="rankingTabelaWrapper" style="display:none;">
-            <table class="ranking-table">
-                <thead>
-                    <tr>
-                        <th style="width:60px;">Pos</th>
-                        <th>Participante</th>
-                        <th style="width:100px;">Acertos</th>
-                        <th style="width:100px;">Pontos</th>
-                    </tr>
-                </thead>
-                <tbody id="rankingBody"></tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════════════════════════════════════ -->
-<!-- FOOTER                                 -->
+<!-- RODAPÉ                                 -->
 <!-- ═══════════════════════════════════════ -->
 <footer>
     <div class="container">
@@ -1317,13 +1212,12 @@
                     BOLÃO DA COPA
                     <small style="color:rgba(255,255,255,0.5);font-size:0.5rem;">Planeta Energia 2026</small>
                 </div>
-                <p>Participe do Bolão Virtual da Copa do Mundo 2026 e concorra a prêmios incríveis!</p>
+                <p>Participe do Bolão Virtual da Copa do Mundo 2026 e<br>ganhe 20% de desconto acertando os placares!</p>
             </div>
             <div class="footer-col">
                 <h4>Links</h4>
                 <a href="#home" onclick="navegar('home')">Inicial</a>
                 <a href="#cadastro" onclick="navegar('cadastro')">Cadastro</a>
-                <a href="#ranking" onclick="navegar('ranking')">Ranking</a>
                 <a href="bolao-copa-admin.html" target="_blank">Admin</a>
             </div>
             <div class="footer-col">
@@ -1402,7 +1296,6 @@
         renderizarPalpites();
         setupMascaras();
         setupValidacao();
-        atualizarRanking();
     });
 
     async function carregarDadosPublicos() {
@@ -1612,7 +1505,6 @@
                 var msgEl = document.querySelector('#successMessage p');
                 if (msgEl) msgEl.textContent = '✅ Novos palpites adicionados! Seus palpites anteriores foram mantidos.';
             }
-            await atualizarRanking();
             mostrarToast('🎉 Palpites registrados com sucesso!');
         } catch (e) {
             btn.classList.remove('loading'); btn.disabled = false; enviando = false;
@@ -1624,29 +1516,6 @@
         var el = document.getElementById('errorMessage');
         el.textContent = '⚠️ ' + msg;
         el.classList.add('show');
-    }
-
-    // ============================================
-    // RANKING
-    // ============================================
-    async function atualizarRanking() {
-        try {
-            var res = await fetch(API_BASE + '/ranking?limit=100&offset=0', { headers: { Accept: 'application/json' } });
-            var json = await res.json();
-            var vazio = document.getElementById('rankingVazio');
-            var wrapper = document.getElementById('rankingTabelaWrapper');
-            var body = document.getElementById('rankingBody');
-            if (!json.success || !json.data.ranking || json.data.ranking.length === 0) { vazio.style.display = 'block'; wrapper.style.display = 'none'; return; }
-            vazio.style.display = 'none'; wrapper.style.display = 'block';
-            body.innerHTML = json.data.ranking.map(function(p, i) {
-                var medal = '';
-                if (i === 0) medal = '🥇';
-                else if (i === 1) medal = '🥈';
-                else if (i === 2) medal = '🥉';
-                var cls = i === 0 ? 'pos-1' : i === 1 ? 'pos-2' : i === 2 ? 'pos-3' : '';
-                return '<tr class="' + cls + '"><td><span class="pos-medal">' + medal + '</span> ' + (i + 1) + 'º</td><td><strong>' + p.nome + '</strong></td><td>' + (p.acertos_exatos || 0) + '</td><td><strong>' + (p.pontos || 0) + ' pts</strong></td></tr>';
-            }).join('');
-        } catch (e) { console.warn('Erro ao carregar ranking:', e); }
     }
 
     // ============================================
@@ -1663,7 +1532,6 @@
     // ============================================
     // EXPORT GLOBAL
     // ============================================
-    window.atualizarRanking = atualizarRanking;
     window.mostrarToast = mostrarToast;
 </script>
 
