@@ -582,9 +582,6 @@
 <script>
 // ─── Edge Functions Config ──────────────────────────────────────
 const API_BASE = 'https://shyvzreadwnvgovgrqek.supabase.co/functions/v1';
-// URL de autenticação Supabase
-const SUPABASE_AUTH_URL = 'https://shyvzreadwnvgovgrqek.supabase.co/auth/v1/token?grant_type=password';
-const ADMIN_EMAIL = 'admin@planetaenergia.com.br';
 
 let adminToken = null;
 
@@ -644,26 +641,48 @@ async function fazerLogin() {
     const senha = document.getElementById('senhaInput').value;
     const erro = document.getElementById('loginError');
     erro.classList.remove('show');
+
+    if (!senha) {
+        erro.textContent = '❌ Digite a senha do administrador';
+        erro.classList.add('show');
+        document.getElementById('senhaInput').focus();
+        return;
+    }
+
     try {
-        const res = await fetch(SUPABASE_AUTH_URL, {
+        // Chama a Edge Function /login (segura — SERVICE_ROLE_KEY no backend)
+        const res = await fetch(API_BASE + '/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: ADMIN_EMAIL, password: senha })
+            body: JSON.stringify({
+                email: 'admin@planetaenergia.com.br',
+                password: senha,
+            }),
         });
-        if (!res.ok) throw new Error('Falha no login');
-        const authData = await res.json();
-        const token = authData.access_token;
-        adminToken = token;
-        sessionStorage.setItem('bolao_admin_token', token);
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+            erro.textContent = '❌ ' + (data.error || 'Erro ao fazer login');
+            erro.classList.add('show');
+            document.getElementById('senhaInput').value = '';
+            document.getElementById('senhaInput').focus();
+            return;
+        }
+
+        // ✅ Login bem-sucedido! Armazena token
+        adminToken = data.token;
+        sessionStorage.setItem('bolao_admin_token', data.token);
+
+        document.getElementById('senhaInput').value = '';
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('appLayout').style.display = 'block';
         try { await carregarTudo(); } catch (e2) { console.warn('Erro ao carregar dados:', e2); }
         mostrarToast('✅ Login realizado com sucesso!');
-    } catch (e) {
-        erro.textContent = '❌ Senha incorreta! Tente novamente.';
+    } catch (error) {
+        console.error('Erro:', error);
+        erro.textContent = '❌ Erro ao fazer login: ' + error.message;
         erro.classList.add('show');
-        document.getElementById('senhaInput').value = '';
-        document.getElementById('senhaInput').focus();
     }
 }
 function fazerLogout() {
