@@ -1445,6 +1445,7 @@
 
         var statusEl = document.getElementById('cnpjStatus');
         var empresaField = document.getElementById('empresa');
+        console.log('📡 buscarDadosCNPJ chamado para:', digitos);
         statusEl.style.display = 'block';
         statusEl.innerHTML = '🔍 Consultando CNPJ...';
         statusEl.style.color = 'var(--gray-300)';
@@ -1454,8 +1455,10 @@
             var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
             var res = await fetch('https://www.receitaws.com.br/api/v2/cnpj/' + digitos, { signal: controller.signal });
             clearTimeout(timeoutId);
+            console.log('📡 API respondeu status:', res.status);
             if (!res.ok) throw new Error('Falha na consulta');
             var data = await res.json();
+            console.log('📡 Dados recebidos:', data.status, data.nome);
 
             if (data.status === 'ERROR') {
                 statusEl.innerHTML = '⚠️ CNPJ não encontrado na base (preencha manualmente)';
@@ -1469,6 +1472,7 @@
             var nomeEmpresa = data.nome || data.fantasia || '';
             if (nomeEmpresa) {
                 empresaField.value = nomeEmpresa;
+                console.log('📡 Empresa preenchida:', nomeEmpresa);
                 document.getElementById('nome').value = nomeEmpresa;
                 document.getElementById('nome').classList.remove('error');
                 document.getElementById('erroNome').classList.remove('show');
@@ -1479,7 +1483,7 @@
             empresaField.readOnly = true;
             return data;
         } catch (e) {
-            console.warn('Erro ao consultar API CNPJ:', e.message);
+            console.warn('📡 Erro na API CNPJ:', e.message);
             statusEl.innerHTML = '✅ CNPJ válido (API indisponível - preencha manualmente)';
             statusEl.style.color = 'var(--green)';
             empresaField.value = '';
