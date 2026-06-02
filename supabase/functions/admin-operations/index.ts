@@ -234,12 +234,45 @@ serve(async (req) => {
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
+    // OPERAÇÃO: BUSCAR PARTICIPANTE
+    if (body.operacao === 'buscar_participante') {
+      const pid = body.participante_id || body.id
+      if (!pid) {
+        return new Response(JSON.stringify({ success: false, error: '"participante_id" obrigatório' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+
+      const { data: p, error: findErr } = await supabase
+        .from('participantes')
+        .select('id, nome, documento, tipo_documento, empresa, telefone, created_at, palpites')
+        .eq('id', pid)
+        .single()
+
+      if (findErr || !p) {
+        return new Response(JSON.stringify({ success: false, error: 'Participante não encontrado' }), {
+          status: 404, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: { ...p, palpites_count: Array.isArray(p.palpites) ? p.palpites.length : 0 },
+      }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
+    }
+
     // OPERAÇÃO: LISTAR VENCEDORES
     if (body.operacao === 'listar_vencedores') {
-      const { data: vencedores, error: listErr } = await supabase
+      let query = supabase
         .from('vencedores_desconto')
-        .select('*, participantes!inner(nome)')
+        .select('*')
         .order('jogo_id', { ascending: true })
+
+      if (body.jogo_id) {
+        query = query.eq('jogo_id', body.jogo_id)
+      }
+
+      const { data: vencedores, error: listErr } = await query
 
       if (listErr) {
         console.error('Erro ao listar vencedores:', listErr)
@@ -248,8 +281,35 @@ serve(async (req) => {
         })
       }
 
+      // Buscar nomes dos participantes
+      const participantesIds = [...new Set((vencedores || []).map(v => v.participante_id))]
+      const { data: participantes } = await supabase
+        .from('participantes')
+        .select('id, nome')
+        .in('id', participantesIds.length ? participantesIds : [0])
+
+      const mapaNomes: Record<number, string> = {}
+      if (participantes) {
+        for (const p of participantes) {
+          mapaNomes[p.id] = p.nome
+        }
+      }
+
+      const dados = (vencedores || []).map(v => ({
+        id: v.id,
+        participante_nome: mapaNomes[v.participante_id] || `ID ${v.participante_id}`,
+        jogo_id: v.jogo_id,
+        rodada: v.rodada,
+        placar_realizado: v.placar_realizado,
+        cupom_codigo: v.cupom_codigo,
+        desconto_percentual: v.desconto_percentual,
+        utilizado: v.utilizado,
+        data_criacao: v.data_criacao,
+        data_validade: v.data_validade,
+      }))
+
       return new Response(JSON.stringify({
-        success: true, data: { vencedores: vencedores || [] }
+        success: true, data: { vencedores: dados }
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
@@ -287,7 +347,7 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({
       success: false,
-      error: 'Operação inválida. Use "listar_participantes", "salvar_resultado", "listar_vencedores" ou "liberar_jogo"'
+      error: 'Operação inválida. Use "listar_participantes", "buscar_participante", "salvar_resultado", "listar_vencedores" ou "liberar_jogo"'
     }), {
       status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
     })
