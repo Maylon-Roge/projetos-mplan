@@ -1496,13 +1496,25 @@
         abrirModalConfirmacaoTelefone();
     }
 
-    function abrirModalConfirmacaoTelefone() {
-        var telefone = document.getElementById('telefone').value.trim();
+    function abrirModalConfirmacaoTelefone(telefoneDigitado) {
+        var telefone = telefoneDigitado || document.getElementById('telefone').value.trim();
         var modal = document.getElementById('modal-confirmar-telefone');
+
+        // Valida formato WhatsApp
+        var val = validarWhatsApp(telefone);
+        if (!val.valido) {
+            mostrarErro('❌ ' + val.erro + '. Digite um número de WhatsApp válido.');
+            document.getElementById('telefone').focus();
+            return;
+        }
+
         document.getElementById('telefone-exibicao').textContent = telefone;
         document.getElementById('telefone-repetido').value = '';
         document.getElementById('erroConfirmacao').classList.remove('show');
+        document.getElementById('msg-validacao-whatsapp').innerHTML = '✅ Número WhatsApp válido!';
+        document.getElementById('msg-validacao-whatsapp').style.color = 'var(--green)';
         modal.style.display = 'flex';
+        document.getElementById('telefone-repetido').focus();
     }
 
     async function realizarCadastro() {
@@ -1550,9 +1562,35 @@
 
     function mostrarErro(msg) {
         var el = document.getElementById('errorMessage');
-        el.textContent = '⚠️ ' + msg;
+        el.textContent = msg;
         el.classList.add('show');
     }
+
+    // Validar se é número WhatsApp válido (formato Brasil)
+    function validarWhatsApp(telefone) {
+        var limpo = telefone.replace(/\D/g, '');
+        if (limpo.length < 10 || limpo.length > 11)
+            return { valido: false, erro: 'Telefone deve ter 10 ou 11 dígitos' };
+        if (/^(\d)\1{9,10}$/.test(limpo))
+            return { valido: false, erro: 'Número inválido (dígitos repetidos)' };
+        if (/^1234567890/.test(limpo) || /^9876543210/.test(limpo))
+            return { valido: false, erro: 'Número inválido (sequência)' };
+        return { valido: true, erro: null };
+    }
+
+    // Abrir modal de confirmação ao sair do campo telefone
+    document.getElementById('telefone').addEventListener('blur', function() {
+        var tel = this.value.trim();
+        if (!tel) return;
+        var val = validarWhatsApp(tel);
+        if (!val.valido) {
+            mostrarErro('❌ ' + val.erro);
+            this.classList.add('error');
+        } else {
+            document.getElementById('errorMessage').classList.remove('show');
+            this.classList.remove('error');
+        }
+    });
 
     // ============================================
     // TOAST
@@ -1580,6 +1618,7 @@
     <div style="margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:var(--radius);">
       <p style="color:var(--gray-400);margin:0;font-size:0.78rem;">Número digitado:</p>
       <p id="telefone-exibicao" style="color:var(--blue);font-size:1.2rem;font-weight:700;margin:4px 0 0;"></p>
+      <p id="msg-validacao-whatsapp" style="color:var(--green);font-size:0.78rem;margin-top:4px;display:none;">✅ Número WhatsApp válido</p>
     </div>
 
     <label style="display:block;color:var(--gray-500);margin-bottom:6px;font-weight:600;font-size:0.88rem;">Repita o telefone:</label>
@@ -1600,6 +1639,14 @@ document.getElementById('btn-confirmar-telefone').addEventListener('click', func
   var repetido = document.getElementById('telefone-repetido').value.trim();
   if (repetido !== digitado) {
     document.getElementById('erroConfirmacao').classList.add('show');
+    return;
+  }
+  // Valida WhatsApp no momento da confirmação
+  var val = validarWhatsApp(repetido);
+  if (!val.valido) {
+    mostrarErro('❌ ' + val.erro);
+    document.getElementById('modal-confirmar-telefone').style.display = 'none';
+    document.getElementById('telefone').focus();
     return;
   }
   document.getElementById('modal-confirmar-telefone').style.display = 'none';
