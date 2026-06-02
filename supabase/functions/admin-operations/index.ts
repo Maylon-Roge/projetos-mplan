@@ -7,11 +7,98 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const RATE_LIMIT = { max: 1000, windowMinutes: 60, name: 'admin' }
 
+// Mapeamento de jogo_id → rodada
+const RODADA_POR_JOGO: Record<number, string> = {
+  1: '1ª Rodada',
+  2: '2ª Rodada',
+  3: '3ª Rodada',
+  4: '2ª Fase (32 avos)',
+  5: 'Oitavas de Final',
+  6: 'Quartas de Final',
+  7: 'Semifinal',
+  8: 'Final',
+}
+
 function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  }
+}
+
+// Gera cupom único para vencedor
+function gerarCupom(jogoId: number, participanteId: number): string {
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase()
+  return `BOLAO-J${jogoId}-${random}`
+}
+
+// Processa vencedores após salvar resultado
+async function processarVencedores(
+  supabase: any,
+  jogoId: number,
+  golsCasa: number,
+  golsFora: number,
+): Promise<any[]> {
+  try {
+    const rodada = RODADA_POR_JOGO[jogoId] || `Jogo ${jogoId}`
+    const placarReal = `${golsCasa}x${golsFora}`
+
+    // 1. Busca todos os participantes com palpites
+    const { data: participantes, error: err } = await supabase
+      .from('participantes')
+      .select('id, nome, palpites')
+      .not('palpites', 'is', null)
+
+    if (err) throw err
+    if (!participantes || participantes.length === 0) return []
+
+    const vencedores: any[] = []
+
+    // 2. Varre cada participante
+    for (const p of participantes) {
+      if (!Array.isArray(p.palpites)) continue
+
+      // 3. Procura palpite deste jogo
+      const palpite = p.palpites.find((pp: any) => pp.jogo_id === jogoId)
+      if (!palpite) continue
+
+      // 4. Verifica se acertou placar exato
+      if (palpite.gols_casa !== golsCasa || palpite.gols_fora !== golsFora) continue
+
+      // 5. ACERTOU! Gera cupom
+      const cupomCodigo = gerarCupom(jogoId, p.id)
+      const dataValidade = new Date()
+      dataValidade.setDate(dataValidade.getDate() + 30)
+
+      // 6. Salva na tabela vencedores_desconto
+      const { error: insertErr } = await supabase
+        .from('vencedores_desconto')
+        .insert({
+          participante_id: p.id,
+          jogo_id: jogoId,
+          rodada: rodada,
+          placar_realizado: placarReal,
+          desconto_percentual: 20,
+          cupom_codigo: cupomCodigo,
+          data_validade: dataValidade.toISOString(),
+          utilizado: false,
+        })
+
+      if (!insertErr) {
+        vencedores.push({
+          participante_id: p.id,
+          nome: p.nome,
+          cupom: cupomCodigo,
+          desconto: '20%',
+        })
+      }
+    }
+
+    return vencedores
+  } catch (err) {
+    console.error('Erro ao processar vencedores:', err)
+    return []
   }
 }
 
@@ -93,7 +180,7 @@ serve(async (req) => {
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
-    // OPERAÇÃO: SALVAR RESULTADO
+    // OPERAÇÃO: SALVAR RESULTADO + PROCESSAR VENCEDORES
     if (body.operacao === 'salvar_resultado') {
       if (!body.jogo_id) {
         return new Response(JSON.stringify({ success: false, error: '"jogo_id" obrigatório' }), {
@@ -130,8 +217,39 @@ serve(async (req) => {
         dados_novos: { gols_casa: body.gols_casa, gols_fora: body.gols_fora }, status: 'sucesso',
       }).select())
 
+      // Processa vencedores — quem acertou placar exato ganha 20% de desconto
+      const vencedores = await processarVencedores(
+        supabase, body.jogo_id, body.gols_casa, body.gols_fora,
+      )
+
+      const msgVencedores = vencedores.length > 0
+        ? `${vencedores.length} vencedor${vencedores.length > 1 ? 'es' : ''} criado${vencedores.length > 1 ? 's' : ''}!`
+        : 'Nenhum palpite acertou o placar exato.'
+
       return new Response(JSON.stringify({
-        success: true, data: { jogo_id: body.jogo_id, gols_casa: body.gols_casa, gols_fora: body.gols_fora }
+        success: true,
+        data: { jogo_id: body.jogo_id, gols_casa: body.gols_casa, gols_fora: body.gols_fora },
+        vencedores: vencedores,
+        mensagem: `Resultado salvo! ${msgVencedores}`,
+      }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
+    }
+
+    // OPERAÇÃO: LISTAR VENCEDORES
+    if (body.operacao === 'listar_vencedores') {
+      const { data: vencedores, error: listErr } = await supabase
+        .from('vencedores_desconto')
+        .select('*, participantes!inner(nome)')
+        .order('jogo_id', { ascending: true })
+
+      if (listErr) {
+        console.error('Erro ao listar vencedores:', listErr)
+        return new Response(JSON.stringify({ success: false, error: 'Erro ao listar vencedores' }), {
+          status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+
+      return new Response(JSON.stringify({
+        success: true, data: { vencedores: vencedores || [] }
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
@@ -167,7 +285,10 @@ serve(async (req) => {
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
-    return new Response(JSON.stringify({ success: false, error: 'Operação inválida. Use "listar_participantes", "salvar_resultado" ou "liberar_jogo"' }), {
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'Operação inválida. Use "listar_participantes", "salvar_resultado", "listar_vencedores" ou "liberar_jogo"'
+    }), {
       status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
     })
   } catch (error) {
