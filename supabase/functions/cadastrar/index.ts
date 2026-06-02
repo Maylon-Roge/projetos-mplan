@@ -95,8 +95,8 @@ serve(async (req) => {
       const palpitesNovos = body.palpites || []
 
       // Extrair IDs dos jogos já palpitados
-      const jogosAntigos = new Set(palpitesAntigos.map(p => p.jogoId))
-      const jogosNovos = palpitesNovos.map(p => p.jogoId)
+      const jogosAntigos = new Set(palpitesAntigos.map(p => p.jogo_id))
+      const jogosNovos = palpitesNovos.map(p => p.jogo_id)
 
       // Verificar se algum jogo novo já foi palpitado antes (mesma rodada)
       const conflitos = jogosNovos.filter(id => jogosAntigos.has(id))
@@ -166,8 +166,8 @@ serve(async (req) => {
 
         if (retryExisting) {
           const merged = [...(retryExisting.palpites || [])]
-          const existingIds = new Set(merged.map(p => p.jogoId))
-          const novos = (body.palpites || []).filter(p => !existingIds.has(p.jogoId))
+          const existingIds = new Set(merged.map(p => p.jogo_id))
+          const novos = (body.palpites || []).filter(p => !existingIds.has(p.jogo_id))
 
           if (novos.length === 0) {
             return new Response(
