@@ -1489,11 +1489,12 @@
             return data;
         } catch (e) {
             console.warn('📡 Erro na API CNPJ:', e.message);
-            statusEl.innerHTML = '✅ CNPJ válido (API indisponível - preencha manualmente)';
+            statusEl.innerHTML = '✅ CNPJ válido (preencha o nome da empresa manualmente)';
             statusEl.style.color = 'var(--green)';
             empresaField.value = '';
             empresaField.readOnly = false;
             empresaField.placeholder = 'Digite o nome da empresa';
+            empresaField.focus();
             return null;
         }
     }
