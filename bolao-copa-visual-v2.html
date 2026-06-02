@@ -219,16 +219,6 @@
             background: var(--yellow);
             border-radius: 2px;
         }
-        .nav-admin {
-            background: var(--yellow) !important;
-            color: var(--blue) !important;
-            font-weight: 700 !important;
-            margin-left: 4px;
-        }
-        .nav-admin:hover {
-            background: var(--yellow-dark) !important;
-            transform: translateY(-1px);
-        }
         .menu-toggle {
             display: none;
             background: none;
@@ -918,8 +908,6 @@
             nav.open { display: flex; }
             nav a { padding: 10px 14px; border-radius: 6px; }
             nav a.active::after { display: none; }
-            .nav-admin { margin-left: 0; }
-
             .hero { padding: 55px 0 50px; }
             .hero h1 { font-size: 2rem; }
             .hero h1 span { font-size: 0.85rem; }
@@ -978,7 +966,6 @@
             <a href="#palpites" onclick="navegar('palpites')">Jogos</a>
             <a href="#regras" onclick="navegar('regras')">Regras</a>
             <a href="#cadastro" onclick="navegar('cadastro')">Cadastro</a>
-            <a href="bolao-copa-admin.html" target="_blank" class="nav-admin">⚙️ Admin</a>
         </nav>
     </div>
 </header>
@@ -1219,7 +1206,6 @@
                 <h4>Links</h4>
                 <a href="#home" onclick="navegar('home')">Inicial</a>
                 <a href="#cadastro" onclick="navegar('cadastro')">Cadastro</a>
-                <a href="bolao-copa-admin.html" target="_blank">Admin</a>
             </div>
             <div class="footer-col">
                 <h4>Contato</h4>
