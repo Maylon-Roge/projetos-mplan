@@ -17,6 +17,30 @@ function corsHeaders() {
   }
 }
 
+function validarCPF(cpf: string): boolean {
+  const d = cpf.replace(/\D/g, '')
+  if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false
+  let s = 0; for (let i = 0; i < 9; i++) s += parseInt(d[i]) * (10 - i)
+  let r = (s * 10) % 11; if (r === 10) r = 0
+  if (r !== parseInt(d[9])) return false
+  s = 0; for (let i = 0; i < 10; i++) s += parseInt(d[i]) * (11 - i)
+  r = (s * 10) % 11; if (r === 10) r = 0
+  if (r !== parseInt(d[10])) return false
+  return true
+}
+
+function validarCNPJ(cnpj: string): boolean {
+  const d = cnpj.replace(/\D/g, '')
+  if (d.length !== 14 || /^(\d)\1{13}$/.test(d)) return false
+  const p1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+  let s = 0; for (let i = 0; i < 12; i++) s += parseInt(d[i]) * p1[i]
+  if ((s % 11 < 2 ? 0 : 11 - (s % 11)) !== parseInt(d[12])) return false
+  const p2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
+  s = 0; for (let i = 0; i < 13; i++) s += parseInt(d[i]) * p2[i]
+  if ((s % 11 < 2 ? 0 : 11 - (s % 11)) !== parseInt(d[13])) return false
+  return true
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders() })
@@ -65,8 +89,14 @@ serve(async (req) => {
 
     const doc = (body.documento || '').replace(/\D/g, '')
     if (!doc) errors.push('Documento é obrigatório')
-    else if (body.tipo_documento === 'cpf' && doc.length !== 11) errors.push('CPF deve ter 11 dígitos')
-    else if (body.tipo_documento === 'cnpj' && doc.length !== 14) errors.push('CNPJ deve ter 14 dígitos')
+    else if (body.tipo_documento === 'cpf') {
+      if (doc.length !== 11) errors.push('CPF deve ter 11 dígitos')
+      else if (!validarCPF(doc)) errors.push('CPF inválido')
+    }
+    else if (body.tipo_documento === 'cnpj') {
+      if (doc.length !== 14) errors.push('CNPJ deve ter 14 dígitos')
+      else if (!validarCNPJ(doc)) errors.push('CNPJ inválido')
+    }
     else if (!['cpf', 'cnpj'].includes(body.tipo_documento || '')) errors.push('tipo_documento deve ser "cpf" ou "cnpj"')
 
     if (body.tipo_documento === 'cnpj' && (!body.empresa || !body.empresa.trim())) errors.push('Empresa é obrigatória para CNPJ')
