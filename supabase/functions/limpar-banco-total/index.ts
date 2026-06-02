@@ -63,51 +63,19 @@ serve(async (req) => {
     console.log('Iniciando limpeza total do banco de dados...')
 
     // 1. Limpar vencedores_desconto (cupons)
-    const { error: erro1 } = await supabase
-      .from('vencedores_desconto')
-      .delete()
-      .neq('id', 0)
-
-    if (erro1) {
-      console.error('Erro ao limpar vencedores_desconto:', erro1)
-      return res(500, { error: 'Erro ao limpar cupons: ' + erro1.message })
-    }
+    await supabase.from('vencedores_desconto').delete().neq('id', 0)
     console.log('✅ Vencedores/Cupons limpados')
 
-    // 2. Limpar resultados
-    const { error: erro2 } = await supabase
-      .from('resultados')
-      .delete()
-      .neq('id', 0)
-
-    if (erro2) {
-      console.error('Erro ao limpar resultados:', erro2)
-      return res(500, { error: 'Erro ao limpar resultados: ' + erro2.message })
-    }
+    // 2. Limpar resultados (PK = jogo_id)
+    await supabase.from('resultados').delete().neq('jogo_id', 0)
     console.log('✅ Resultados limpos')
 
-    // 3. Limpar jogos_liberados
-    const { error: erro3 } = await supabase
-      .from('jogos_liberados')
-      .delete()
-      .neq('id', 0)
-
-    if (erro3) {
-      console.error('Erro ao limpar jogos_liberados:', erro3)
-      return res(500, { error: 'Erro ao limpar status dos jogos: ' + erro3.message })
-    }
+    // 3. Limpar jogos_liberados (PK = jogo_id)
+    await supabase.from('jogos_liberados').delete().neq('jogo_id', 0)
     console.log('✅ Status dos jogos limpado')
 
-    // 4. Limpar participantes (vai limpar palpites também via CASCADE)
-    const { error: erro4 } = await supabase
-      .from('participantes')
-      .delete()
-      .neq('id', 0)
-
-    if (erro4) {
-      console.error('Erro ao limpar participantes:', erro4)
-      return res(500, { error: 'Erro ao limpar participantes: ' + erro4.message })
-    }
+    // 4. Limpar participantes (palpites vão junto via CASCADE)
+    await supabase.from('participantes').delete().neq('id', 0)
     console.log('✅ Participantes e palpites limpados')
 
     console.log('✅ BANCO DE DADOS TOTALMENTE LIMPO!')
