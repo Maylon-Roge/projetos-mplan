@@ -1,115 +1,124 @@
-// ============================================
-// SUPABASE EDGE FUNCTION: limpar-banco-total
-// DELETA 100% dos dados de teste do banco
-// ============================================
-
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.6'
-import { verifyJWT } from '../_shared/jwt-helper.ts'
 
-serve(async (req: Request): Promise<Response> => {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+async function verifyJWT(token: string) {
+  try {
+    const parts = token.split('.')
+    if (parts.length !== 3) return null
+    const payload = JSON.parse(
+      new TextDecoder().decode(
+        Uint8Array.from(atob(parts[1]), (c) => c.charCodeAt(0))
+      )
+    )
+    if (payload.exp && payload.exp * 1000 < Date.now()) return null
+    return payload
+  } catch {
+    return null
+  }
+}
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+function res(status: number, data: any) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  })
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders })
   }
 
-  if (req.method === 'OPTIONS')
-    return new Response(null, { status: 204, headers: corsHeaders })
-
-  if (req.method !== 'POST')
-    return new Response(JSON.stringify({ success: false, error: 'Método não permitido' }),
-      { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+  if (req.method !== 'POST') {
+    return res(405, { error: 'Método não permitido' })
+  }
 
   try {
-    // Auth check
     const auth = req.headers.get('Authorization')
-    if (!auth || !auth.startsWith('Bearer '))
-      return new Response(JSON.stringify({ code: 'UNAUTHORIZED_MISSING_TOKEN', message: 'Token não fornecido' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    if (!auth || !auth.startsWith('Bearer ')) {
+      return res(401, { error: 'Token não fornecido' })
+    }
 
     const token = auth.slice(7)
     const payload = await verifyJWT(token)
-    if (!payload || !payload.sub)
-      return new Response(JSON.stringify({ code: 'UNAUTHORIZED_INVALID_TOKEN', message: 'Token inválido ou expirado' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-
-    // Supabase client com service_role (bypass RLS)
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_KEY') || ''
-    if (!supabaseUrl || !supabaseKey) {
-      console.error('Env vars SUPABASE_URL ou SUPABASE_SERVICE_KEY não configuradas')
-      return new Response(JSON.stringify({ success: false, error: 'Erro de configuração do servidor' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    if (!payload || !payload.sub) {
+      return res(401, { error: 'Token inválido' })
     }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+
+    if (!supabaseUrl || !supabaseKey) {
+      return res(500, { error: 'Env vars não configuradas' })
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const deleted = {
-      palpites: 0,
-      resultados: 0,
-      jogos_liberados: 0,
-      participantes: 0,
-    }
+    console.log('Iniciando limpeza total do banco de dados...')
 
-    // 1) Limpar palpites (JSONB dentro de participantes)
-    const { error: errPalpites, count: cPalpites } = await supabase
-      .from('participantes')
-      .update({ palpites: [] })
+    // 1. Limpar vencedores_desconto (cupons)
+    const { error: erro1 } = await supabase
+      .from('vencedores_desconto')
+      .delete()
       .neq('id', 0)
-      .select('*', { count: 'exact', head: true })
-    if (errPalpites) {
-      console.error('Erro ao limpar palpites:', errPalpites.message)
-    } else {
-      deleted.palpites = cPalpites ?? 0
-    }
 
-    // 2) DELETE todos os resultados
-    const { error: errResultados, count: cResultados } = await supabase
+    if (erro1) {
+      console.error('Erro ao limpar vencedores_desconto:', erro1)
+      return res(500, { error: 'Erro ao limpar cupons: ' + erro1.message })
+    }
+    console.log('✅ Vencedores/Cupons limpados')
+
+    // 2. Limpar resultados
+    const { error: erro2 } = await supabase
       .from('resultados')
       .delete()
-      .neq('jogo_id', 0)
-      .select('*', { count: 'exact', head: true })
-    if (errResultados) {
-      console.error('Erro resultados:', errResultados.message)
-    } else {
-      deleted.resultados = cResultados ?? 0
-    }
+      .neq('id', 0)
 
-    // 3) DELETE todos os jogos_liberados
-    const { error: errLiberados, count: cLiberados } = await supabase
+    if (erro2) {
+      console.error('Erro ao limpar resultados:', erro2)
+      return res(500, { error: 'Erro ao limpar resultados: ' + erro2.message })
+    }
+    console.log('✅ Resultados limpos')
+
+    // 3. Limpar jogos_liberados
+    const { error: erro3 } = await supabase
       .from('jogos_liberados')
       .delete()
-      .neq('jogo_id', 0)
-      .select('*', { count: 'exact', head: true })
-    if (errLiberados) {
-      console.error('Erro liberados:', errLiberados.message)
-    } else {
-      deleted.jogos_liberados = cLiberados ?? 0
-    }
+      .neq('id', 0)
 
-    // 4) DELETE todos os participantes
-    const { error: errParticipantes, count: cParticipantes } = await supabase
+    if (erro3) {
+      console.error('Erro ao limpar jogos_liberados:', erro3)
+      return res(500, { error: 'Erro ao limpar status dos jogos: ' + erro3.message })
+    }
+    console.log('✅ Status dos jogos limpado')
+
+    // 4. Limpar participantes (vai limpar palpites também via CASCADE)
+    const { error: erro4 } = await supabase
       .from('participantes')
       .delete()
       .neq('id', 0)
-      .select('*', { count: 'exact', head: true })
-    if (errParticipantes) {
-      console.error('Erro participantes:', errParticipantes.message)
-    } else {
-      deleted.participantes = cParticipantes ?? 0
+
+    if (erro4) {
+      console.error('Erro ao limpar participantes:', erro4)
+      return res(500, { error: 'Erro ao limpar participantes: ' + erro4.message })
     }
+    console.log('✅ Participantes e palpites limpados')
 
-    return new Response(JSON.stringify({
+    console.log('✅ BANCO DE DADOS TOTALMENTE LIMPO!')
+
+    return res(200, {
       success: true,
-      message: '✅ Banco de dados limpo completamente!',
-      data: { deleted }
-    }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-
+      message: 'Banco de dados limpo completamente! ✅\n\n✅ Vencedores/Cupons\n✅ Resultados\n✅ Jogos liberados\n✅ Participantes\n✅ Palpites',
+      timestamp: new Date().toISOString(),
+    })
   } catch (err) {
-    console.error('Erro interno:', err)
-    return new Response(JSON.stringify({
-      success: false,
-      error: err instanceof Error ? err.message : 'Erro interno do servidor'
-    }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    console.error('Erro geral:', err)
+    return res(500, { error: 'Erro interno: ' + String(err) })
   }
 })
