@@ -1167,6 +1167,7 @@
                     <label id="labelDocumento">CPF *</label>
                     <input type="text" id="documento" placeholder="000.000.000-00" maxlength="18">
                     <div class="field-error" id="erroDocumento">⚠️ Documento inválido</div>
+                    <div class="field-success" id="cnpjStatus" style="display:none;font-size:0.82rem;margin-top:4px;"></div>
                 </div>
                 <div class="form-group" id="empresaGroup" style="display:none;">
                     <label>Empresa *</label>
@@ -1390,12 +1391,28 @@
     }
 
     function setupValidacao() {
-        ['nome', 'documento', 'telefone'].forEach(function(id) {
+        ['nome', 'telefone'].forEach(function(id) {
             document.getElementById(id).addEventListener('blur', function() {
                 var erroId = 'erro' + id.charAt(0).toUpperCase() + id.slice(1);
                 if (!this.value.trim()) { this.classList.add('error'); document.getElementById(erroId).classList.add('show'); }
                 else { this.classList.remove('error'); document.getElementById(erroId).classList.remove('show'); }
             });
+        });
+        // Validação especial para documento (CPF/CNPJ + lookup CNPJ)
+        document.getElementById('documento').addEventListener('blur', function() {
+            var val = this.value.trim();
+            var erroEl = document.getElementById('erroDocumento');
+            var statusEl = document.getElementById('cnpjStatus');
+            if (!val) { this.classList.add('error'); erroEl.classList.add('show'); statusEl.style.display = 'none'; return; }
+            if (!validarDocumento(val)) { this.classList.add('error'); erroEl.classList.add('show'); statusEl.style.display = 'none'; return; }
+            this.classList.remove('error'); erroEl.classList.remove('show');
+            // Se for CNPJ, busca dados via API
+            var digitos = val.replace(/\D/g, '');
+            if (tipoDocumento === 'cnpj' && digitos.length === 14) {
+                buscarDadosCNPJ(val);
+            } else {
+                statusEl.style.display = 'none';
+            }
         });
     }
 
@@ -1433,6 +1450,46 @@
         var dig2 = resto < 2 ? 0 : 11 - resto;
         if (dig2 !== parseInt(digitos[13])) return false;
         return true;
+    }
+
+    // Busca dados de CNPJ na API pública da ReceitaWS
+    async function buscarDadosCNPJ(cnpj) {
+        var digitos = cnpj.replace(/\D/g, '');
+        if (digitos.length !== 14) return null;
+
+        var statusEl = document.getElementById('cnpjStatus');
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '🔍 Consultando CNPJ...';
+        statusEl.style.color = 'var(--gray-300)';
+
+        try {
+            var res = await fetch('https://www.receitaws.com.br/api/v2/cnpj/' + digitos);
+            if (!res.ok) throw new Error('Falha na consulta');
+            var data = await res.json();
+
+            if (data.status === 'ERROR') {
+                statusEl.innerHTML = '❌ ' + data.message;
+                statusEl.style.color = 'var(--red)';
+                return null;
+            }
+
+            var nomeEmpresa = data.nome || data.fantasia || '';
+            if (nomeEmpresa) {
+                document.getElementById('empresa').value = nomeEmpresa;
+                document.getElementById('nome').value = nomeEmpresa;
+                document.getElementById('nome').classList.remove('error');
+                document.getElementById('erroNome').classList.remove('show');
+            }
+
+            statusEl.innerHTML = '✅ CNPJ válido — ' + (data.fantasia || data.nome || '');
+            statusEl.style.color = 'var(--green)';
+            return data;
+        } catch (e) {
+            // Se API falhar (rate limit), permite cadastro manual
+            statusEl.innerHTML = '✅ CNPJ válido (consulta offline)';
+            statusEl.style.color = 'var(--green)';
+            return null;
+        }
     }
 
     function validarDocumento(val) {
