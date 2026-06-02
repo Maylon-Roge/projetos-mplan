@@ -1,5 +1,5 @@
 // POST /enviar-mensagem-chatguru — Envia mensagens WhatsApp via ChatGuru API
-// Tipos: boas_vindas (após cadastro) | acerto (após resultado)
+// Documentacao: action=message_send, text, key, account_id, phone_id, chat_number
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 
 const corsHeaders = {
@@ -8,9 +8,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'content-type, authorization',
 }
 
-// Credenciais ChatGuru (ideal: mover para env vars futuramente)
 const CHATGURU_API = Deno.env.get('CHATGURU_API') || 'https://app3.zap.guru/api/v1'
-const CHATGURU_API_KEY = Deno.env.get('CHATGURU_API_KEY') || 'MG93D9YGMWZCS4IS6051RSGOPFV9VU5KJHS5JM6F19S4Y1RKRGKK4YAA31LL125QRH'
+const CHATGURU_KEY = Deno.env.get('CHATGURU_KEY') || 'MG93D9YGMWZCS4IS6051RSGOPFV9VU5KJHS5JM6F19S4Y1RKRGKK4YAA31LL125QRH'
 const CHATGURU_ACCOUNT_ID = Deno.env.get('CHATGURU_ACCOUNT_ID') || '5e5ab0be696c6b7582b7a1af'
 const CHATGURU_PHONE_ID = Deno.env.get('CHATGURU_PHONE_ID') || '688b55d066c21a08583dae29'
 
@@ -28,7 +27,7 @@ serve(async (req) => {
     console.log(`📨 [ChatGuru] ${tipo_mensagem} → ${telefone}`)
 
     // Montar mensagem
-    let mensagem = ''
+    let texto = ''
     if (tipo_mensagem === 'boas_vindas') {
       const { nome, palpites } = dados
       let txt = ''
@@ -37,43 +36,53 @@ serve(async (req) => {
           txt += `\n⚽ Jogo ${p.jogo_id || '?'}: ${p.gols_casa || '?'}x${p.gols_fora || '?'}`
         })
       }
-      mensagem = `🏆 Olá ${nome}!%0ABem-vindo ao *Bolão Copa 2026* da Planeta Energia!%0A%0A📊 Seus palpites:${txt}%0A%0A🍀 Boa sorte!%0A%0A#BolãoCopa2026`
+      texto = `🏆 Olá ${nome}!\nBem-vindo ao *Bolão Copa 2026* da Planeta Energia!\n\n📊 Seus palpites:${txt}\n\n🍀 Boa sorte!\n\n#BolãoCopa2026`
     } else if (tipo_mensagem === 'acerto') {
       const { nome, placar, palpite, cupom, desconto } = dados
-      mensagem = `🎉 *PARABÉNS ${nome}!*%0A%0AVocê acertou o palpite! 🎯%0A%0A📊 Resultado: ${placar}%0A🎲 Seu palpite: ${palpite}%0A%0A💝 *PRÊMIO: ${desconto || 20}% DE DESCONTO!*%0A%0A🎁 Cupom: *${cupom}*%0AValidade: 30 dias%0A%0A🛍️ Aproveite na Planeta Energia!%0A%0A#BolãoCopa2026`
+      texto = `🎉 *PARABÉNS ${nome}!*\n\nVocê acertou o palpite! 🎯\n\n📊 Resultado: ${placar}\n🎲 Seu palpite: ${palpite}\n\n💝 *PRÊMIO: ${desconto || 20}% DE DESCONTO!*\n\n🎁 Cupom: *${cupom}*\nValidade: 30 dias\n\n🛍️ Aproveite na Planeta Energia!\n\n#BolãoCopa2026`
     }
 
-    if (!mensagem)
+    if (!texto)
       return new Response(JSON.stringify({ error: 'Tipo de mensagem inválido' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 
     // Normalizar telefone
     const tel = telefone.replace(/\D/g, '')
-    const to = tel.startsWith('55') ? `+${tel}` : `+55${tel}`
+    const chat_number = tel.startsWith('55') ? tel : `55${tel}`
 
-    // Enviar via API ChatGuru
-    const payload = new URLSearchParams()
-    payload.append('api_key', CHATGURU_API_KEY)
-    payload.append('account_id', CHATGURU_ACCOUNT_ID)
-    payload.append('phone_id', CHATGURU_PHONE_ID)
-    payload.append('to', to)
-    payload.append('message', mensagem)
-    payload.append('type', 'text')
+    // Enviar via API ChatGuru (form-urlencoded conforme documentação)
+    const params = new URLSearchParams()
+    params.append('action', 'message_send')
+    params.append('text', texto)
+    params.append('key', CHATGURU_KEY)
+    params.append('account_id', CHATGURU_ACCOUNT_ID)
+    params.append('phone_id', CHATGURU_PHONE_ID)
+    params.append('chat_number', chat_number)
 
-    console.log(`📤 Enviando para ${to}...`)
-    const res = await fetch(`${CHATGURU_API}/message/send`, {
+    console.log(`📤 Enviando para ${chat_number}...`)
+    const res = await fetch(CHATGURU_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: payload
+      body: params
     })
     const data = await res.json()
     console.log(`📬 Resposta:`, JSON.stringify(data))
 
-    if (!res.ok)
-      return new Response(JSON.stringify({ error: data.message || `HTTP ${res.status}` }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    if (!res.ok || data.result === 'error') {
+      const msg = data.description || `HTTP ${res.status}`
+      // Se nao autorizado, informa que precisa habilitar modulo de API
+      if (data.description?.includes('não autorizado')) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'API ChatGuru não autorizada. Habilite o módulo de API em Configurações > Módulos.',
+          code: 'API_UNAUTHORIZED'
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      }
+      return new Response(JSON.stringify({ success: false, error: msg }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
 
-    return new Response(JSON.stringify({ success: true, tipo_mensagem, telefone: to }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ success: true, tipo_mensagem, telefone: chat_number }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   } catch (e) {
     console.error('❌', e.message)
-    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    return new Response(JSON.stringify({ success: false, error: e.message }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })
