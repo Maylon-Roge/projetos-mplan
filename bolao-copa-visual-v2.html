@@ -1438,6 +1438,13 @@
         return true;
     }
 
+    // Mock de CNPJs para auto-preenche (enquanto API da ReceitaWS está bloqueada)
+    const CNPJ_MOCK = {
+      '27100625000262': 'NATURA &CO',
+      '11222333000181': 'Masterplan Marcenaria',
+      '42524761000189': 'Planeta Energia Comércio',
+    }
+
     // Busca dados de CNPJ na API pública da ReceitaWS
     async function buscarDadosCNPJ(cnpj) {
         var digitos = cnpj.replace(/\D/g, '');
@@ -1445,6 +1452,22 @@
 
         var statusEl = document.getElementById('cnpjStatus');
         var empresaField = document.getElementById('empresa');
+
+        // Verifica se existe nos mocks (auto-preenche instantâneo)
+        if (CNPJ_MOCK[digitos]) {
+            var nomeEmpresa = CNPJ_MOCK[digitos];
+            empresaField.value = nomeEmpresa;
+            document.getElementById('nome').value = nomeEmpresa;
+            document.getElementById('nome').classList.remove('error');
+            document.getElementById('erroNome').classList.remove('show');
+            statusEl.style.display = 'block';
+            statusEl.innerHTML = '✅ CNPJ válido — ' + nomeEmpresa;
+            statusEl.style.color = 'var(--green)';
+            empresaField.readOnly = true;
+            console.log('📡 CNPJ preenchido via MOCK:', nomeEmpresa);
+            return { nome: nomeEmpresa };
+        }
+
         console.log('📡 buscarDadosCNPJ chamado para:', digitos);
         statusEl.style.display = 'block';
         statusEl.innerHTML = '🔍 Consultando CNPJ...';
