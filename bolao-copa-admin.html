@@ -582,9 +582,8 @@
 <script>
 // ─── Edge Functions Config ──────────────────────────────────────
 const API_BASE = 'https://shyvzreadwnvgovgrqek.supabase.co/functions/v1';
-// Anon key mantida APENAS para o login (Supabase Auth requer apikey no header)
+// URL de autenticação Supabase
 const SUPABASE_AUTH_URL = 'https://shyvzreadwnvgovgrqek.supabase.co/auth/v1/token?grant_type=password';
-const SUPABASE_ANON_KEY = 'sb_publishable_ld6hyjwZ68w_hD4UoJdItg_NYuR-dfU';
 const ADMIN_EMAIL = 'admin@planetaenergia.com.br';
 
 let adminToken = null;
@@ -648,7 +647,7 @@ async function fazerLogin() {
     try {
         const res = await fetch(SUPABASE_AUTH_URL, {
             method: 'POST',
-            headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: ADMIN_EMAIL, password: senha })
         });
         if (!res.ok) throw new Error('Falha no login');
