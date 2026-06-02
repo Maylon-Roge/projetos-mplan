@@ -1636,9 +1636,23 @@
 
 <script>
 // Handlers do modal de confirmação de telefone
+// Função para formatar telefone enquanto digita
+function formatarTelefone(valor) {
+  var n = valor.replace(/\D/g, '');
+  if (n.length === 0) return '';
+  if (n.length <= 2) return '(' + n;
+  if (n.length <= 7) return '(' + n.slice(0, 2) + ') ' + n.slice(2);
+  return '(' + n.slice(0, 2) + ') ' + n.slice(2, 7) + '-' + n.slice(7, 11);
+}
+
+// Máscara no campo de confirmação
+document.getElementById('telefone-repetido').addEventListener('input', function() {
+  this.value = formatarTelefone(this.value);
+});
+
 document.getElementById('btn-confirmar-telefone').addEventListener('click', function() {
-  var digitado = document.getElementById('telefone').value.trim();
-  var repetido = document.getElementById('telefone-repetido').value.trim();
+  var digitado = document.getElementById('telefone').value.trim().replace(/\D/g, '');
+  var repetido = document.getElementById('telefone-repetido').value.trim().replace(/\D/g, '');
   if (repetido !== digitado) {
     document.getElementById('erroConfirmacao').classList.add('show');
     return;
