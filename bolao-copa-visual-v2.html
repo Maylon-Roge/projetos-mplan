@@ -1444,24 +1444,31 @@
         if (digitos.length !== 14) return null;
 
         var statusEl = document.getElementById('cnpjStatus');
+        var empresaField = document.getElementById('empresa');
         statusEl.style.display = 'block';
         statusEl.innerHTML = '🔍 Consultando CNPJ...';
         statusEl.style.color = 'var(--gray-300)';
 
         try {
-            var res = await fetch('https://www.receitaws.com.br/api/v2/cnpj/' + digitos);
+            var controller = new AbortController();
+            var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
+            var res = await fetch('https://www.receitaws.com.br/api/v2/cnpj/' + digitos, { signal: controller.signal });
+            clearTimeout(timeoutId);
             if (!res.ok) throw new Error('Falha na consulta');
             var data = await res.json();
 
             if (data.status === 'ERROR') {
-                statusEl.innerHTML = '❌ ' + data.message;
-                statusEl.style.color = 'var(--red)';
+                statusEl.innerHTML = '⚠️ CNPJ não encontrado na base (preencha manualmente)';
+                statusEl.style.color = 'var(--yellow-dark)';
+                empresaField.value = '';
+                empresaField.readOnly = false;
+                empresaField.placeholder = 'Digite o nome da empresa';
                 return null;
             }
 
             var nomeEmpresa = data.nome || data.fantasia || '';
             if (nomeEmpresa) {
-                document.getElementById('empresa').value = nomeEmpresa;
+                empresaField.value = nomeEmpresa;
                 document.getElementById('nome').value = nomeEmpresa;
                 document.getElementById('nome').classList.remove('error');
                 document.getElementById('erroNome').classList.remove('show');
@@ -1469,11 +1476,15 @@
 
             statusEl.innerHTML = '✅ CNPJ válido — ' + (data.fantasia || data.nome || '');
             statusEl.style.color = 'var(--green)';
+            empresaField.readOnly = true;
             return data;
         } catch (e) {
-            console.warn('Erro ao consultar CNPJ:', e);
-            statusEl.innerHTML = '❌ CNPJ inválido ou erro na consulta';
-            statusEl.style.color = 'var(--red)';
+            console.warn('Erro ao consultar API CNPJ:', e.message);
+            statusEl.innerHTML = '✅ CNPJ válido (API indisponível - preencha manualmente)';
+            statusEl.style.color = 'var(--green)';
+            empresaField.value = '';
+            empresaField.readOnly = false;
+            empresaField.placeholder = 'Digite o nome da empresa';
             return null;
         }
     }
