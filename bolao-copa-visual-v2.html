@@ -1554,6 +1554,28 @@
                 if (msgEl) msgEl.textContent = '✅ Novos palpites adicionados! Seus palpites anteriores foram mantidos.';
             }
             mostrarToast('🎉 Palpites registrados com sucesso!');
+
+            // Enviar boas-vindas via WhatsApp (nao bloqueia se falhar)
+            try {
+                var primeiroPalpite = palpites.length > 0 ? palpites[0] : null;
+                if (primeiroPalpite) {
+                    var nomesAdversarios = {1:'Marrocos',2:'Croacia',3:'Espanha',4:'Colombia',5:'Alemanha',6:'EUA',7:'Suica',8:'Portugal'};
+                    fetch(API_BASE + '/enviar-mensagem-chatguru', {
+                        method: 'POST',
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify({
+                            telefone: dados.telefone,
+                            tipo_mensagem: 'boas_vindas',
+                            dados: {
+                                gols_casa: primeiroPalpite.casa,
+                                gols_fora: primeiroPalpite.fora,
+                                adversario: nomesAdversarios[primeiroPalpite.jogoId] || 'Time',
+                                nome: dados.nome
+                            }
+                        })
+                    }).catch(function(e){console.warn('WhatsApp:',e.message)});
+                }
+            } catch(e) { console.warn('WhatsApp error:',e); }
         } catch (e) {
             btn.classList.remove('loading'); btn.disabled = false; enviando = false;
             mostrarErro('Erro ao registrar. Tente novamente.');
