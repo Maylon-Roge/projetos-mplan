@@ -42,29 +42,53 @@ serve(async (req) => {
     const chat_number = normalizarTelefone(telefone)
     console.log(`📨 [ChatGuru] ${tipo_mensagem} → ${telefone} (norm: ${chat_number})`)
 
-    // Executa diálogo com template aprovado (inicia conversa mesmo para contatos novos)
-    const params = new URLSearchParams()
-    params.append('action', 'dialog_execute')
-    params.append('dialog_id', DIALOGO_BOAS_VINDAS)
-    params.append('key', CHATGURU_KEY)
-    params.append('account_id', CHATGURU_ACCOUNT_ID)
-    params.append('phone_id', CHATGURU_PHONE_ID)
-    params.append('chat_number', chat_number)
+    // PASSO 1: Atualizar contexto com as variáveis do template
+    const ctxParams = new URLSearchParams()
+    ctxParams.append('action', 'chat_update_context')
+    ctxParams.append('key', CHATGURU_KEY)
+    ctxParams.append('account_id', CHATGURU_ACCOUNT_ID)
+    ctxParams.append('phone_id', CHATGURU_PHONE_ID)
+    ctxParams.append('chat_number', chat_number)
 
-    // Passar variáveis do template ({{1}}, {{2}}, {{3}})
     if (dados) {
-      if (dados.gols_casa !== undefined) params.append('var__1', String(dados.gols_casa))
-      if (dados.gols_fora !== undefined) params.append('var__2', String(dados.gols_fora))
-      if (dados.adversario) params.append('var__3', dados.adversario)
-      if (dados.nome) params.append('var__4', dados.nome)
-      if (dados.cupom) params.append('var__5', dados.cupom)
+      if (dados.gols_casa !== undefined) ctxParams.append('var__1', String(dados.gols_casa))
+      if (dados.gols_fora !== undefined) ctxParams.append('var__2', String(dados.gols_fora))
+      if (dados.adversario) ctxParams.append('var__3', dados.adversario)
+      if (dados.nome) ctxParams.append('var__4', dados.nome)
+      if (dados.cupom) ctxParams.append('var__5', dados.cupom)
     }
+
+    console.log(`📤 Atualizando contexto para ${chat_number}...`)
+    const ctxRes = await fetch(CHATGURU_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: ctxParams
+    })
+    const ctxData = await ctxRes.json()
+    console.log(`📬 Contexto:`, JSON.stringify(ctxData))
+
+    if (ctxData.result === 'error') {
+      return new Response(JSON.stringify({
+        success: false,
+        error: ctxData.description || 'Erro ao atualizar contexto',
+        step: 'chat_update_context'
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
+
+    // PASSO 2: Executar diálogo com template
+    const dialogParams = new URLSearchParams()
+    dialogParams.append('action', 'dialog_execute')
+    dialogParams.append('dialog_id', DIALOGO_BOAS_VINDAS)
+    dialogParams.append('key', CHATGURU_KEY)
+    dialogParams.append('account_id', CHATGURU_ACCOUNT_ID)
+    dialogParams.append('phone_id', CHATGURU_PHONE_ID)
+    dialogParams.append('chat_number', chat_number)
 
     console.log(`📤 Executando diálogo ${DIALOGO_BOAS_VINDAS} para ${chat_number}...`)
     const res = await fetch(CHATGURU_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params
+      body: dialogParams
     })
     const data = await res.json()
     console.log(`📬 Resposta:`, JSON.stringify(data))
