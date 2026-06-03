@@ -13,7 +13,7 @@ const CHATGURU_API = Deno.env.get('CHATGURU_API') || 'https://app3.zap.guru/api/
 const CHATGURU_KEY = Deno.env.get('CHATGURU_KEY') || 'BTZP3ONB5WTZ9N12W8GHBOFHK0ZTIURPGA5CDIH7FAZFV1460KA00TUHHBDCZUM0'
 const CHATGURU_ACCOUNT_ID = Deno.env.get('CHATGURU_ACCOUNT_ID') || '5e5ab0be696c6b7582b7a1af'
 const CHATGURU_PHONE_ID = Deno.env.get('CHATGURU_PHONE_ID') || '688b55d066c21a08583dae29'
-const DIALOGO_BOAS_VINDAS = Deno.env.get('DIALOGO_BOAS_VINDAS') || '6a1efaa4776f0ae2486325a4'
+const DIALOGO_BOAS_VINDAS = Deno.env.get('DIALOGO_BOAS_VINDAS') || '6a1efdc3df3722483f10087f'
 
 // Normaliza telefone brasileiro: ChatGuru remove 9 extra de celular
 // Ex: 5591982422765 → 559182422765
@@ -50,6 +50,15 @@ serve(async (req) => {
     params.append('account_id', CHATGURU_ACCOUNT_ID)
     params.append('phone_id', CHATGURU_PHONE_ID)
     params.append('chat_number', chat_number)
+
+    // Passar variáveis do template ({{1}}, {{2}}, {{3}})
+    if (dados) {
+      if (dados.gols_casa !== undefined) params.append('var__1', String(dados.gols_casa))
+      if (dados.gols_fora !== undefined) params.append('var__2', String(dados.gols_fora))
+      if (dados.adversario) params.append('var__3', dados.adversario)
+      if (dados.nome) params.append('var__4', dados.nome)
+      if (dados.cupom) params.append('var__5', dados.cupom)
+    }
 
     console.log(`📤 Executando diálogo ${DIALOGO_BOAS_VINDAS} para ${chat_number}...`)
     const res = await fetch(CHATGURU_API, {
