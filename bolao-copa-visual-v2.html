@@ -1559,7 +1559,12 @@
             try {
                 var primeiroPalpite = palpites.length > 0 ? palpites[0] : null;
                 if (primeiroPalpite) {
-                    var nomesAdversarios = {1:'Marrocos',2:'Croacia',3:'Espanha',4:'Colombia',5:'Alemanha',6:'EUA',7:'Suica',8:'Portugal'};
+                    // Busca o adversario do Brasil na JOGOS
+                    var jogo = JOGOS.find(function(j) { return j.id === primeiroPalpite.jogoId; });
+                    var adversario = '';
+                    if (jogo) {
+                        adversario = jogo.paisCasa === 'Brasil' ? jogo.paisFora : jogo.paisCasa;
+                    }
                     fetch(API_BASE + '/enviar-mensagem-chatguru', {
                         method: 'POST',
                         headers: {'Content-Type':'application/json'},
@@ -1569,7 +1574,7 @@
                             dados: {
                                 gols_casa: primeiroPalpite.casa,
                                 gols_fora: primeiroPalpite.fora,
-                                adversario: nomesAdversarios[primeiroPalpite.jogoId] || 'Time',
+                                adversario: adversario || 'Time',
                                 nome: dados.nome
                             }
                         })
