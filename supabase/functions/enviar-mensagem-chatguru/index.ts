@@ -10,7 +10,7 @@ const corsHeaders = {
 
 // Credenciais ChatGuru (APENAS env vars — sem fallback hardcoded por segurança)
 const CHATGURU_API = Deno.env.get('CHATGURU_API') || 'https://app3.zap.guru/api/v1'
-const CHATGURU_KEY = Deno.env.get('CHATGURU_KEY') || ''
+const CHATGURU_KEY = Deno.env.get('CHATGURU_API_KEY') || Deno.env.get('CHATGURU_KEY') || ''
 const CHATGURU_ACCOUNT_ID = Deno.env.get('CHATGURU_ACCOUNT_ID') || ''
 const CHATGURU_PHONE_ID = Deno.env.get('CHATGURU_PHONE_ID') || ''
 const DIALOGO_BOAS_VINDAS = Deno.env.get('DIALOGO_BOAS_VINDAS') || ''
