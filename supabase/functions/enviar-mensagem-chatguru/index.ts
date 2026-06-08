@@ -8,12 +8,16 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'content-type, authorization',
 }
 
-// Credenciais ChatGuru (via env vars ou fallback)
+// Credenciais ChatGuru (APENAS env vars — sem fallback hardcoded por segurança)
 const CHATGURU_API = Deno.env.get('CHATGURU_API') || 'https://app3.zap.guru/api/v1'
-const CHATGURU_KEY = Deno.env.get('CHATGURU_KEY') || 'BTZP3ONB5WTZ9N12W8GHBOFHK0ZTIURPGA5CDIH7FAZFV1460KA00TUHHBDCZUM0'
-const CHATGURU_ACCOUNT_ID = Deno.env.get('CHATGURU_ACCOUNT_ID') || '5e5ab0be696c6b7582b7a1af'
-const CHATGURU_PHONE_ID = Deno.env.get('CHATGURU_PHONE_ID') || '688b55d066c21a08583dae29'
-const DIALOGO_BOAS_VINDAS = Deno.env.get('DIALOGO_BOAS_VINDAS') || '6a1efdc3df3722483f10087f'
+const CHATGURU_KEY = Deno.env.get('CHATGURU_KEY') || ''
+const CHATGURU_ACCOUNT_ID = Deno.env.get('CHATGURU_ACCOUNT_ID') || ''
+const CHATGURU_PHONE_ID = Deno.env.get('CHATGURU_PHONE_ID') || ''
+const DIALOGO_BOAS_VINDAS = Deno.env.get('DIALOGO_BOAS_VINDAS') || ''
+
+if (!CHATGURU_KEY || !CHATGURU_ACCOUNT_ID || !CHATGURU_PHONE_ID || !DIALOGO_BOAS_VINDAS) {
+  console.error('❌ CHATGURU_KEY, CHATGURU_ACCOUNT_ID, CHATGURU_PHONE_ID ou DIALOGO_BOAS_VINDAS nao configurados')
+}
 
 // Normaliza telefone brasileiro: ChatGuru remove 9 extra de celular
 // Ex: 5591982422765 → 559182422765
