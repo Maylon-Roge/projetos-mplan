@@ -46,6 +46,22 @@ serve(async (req) => {
     const chat_number = normalizarTelefone(telefone)
     console.log(`📨 [ChatGuru] ${tipo_mensagem} → ${telefone} (norm: ${chat_number})`)
 
+    // PASSO 0: Garantir que o chat existe
+    const addParams = new URLSearchParams()
+    addParams.append('action', 'chat_add')
+    addParams.append('name', dados?.nome || 'Participante Bolao')
+    addParams.append('text', 'Seu palpite: ' + (dados?.gols_casa||'?') + 'x' + (dados?.gols_fora||'?'))
+    addParams.append('key', CHATGURU_KEY)
+    addParams.append('account_id', CHATGURU_ACCOUNT_ID)
+    addParams.append('phone_id', CHATGURU_PHONE_ID)
+    addParams.append('chat_number', chat_number)
+    console.log(`📤 Adicionando chat para ${chat_number}...`)
+    await fetch(CHATGURU_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: addParams
+    })
+
     // PASSO 1: Atualizar contexto com as variáveis do template
     const ctxParams = new URLSearchParams()
     ctxParams.append('action', 'chat_update_context')
