@@ -56,11 +56,36 @@ serve(async (req) => {
     addParams.append('phone_id', CHATGURU_PHONE_ID)
     addParams.append('chat_number', chat_number)
     console.log(`📤 Adicionando chat para ${chat_number}...`)
-    await fetch(CHATGURU_API, {
+    const addRes = await fetch(CHATGURU_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: addParams
     })
+    const addData = await addRes.json()
+    console.log(`📬 Chat add:`, JSON.stringify(addData))
+
+    // Verificar se chat_add pendente, aguardar processamento
+    if (addData.chat_add_id && addData.chat_add_status === 'pending') {
+      console.log(`⏳ Chat pending, verificando status...`)
+      for (let i = 0; i < 5; i++) {
+        await new Promise(r => setTimeout(r, 2000)) // espera 2s
+        const statusParams = new URLSearchParams()
+        statusParams.append('action', 'chat_add_status')
+        statusParams.append('chat_add_id', addData.chat_add_id)
+        statusParams.append('key', CHATGURU_KEY)
+        statusParams.append('account_id', CHATGURU_ACCOUNT_ID)
+        statusParams.append('phone_id', CHATGURU_PHONE_ID)
+        statusParams.append('chat_number', chat_number)
+        const stRes = await fetch(CHATGURU_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: statusParams
+        })
+        const stData = await stRes.json()
+        console.log(`   ⏳ Status[${i+1}]: ${stData.chat_add_status}`)
+        if (stData.chat_add_status === 'done') break
+      }
+    }
 
     // PASSO 1: Atualizar contexto com as variáveis do template
     const ctxParams = new URLSearchParams()
