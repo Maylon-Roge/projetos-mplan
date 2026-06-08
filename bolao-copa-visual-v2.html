@@ -523,13 +523,83 @@
            ============================================ */
         .form-section { background: var(--white); }
         .form-card {
-            max-width: 720px;
+            max-width: 960px;
             margin: 0 auto;
-            background: var(--gray-100);
+            background: var(--white);
             border-radius: var(--radius-lg);
             padding: 40px;
             border: 1px solid var(--gray-200);
             box-shadow: var(--shadow-sm);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+        }
+        .form-grid .full { grid-column: 1 / -1; }
+        .form-grid .info-col { grid-column: 1; }
+        .form-grid .game-col { grid-column: 2; }
+
+        /* Card do Jogo (Planeta Energia) */
+        .jogo-card {
+            background: linear-gradient(135deg, #003a70 0%, #004a90 100%);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: 0 4px 15px rgba(0,58,112,0.2);
+        }
+        .jogo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 0.82rem;
+            opacity: 0.9;
+        }
+        .jogo-rodada { font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .jogo-status {
+            background: rgba(76,175,80,0.25);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+        }
+        .jogo-times {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .time { text-align: center; }
+        .time-bandeira { font-size: 2.5rem; display: block; margin-bottom: 6px; }
+        .time-nome { font-size: 0.95rem; font-weight: 700; display: block; }
+        .jogo-vs { font-size: 1.2rem; font-weight: 800; opacity: 0.6; }
+        .jogo-palpite { margin-top: 20px; }
+        .jogo-palpite label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 10px; opacity: 0.9; }
+        .jogo-inputs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+        .palpite-input {
+            width: 70px;
+            height: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+            border-radius: var(--radius);
+            background: rgba(255,255,255,0.9);
+            color: #003a70;
+        }
+        .palpite-input:focus { outline: 3px solid var(--yellow); background: var(--white); }
+        .jogo-x { font-size: 1.3rem; font-weight: 700; }
+        .jogo-info {
+            margin-top: 16px;
+            font-size: 0.78rem;
+            opacity: 0.7;
+            display: flex;
+            justify-content: space-between;
         }
         .form-card h3 {
             font-size: 1.3rem;
@@ -919,6 +989,7 @@
             .benefits-grid { grid-template-columns: 1fr; }
             .rules-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
             .form-card { padding: 24px; }
             .games-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; text-align: center; }
@@ -1143,44 +1214,67 @@
             </div>
 
             <div class="form-grid">
-                <div class="full">
+                <div class="info-col">
                     <div class="form-group">
-                        <label>Nome Completo *</label>
+                        <label>👤 Nome Completo *</label>
                         <input type="text" id="nome" placeholder="Seu nome completo" maxlength="255">
                         <div class="field-error" id="erroNome">⚠️ Nome é obrigatório (mín. 3 caracteres)</div>
                     </div>
+                    <div class="toggle-group" id="tipoToggle">
+                        <button class="toggle-btn active" data-type="cpf" onclick="setTipoDoc('cpf')" aria-pressed="true">👤 CPF</button>
+                        <button class="toggle-btn" data-type="cnpj" onclick="setTipoDoc('cnpj')" aria-pressed="false">🏢 CNPJ</button>
+                    </div>
+                    <div class="form-group">
+                        <label id="labelDocumento">📄 CPF *</label>
+                        <input type="text" id="documento" placeholder="000.000.000-00" maxlength="18">
+                        <div class="field-error" id="erroDocumento">⚠️ Documento inválido</div>
+                        <div class="field-success" id="cnpjStatus" style="display:none;font-size:0.82rem;margin-top:4px;"></div>
+                    </div>
+                    <div class="form-group" id="empresaGroup" style="display:none;">
+                        <label>🏢 Empresa *</label>
+                        <input type="text" id="empresa" placeholder="Nome da empresa">
+                        <div class="field-error" id="erroEmpresa">⚠️ Empresa é obrigatória para CNPJ</div>
+                    </div>
+                    <div class="form-group">
+                        <label>📞 Telefone *</label>
+                        <input type="tel" id="telefone" placeholder="(91) 98242-2765" maxlength="15">
+                        <div class="field-error" id="erroTelefone">⚠️ Telefone inválido (mín. 10 dígitos)</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label id="labelDocumento">CPF *</label>
-                    <input type="text" id="documento" placeholder="000.000.000-00" maxlength="18">
-                    <div class="field-error" id="erroDocumento">⚠️ Documento inválido</div>
-                    <div class="field-success" id="cnpjStatus" style="display:none;font-size:0.82rem;margin-top:4px;"></div>
-                </div>
-                <div class="form-group" id="empresaGroup" style="display:none;">
-                    <label>Empresa *</label>
-                    <input type="text" id="empresa" placeholder="Nome da empresa">
-                    <div class="field-error" id="erroEmpresa">⚠️ Empresa é obrigatória para CNPJ</div>
-                </div>
-                <div class="form-group">
-                    <label>Telefone *</label>
-                    <input type="text" id="telefone" placeholder="(00) 00000-0000">
-                    <div class="field-error" id="erroTelefone">⚠️ Telefone inválido (mín. 10 dígitos)</div>
+                <div class="game-col">
+                    <div class="jogo-card" id="jogoCard">
+                        <div class="jogo-header">
+                            <span class="jogo-rodada" id="jogoRodada">⏳ Aguardando jogo...</span>
+                            <span class="jogo-status" id="jogoStatus"></span>
+                        </div>
+                        <div class="jogo-times" id="jogoTimes">
+                            <div class="time time-casa">
+                                <span class="time-bandeira" id="bandeiraCasa">❓</span>
+                                <span class="time-nome" id="nomeCasa">Casa</span>
+                            </div>
+                            <span class="jogo-vs">VS</span>
+                            <div class="time time-fora">
+                                <span class="time-bandeira" id="bandeiraFora">❓</span>
+                                <span class="time-nome" id="nomeFora">Fora</span>
+                            </div>
+                        </div>
+                        <div class="jogo-palpite">
+                            <label>Seu palpite:</label>
+                            <div class="jogo-inputs">
+                                <input type="number" id="palpiteLiberado" class="palpite-input" min="0" max="20" placeholder="0">
+                                <span class="jogo-x">X</span>
+                                <input type="number" id="palpiteLiberadoFora" class="palpite-input" min="0" max="20" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="jogo-info">
+                            <span id="jogoLocal"></span>
+                            <span id="jogoData"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- GAMES GRID -->
-            <div style="margin-top:48px;" id="palpites">
-                <h2 class="section-title">⚽ Jogos da Copa</h2>
-                <div class="section-title-decorator">
-                    <span class="line"></span>
-                    <span class="diamond"></span>
-                    <span class="line"></span>
-                </div>
-                <p class="section-subtitle">Faça seus palpites para cada jogo do Brasil</p>
-                <div class="games-grid" id="palpitesContainer"></div>
-            </div>
-
-            <div class="field-error" id="erroPalpites" style="margin-top:12px;">⚠️ Preencha o palpite do primeiro jogo (Brasil vs Marrocos)</div>
+            <div class="field-error" id="erroPalpites" style="margin-top:12px;">⚠️ Preencha o palpite do jogo liberado</div>
 
             <div class="submit-area">
                 <button class="btn-submit" id="submitBtn" onclick="enviarPalpites()">📨 Enviar Palpites</button>
@@ -1302,35 +1396,23 @@
     }
 
     function renderizarPalpites() {
-        var container = document.getElementById('palpitesContainer');
-        container.innerHTML = JOGOS.map(function(j) {
-            var ativo = liberadosCache.includes(j.id);
-            var res = resultadosCache[j.id];
-            var ff = j.flagFora ? flagHtml(j.flagFora, j.paisFora) : '<span style="font-size:2rem;">❓</span>';
-            return '<div class="game-card' + (ativo ? '' : ' locked') + '">' +
-                '<div class="game-header">' +
-                '<span class="game-rodada">' + j.rodada + '</span>' +
-                '<span class="game-lock-badge ' + (ativo ? 'open' : 'locked') + '">' + (ativo ? '✅ Aberto' : '🔒 Bloqueado') + '</span>' +
-                '</div>' +
-                '<div class="game-teams">' +
-                '<div class="game-team">' +
-                (j.paisCasa === 'Brasil' ? '<span class="uniform-brasil"></span>' : '<span class="uniform-adversario"></span>') +
-                flagHtml(j.flagCasa, j.paisCasa) +
-                '<span class="name">' + j.paisCasa + '</span></div>' +
-                '<span class="game-vs">VS</span>' +
-                '<div class="game-team">' +
-                (j.paisFora === 'Brasil' ? '<span class="uniform-brasil"></span>' : '<span class="uniform-adversario"></span>') +
-                ff +
-                '<span class="name">' + j.paisFora + '</span></div>' +
-                '</div>' +
-                '<div class="game-inputs">' +
-                '<input type="number" min="0" max="20" class="palpite-casa" data-jogo="' + j.id + '" placeholder="0" ' + (ativo ? '' : 'disabled') + '>' +
-                '<span class="sep">×</span>' +
-                '<input type="number" min="0" max="20" class="palpite-fora" data-jogo="' + j.id + '" placeholder="0" ' + (ativo ? '' : 'disabled') + '>' +
-                '</div>' +
-                (res ? '<div class="game-meta">✅ Resultado: ' + res.casa + ' × ' + res.fora + '</div>' : '<div class="game-meta">📅 ' + j.data + ' | ' + j.local + '</div>') +
-                '</div>';
-        }).join('');
+        // Encontra o primeiro jogo liberado
+        var jogo = JOGOS.find(function(j) { return liberadosCache.includes(j.id); });
+        if (!jogo) {
+            document.getElementById('jogoRodada').textContent = '🔒 Nenhum jogo liberado';
+            return;
+        }
+        var res = resultadosCache[jogo.id];
+        document.getElementById('jogoRodada').textContent = jogo.rodada;
+        document.getElementById('jogoStatus').textContent = '✅ Liberado';
+        document.getElementById('bandeiraCasa').innerHTML = flagHtml(jogo.flagCasa, jogo.paisCasa);
+        document.getElementById('nomeCasa').textContent = jogo.paisCasa;
+        document.getElementById('bandeiraFora').innerHTML = jogo.flagFora ? flagHtml(jogo.flagFora, jogo.paisFora) : '❓';
+        document.getElementById('nomeFora').textContent = jogo.paisFora;
+        document.getElementById('jogoLocal').textContent = '📍 ' + jogo.local;
+        document.getElementById('jogoData').textContent = '📅 ' + jogo.data;
+        // Guarda ID do jogo liberado para uso no submit
+        window._jogoLiberadoId = jogo.id;
     }
 
     // ============================================
@@ -1475,9 +1557,9 @@
         else { document.getElementById('erroTelefone').classList.remove('show'); document.getElementById('telefone').classList.remove('error'); }
         if (tipoDocumento === 'cnpj' && !empresa) { document.getElementById('erroEmpresa').classList.add('show'); document.getElementById('empresa').classList.add('error'); valido = false; }
         else { document.getElementById('erroEmpresa').classList.remove('show'); document.getElementById('empresa').classList.remove('error'); }
-        var casa1 = document.querySelector('.palpite-casa[data-jogo="1"]');
-        var fora1 = document.querySelector('.palpite-fora[data-jogo="1"]');
-        if (!casa1 || !fora1 || casa1.value === '' || fora1.value === '') { document.getElementById('erroPalpites').classList.add('show'); valido = false; }
+        var palpiteCasa = document.getElementById('palpiteLiberado').value;
+        var palpiteFora = document.getElementById('palpiteLiberadoFora').value;
+        if (palpiteCasa === '' || palpiteFora === '') { document.getElementById('erroPalpites').classList.add('show'); valido = false; }
         else { document.getElementById('erroPalpites').classList.remove('show'); }
         return valido;
     }
@@ -1520,12 +1602,8 @@
         enviando = true;
         var btn = document.getElementById('submitBtn');
         btn.classList.add('loading'); btn.disabled = true;
-        var palpites = [];
-        document.querySelectorAll('.palpite-casa').forEach(function(input) {
-            var jogoId = parseInt(input.dataset.jogo);
-            var fora = document.querySelector('.palpite-fora[data-jogo="' + jogoId + '"]');
-            if (input.value !== '' && fora && fora.value !== '') { palpites.push({ jogoId: jogoId, casa: parseInt(input.value), fora: parseInt(fora.value) }); }
-        });
+        var jogoId = window._jogoLiberadoId || 1;
+        var palpites = [{ jogoId: jogoId, casa: parseInt(document.getElementById('palpiteLiberado').value), fora: parseInt(document.getElementById('palpiteLiberadoFora').value) }];
         var dados = {
             nome: document.getElementById('nome').value.trim(),
             documento: document.getElementById('documento').value.trim().replace(/\D/g, ''),
