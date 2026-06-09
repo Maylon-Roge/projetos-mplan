@@ -79,7 +79,6 @@ serve(async (req) => {
       const addP = new URLSearchParams()
       addP.append('action', 'chat_add')
       addP.append('name', vencedor.nome || 'Vencedor')
-      addP.append('text', 'Você acertou o placar!')
       addP.append('key', CHATGURU_KEY)
       addP.append('account_id', CHATGURU_ACCOUNT_ID)
       addP.append('phone_id', CHATGURU_PHONE_ID)
