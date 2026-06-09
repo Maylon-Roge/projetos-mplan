@@ -739,6 +739,26 @@
             box-shadow: var(--shadow-glow-blue);
         }
         .btn-submit.loading { opacity: 0.7; }
+        .btn-submit:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .jogo-card.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+        .jogo-card.disabled .jogo-header .jogo-status { opacity: 0; }
+        .jogo-card .jogo-bloqueado-msg {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-400);
+            font-size: 0.85rem;
+        }
+        .jogo-card.disabled .jogo-bloqueado-msg { display: block; }
 
         /* ============================================
            GAME CARDS (PALPITES) — conforme Figma
@@ -1251,11 +1271,12 @@
                     </div>
                 </div>
                 <div class="game-col">
-                    <div class="jogo-card" id="jogoCard">
+                    <div class="jogo-card disabled" id="jogoCard">
                         <div class="jogo-header">
                             <span class="jogo-rodada" id="jogoRodada">⏳ Aguardando jogo...</span>
                             <span class="jogo-status" id="jogoStatus"></span>
                         </div>
+                        <div class="jogo-bloqueado-msg">🔒 Confirme seus dados ao lado para liberar o palpite</div>
                         <div class="jogo-times" id="jogoTimes">
                             <div class="time time-casa">
                                 <span class="time-bandeira" id="bandeiraCasa">❓</span>
@@ -1479,11 +1500,14 @@
     }
 
     function setupValidacao() {
-        ['nome', 'telefone'].forEach(function(id) {
+        ['nome', 'telefone', 'documento', 'empresa'].forEach(function(id) {
             document.getElementById(id).addEventListener('blur', function() {
                 var erroId = 'erro' + id.charAt(0).toUpperCase() + id.slice(1);
                 if (!this.value.trim()) { this.classList.add('error'); document.getElementById(erroId).classList.add('show'); }
                 else { this.classList.remove('error'); document.getElementById(erroId).classList.remove('show'); }
+            });
+            document.getElementById(id).addEventListener('input', function() {
+                atualizarEstadoPalpite();
             });
         });
         // Validação especial para documento (CPF/CNPJ + lookup CNPJ)
@@ -1583,6 +1607,26 @@
         if (palpiteCasa === '' || palpiteFora === '') { document.getElementById('erroPalpites').classList.add('show'); valido = false; }
         else { document.getElementById('erroPalpites').classList.remove('show'); }
         return valido;
+    }
+
+    // ─── Controle de bloqueio do card de palpite ────────────────────
+    function atualizarEstadoPalpite() {
+        var nomeOk = document.getElementById('nome').value.trim().length > 0;
+        var docVal = document.getElementById('documento').value.trim().replace(/\D/g, '');
+        var docOk = (tipoDocumento === 'cpf' && docVal.length === 11) || (tipoDocumento === 'cnpj' && docVal.length === 14);
+        var empresaOk = (tipoDocumento !== 'cnpj') || document.getElementById('empresa').value.trim().length > 0;
+        var telOk = window._telefoneConfirmado === true;
+        var tudoOk = nomeOk && docOk && empresaOk && telOk;
+
+        var card = document.getElementById('jogoCard');
+        var btn = document.getElementById('submitBtn');
+        if (tudoOk) {
+            card.classList.remove('disabled');
+            btn.disabled = false;
+        } else {
+            card.classList.add('disabled');
+            btn.disabled = true;
+        }
     }
 
     // ============================================
@@ -1735,6 +1779,7 @@
             document.getElementById('telConfirmadoOk').style.display = 'block';
             document.getElementById('telConfirmadoErro').style.display = 'none';
             window._telefoneConfirmado = true;
+            atualizarEstadoPalpite();
         } else if (repetido.length >= original.length) {
             document.getElementById('telConfirmadoErro').style.display = 'block';
             document.getElementById('telConfirmadoOk').style.display = 'none';
@@ -1746,6 +1791,7 @@
             window._telefoneConfirmado = false;
             document.getElementById('telConfirmadoOk').style.display = 'none';
             document.getElementById('confirmacaoTelefoneInline').style.display = 'none';
+            atualizarEstadoPalpite();
         }
     });
 
