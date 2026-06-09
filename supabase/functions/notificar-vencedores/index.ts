@@ -163,12 +163,14 @@ serve(async (req) => {
         // Gerar cupom único
         const cupom = `BOLAO-BRASIL-20-${Date.now()}-${v.id}`
         const adversario = resultado.adversario || 'Adversário'
+        const placarReal = `${resultado.gols_casa}x${resultado.gols_fora}`
 
         // Salvar na tabela
         const { error: iErr } = await supabase.from('vencedores_desconto').insert({
           participante_id: v.id,
           jogo_id,
           rodada: resultado.rodada || 1,
+          placar_realizado: placarReal,
           cupom_codigo: cupom,
           desconto_percentual: 20,
           utilizado: false,

@@ -59,8 +59,8 @@ async function processarVencedores(
     for (const p of participantes) {
       if (!Array.isArray(p.palpites)) continue
 
-      // 3. Procura palpite deste jogo
-      const palpite = p.palpites.find((pp: any) => pp.jogo_id === jogoId)
+      // 3. Procura palpite deste jogo (suporta jogo_id e jogoId)
+      const palpite = p.palpites.find((pp: any) => (pp.jogo_id ?? pp.jogoId) === jogoId)
       if (!palpite) continue
 
       // 4. Verifica se acertou placar exato
