@@ -120,8 +120,6 @@ serve(async (req) => {
       ctx.append('2', String(resultado.gols_fora))
       ctx.append('var__3', adversario || 'Adversário')
       ctx.append('3', adversario || 'Adversário')
-      ctx.append('var__4', cupom)
-      ctx.append('4', cupom)
       const ctxR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: ctx })
       const ctxD = await ctxR.json()
       console.log(`📬 contexto:`, JSON.stringify(ctxD))
@@ -149,14 +147,17 @@ serve(async (req) => {
         // Verificar se já tem cupom para este jogo
         const { data: existing } = await supabase
           .from('vencedores_desconto')
-          .select('id')
+          .select('id, cupom_codigo')
           .eq('participante_id', v.id)
           .eq('jogo_id', jogo_id)
           .maybeSingle()
 
         if (existing) {
-          console.log(`⏭️ ${v.nome} já tem cupom para jogo ${jogo_id}`)
-          erros.push({ nome: v.nome, erro: 'Cupom já existe' })
+          console.log(`📨 ${v.nome} já tem cupom, reenviando WhatsApp...`)
+          const cupomExistente = existing.cupom_codigo || `BOLAO-BRASIL-20-${Date.now()}-${v.id}`
+          const adversario = resultado.adversario || 'Adversário'
+          enviarWhatsApp(v, cupomExistente, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
+          notificados.push({ id: v.id, nome: v.nome, cupom: cupomExistente })
           continue
         }
 

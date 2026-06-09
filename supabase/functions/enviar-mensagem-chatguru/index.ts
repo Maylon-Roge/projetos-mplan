@@ -115,11 +115,6 @@ serve(async (req) => {
         ctxParams.append('var_4', dados.nome)
         ctxParams.append('4', dados.nome)
       }
-      if (dados.cupom) {
-        ctxParams.append('var__5', dados.cupom)
-        ctxParams.append('var_5', dados.cupom)
-        ctxParams.append('5', dados.cupom)
-      }
     }
 
     console.log(`📤 Atualizando contexto para ${chat_number}...`)
