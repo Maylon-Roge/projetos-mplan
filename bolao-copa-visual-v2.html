@@ -1404,6 +1404,7 @@
     document.addEventListener('DOMContentLoaded', async function() {
         await carregarDadosPublicos();
         renderizarPalpites();
+        atualizarEstadoPalpite();
         setupMascaras();
         setupValidacao();
     });
@@ -1467,6 +1468,7 @@
             b.setAttribute('aria-pressed', b.dataset.type === tipo ? 'true' : 'false');
         });
         document.getElementById('labelDocumento').textContent = tipo.toUpperCase() + ' *';
+        atualizarEstadoPalpite();
         document.getElementById('documento').placeholder = tipo === 'cpf' ? '000.000.000-00' : '00.000.000/0000-00';
         document.getElementById('documento').value = '';
         document.getElementById('erroDocumento').classList.remove('show');
