@@ -313,6 +313,33 @@ serve(async (req) => {
       }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
     }
 
+    // OPERAÇÃO: SALVAR CONFIG DO JOGO
+    if (body.operacao === 'salvar_jogo_config') {
+      if (!body.jogo_id || !body.pais_fora || !body.data || !body.local) {
+        return new Response(JSON.stringify({ success: false, error: '"jogo_id", "pais_fora", "data" e "local" obrigatórios' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+      const { error: upsertError } = await supabase
+        .from('jogos_config').upsert({
+          jogo_id: body.jogo_id,
+          pais_fora: body.pais_fora,
+          flag_fora: body.flag_fora || '',
+          data: body.data,
+          local: body.local,
+          updated_at: new Date().toISOString(),
+        })
+      if (upsertError) {
+        console.error('Erro ao salvar config do jogo:', upsertError)
+        return new Response(JSON.stringify({ success: false, error: 'Erro ao salvar config do jogo' }), {
+          status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+      return new Response(JSON.stringify({
+        success: true, data: { jogo_id: body.jogo_id, pais_fora: body.pais_fora, data: body.data, local: body.local }
+      }), { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders() } })
+    }
+
     // OPERAÇÃO: LIBERAR JOGO
     if (body.operacao === 'liberar_jogo') {
       if (body.liberado === undefined) {

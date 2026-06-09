@@ -51,8 +51,10 @@ serve(async (req) => {
       try {
         const { data: resultados } = await supabase.from('resultados').select('*')
         const { data: jogosLiberados } = await supabase.from('jogos_liberados').select('*')
+        const { data: jogosConfig } = await supabase.from('jogos_config').select('*')
         if (resultados) extras.resultados = resultados
         if (jogosLiberados) extras.jogos_liberados = jogosLiberados
+        if (jogosConfig) extras.jogos_config = jogosConfig
       } catch (e) {
         console.error('Erro ao carregar dados extras:', e)
       }
