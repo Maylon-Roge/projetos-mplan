@@ -50,6 +50,7 @@ serve(async (req) => {
     const addParams = new URLSearchParams()
     addParams.append('action', 'chat_add')
     addParams.append('name', dados?.nome || 'Participante Bolao')
+    addParams.append('text', '🏆 Bolão Planeta Energia')
     addParams.append('key', CHATGURU_KEY)
     addParams.append('account_id', CHATGURU_ACCOUNT_ID)
     addParams.append('phone_id', CHATGURU_PHONE_ID)

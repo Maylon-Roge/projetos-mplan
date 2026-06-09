@@ -79,6 +79,7 @@ serve(async (req) => {
       const addP = new URLSearchParams()
       addP.append('action', 'chat_add')
       addP.append('name', vencedor.nome || 'Vencedor')
+      addP.append('text', '🎉 Você acertou!')
       addP.append('key', CHATGURU_KEY)
       addP.append('account_id', CHATGURU_ACCOUNT_ID)
       addP.append('phone_id', CHATGURU_PHONE_ID)
@@ -174,7 +175,8 @@ serve(async (req) => {
           cupom_codigo: cupom,
           desconto_percentual: 20,
           utilizado: false,
-          data_criacao: new Date().toISOString()
+          data_criacao: new Date().toISOString(),
+          data_validade: new Date(Date.now() + 30*24*60*60*1000).toISOString()
         })
 
         if (iErr) { erros.push({ nome: v.nome, erro: iErr.message }); continue }
