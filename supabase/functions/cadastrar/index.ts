@@ -17,31 +17,27 @@ function corsHeaders() {
   }
 }
 
-// Dispara WhatsApp de boas-vindas (servidor-para-servidor)
-async function enviarWhatsappBoasVindas(body: any) {
+// Enfileira WhatsApp de boas-vindas (na fila, nao bloqueia)
+async function enfileirarWhatsapp(body: any) {
   try {
-    const primeiroPalpite = Array.isArray(body.palpites) ? body.palpites[0] : null
-    if (!primeiroPalpite) return
+    const pp = Array.isArray(body.palpites) ? body.palpites[0] : null
+    if (!pp) return
     const getJogoId = (p: any) => p.jogo_id ?? p.jogoId
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
-    const { data: config } = await supabase.from('jogos_config').select('pais_fora').eq('jogo_id', getJogoId(primeiroPalpite)).maybeSingle()
-    await fetch(SUPABASE_URL + '/functions/v1/enviar-mensagem-chatguru', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        telefone: body.telefone,
-        tipo_mensagem: 'boas_vindas',
-        dados: {
-          gols_casa: primeiroPalpite.casa ?? primeiroPalpite.gols_casa ?? 0,
-          gols_fora: primeiroPalpite.fora ?? primeiroPalpite.gols_fora ?? 0,
-          adversario: config?.pais_fora || 'Time',
-          nome: body.nome?.trim() || 'Participante'
-        }
-      })
+    const { data: cfg } = await supabase.from('jogos_config').select('pais_fora').eq('jogo_id', getJogoId(pp)).maybeSingle()
+    await supabase.from('mensagens_queue').insert({
+      telefone: body.telefone?.replace(/\D/g, '') || '',
+      tipo_mensagem: 'boas_vindas',
+      dados: {
+        nome: body.nome?.trim() || 'Participante',
+        gols_casa: pp.casa ?? pp.gols_casa ?? 0,
+        gols_fora: pp.fora ?? pp.gols_fora ?? 0,
+        adversario: cfg?.pais_fora || 'Time'
+      }
     })
-    console.log('✅ WhatsApp boas-vindas disparado internamente')
+    console.log('✅ Boas-vindas enfileirada')
   } catch (e) {
-    console.warn('⚠️ WhatsApp boas-vindas (interno):', e.message)
+    console.warn('⚠️ Erro ao enfileirar:', e.message)
   }
 }
 
@@ -193,8 +189,8 @@ serve(async (req) => {
         )
       }
 
-      // Disparar WhatsApp (assíncrono, não bloqueia)
-      enviarWhatsappBoasVindas(body)
+      // Enfileirar WhatsApp (assíncrono, não bloqueia)
+      enfileirarWhatsapp(body)
 
       return new Response(
         JSON.stringify({
@@ -264,7 +260,8 @@ serve(async (req) => {
     }
 
     // Disparar WhatsApp (assíncrono, não bloqueia)
-    enviarWhatsappBoasVindas(body)
+    // Enfileirar WhatsApp (assíncrono, não bloqueia)
+    enfileirarWhatsapp(body)
 
     return new Response(
       JSON.stringify({ success: true, data: { id: data.id, nome: data.nome, merge: false } }),

@@ -69,78 +69,24 @@ serve(async (req) => {
       return num
     }
 
-    async function enviarWhatsApp(vencedor: any, cupom: string, adversario: string) {
-      const chat_number = normalizarTel(vencedor.telefone || '')
-      if (!chat_number) { console.warn(`⚠️ ${vencedor.nome}: telefone inválido`); return }
-
-      console.log(`📨 Enviando WhatsApp para ${vencedor.nome} (${chat_number})`)
-
-      // PASSO 0: Criar chat
-      const addP = new URLSearchParams()
-      addP.append('action', 'chat_add')
-      addP.append('name', vencedor.nome || 'Vencedor')
-      addP.append('text', '🎉 Você acertou!')
-      addP.append('key', CHATGURU_KEY)
-      addP.append('account_id', CHATGURU_ACCOUNT_ID)
-      addP.append('phone_id', CHATGURU_PHONE_ID)
-      addP.append('chat_number', chat_number)
-      const addR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: addP })
-      const addD = await addR.json()
-      console.log(`📬 chat_add:`, JSON.stringify(addD))
-      if (addD.result === 'error') { console.warn(`⚠️ chat_add falhou:`, addD.description); return }
-
-      // Aguardar chat_add processar
-      if (addD.chat_add_id && addD.chat_add_status === 'pending') {
-        for (let i = 0; i < 5; i++) {
-          await new Promise(r => setTimeout(r, 2000))
-          const sp = new URLSearchParams()
-          sp.append('action', 'chat_add_status')
-          sp.append('chat_add_id', addD.chat_add_id)
-          sp.append('key', CHATGURU_KEY)
-          sp.append('account_id', CHATGURU_ACCOUNT_ID)
-          sp.append('phone_id', CHATGURU_PHONE_ID)
-          sp.append('chat_number', chat_number)
-          const sr = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: sp })
-          const sd = await sr.json()
-          console.log(`  ⏳ Status[${i+1}]: ${sd.chat_add_status}`)
-          if (sd.chat_add_status === 'done') break
-        }
+    // Enfileira notificacao de vencedor (na fila, processado assincronamente)
+    async function enfileirarVencedor(vencedor: any, cupom: string, adversario: string) {
+      try {
+        await supabase.from('mensagens_queue').insert({
+          telefone: (vencedor.telefone || '').replace(/\D/g, ''),
+          tipo_mensagem: 'vencedor',
+          dados: {
+            nome: vencedor.nome || 'Vencedor',
+            gols_casa: resultado.gols_casa,
+            gols_fora: resultado.gols_fora,
+            adversario: adversario || 'Adversário',
+            cupom: cupom || ''
+          }
+        })
+        console.log(`✅ ${vencedor.nome} enfileirado`)
+      } catch (e) {
+        console.warn(`⚠️ Erro ao enfileirar ${vencedor.nome}:`, e.message)
       }
-
-      // PASSO 1: Contexto
-      const ctx = new URLSearchParams()
-      ctx.append('action', 'chat_update_context')
-      ctx.append('key', CHATGURU_KEY)
-      ctx.append('account_id', CHATGURU_ACCOUNT_ID)
-      ctx.append('phone_id', CHATGURU_PHONE_ID)
-      ctx.append('chat_number', chat_number)
-      const wrap0 = (v: number) => v === 0 ? '​0' : String(v)
-      ctx.append('var__1', wrap0(resultado.gols_casa))
-      ctx.append('var_1', wrap0(resultado.gols_casa))
-      ctx.append('1', wrap0(resultado.gols_casa))
-      ctx.append('var__2', wrap0(resultado.gols_fora))
-      ctx.append('var_2', wrap0(resultado.gols_fora))
-      ctx.append('2', wrap0(resultado.gols_fora))
-      ctx.append('var__3', adversario || 'Adversário')
-      ctx.append('var_3', adversario || 'Adversário')
-      ctx.append('3', adversario || 'Adversário')
-      const ctxR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: ctx })
-      const ctxD = await ctxR.json()
-      console.log(`📬 contexto:`, JSON.stringify(ctxD))
-      if (ctxD.result === 'error') { console.warn(`⚠️ contexto falhou:`, ctxD.description) }
-
-      // PASSO 2: Dialogo
-      const d = new URLSearchParams()
-      d.append('action', 'dialog_execute')
-      d.append('dialog_id', DIALOGO_VENCEDOR)
-      d.append('key', CHATGURU_KEY)
-      d.append('account_id', CHATGURU_ACCOUNT_ID)
-      d.append('phone_id', CHATGURU_PHONE_ID)
-      d.append('chat_number', chat_number)
-      const dR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: d })
-      const dD = await dR.json()
-      console.log(`📬 dialogo:`, JSON.stringify(dD))
-      if (dD.result === 'error') { console.warn(`⚠️ dialogo falhou:`, dD.description) }
     }
 
     const notificados: any[] = []
@@ -160,7 +106,7 @@ serve(async (req) => {
           console.log(`📨 ${v.nome} já tem cupom, reenviando WhatsApp...`)
           const cupomExistente = existing.cupom_codigo || `BOLAO-BRASIL-20-${Date.now()}-${v.id}`
           const adversario = resultado.adversario || 'Adversário'
-          enviarWhatsApp(v, cupomExistente, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
+          enfileirarVencedor(v, cupomExistente, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
           notificados.push({ id: v.id, nome: v.nome, cupom: cupomExistente })
           continue
         }
@@ -186,7 +132,7 @@ serve(async (req) => {
         if (iErr) { erros.push({ nome: v.nome, erro: iErr.message }); continue }
 
         // Enviar WhatsApp (assíncrono, não bloqueia)
-        enviarWhatsApp(v, cupom, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
+        enfileirarVencedor(v, cupom, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
         notificados.push({ id: v.id, nome: v.nome, cupom })
         console.log(`✅ ${v.nome} → ${cupom}`)
       } catch (e: any) {
