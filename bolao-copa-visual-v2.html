@@ -1602,8 +1602,25 @@
         enviando = true;
         var btn = document.getElementById('submitBtn');
         btn.classList.add('loading'); btn.disabled = true;
+        // Re-validar palpites antes de enviar
+        var palpiteCasaEl = document.getElementById('palpiteLiberado');
+        var palpiteForaEl = document.getElementById('palpiteLiberadoFora');
+        var palpiteCasa = palpiteCasaEl.value.trim();
+        var palpiteFora = palpiteForaEl.value.trim();
+        if (palpiteCasa === '' || palpiteFora === '') {
+            document.getElementById('erroPalpites').classList.add('show');
+            btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+            return;
+        }
+        var casaNum = parseInt(palpiteCasa);
+        var foraNum = parseInt(palpiteFora);
+        if (isNaN(casaNum) || isNaN(foraNum) || casaNum < 0 || foraNum < 0) {
+            document.getElementById('erroPalpites').classList.add('show');
+            btn.classList.remove('loading'); btn.disabled = false; enviando = false;
+            return;
+        }
         var jogoId = window._jogoLiberadoId || 1;
-        var palpites = [{ jogoId: jogoId, casa: parseInt(document.getElementById('palpiteLiberado').value), fora: parseInt(document.getElementById('palpiteLiberadoFora').value) }];
+        var palpites = [{ jogoId: jogoId, casa: casaNum, fora: foraNum }];
         var dados = {
             nome: document.getElementById('nome').value.trim(),
             documento: document.getElementById('documento').value.trim().replace(/\D/g, ''),
