@@ -71,9 +71,43 @@ serve(async (req) => {
 
     async function enviarWhatsApp(vencedor: any, cupom: string, adversario: string) {
       const chat_number = normalizarTel(vencedor.telefone || '')
-      if (!chat_number) return
+      if (!chat_number) { console.warn(`⚠️ ${vencedor.nome}: telefone inválido`); return }
 
-      // Contexto
+      console.log(`📨 Enviando WhatsApp para ${vencedor.nome} (${chat_number})`)
+
+      // PASSO 0: Criar chat
+      const addP = new URLSearchParams()
+      addP.append('action', 'chat_add')
+      addP.append('name', vencedor.nome || 'Vencedor')
+      addP.append('text', 'Você acertou o placar!')
+      addP.append('key', CHATGURU_KEY)
+      addP.append('account_id', CHATGURU_ACCOUNT_ID)
+      addP.append('phone_id', CHATGURU_PHONE_ID)
+      addP.append('chat_number', chat_number)
+      const addR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: addP })
+      const addD = await addR.json()
+      console.log(`📬 chat_add:`, JSON.stringify(addD))
+      if (addD.result === 'error') { console.warn(`⚠️ chat_add falhou:`, addD.description); return }
+
+      // Aguardar chat_add processar
+      if (addD.chat_add_id && addD.chat_add_status === 'pending') {
+        for (let i = 0; i < 5; i++) {
+          await new Promise(r => setTimeout(r, 2000))
+          const sp = new URLSearchParams()
+          sp.append('action', 'chat_add_status')
+          sp.append('chat_add_id', addD.chat_add_id)
+          sp.append('key', CHATGURU_KEY)
+          sp.append('account_id', CHATGURU_ACCOUNT_ID)
+          sp.append('phone_id', CHATGURU_PHONE_ID)
+          sp.append('chat_number', chat_number)
+          const sr = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: sp })
+          const sd = await sr.json()
+          console.log(`  ⏳ Status[${i+1}]: ${sd.chat_add_status}`)
+          if (sd.chat_add_status === 'done') break
+        }
+      }
+
+      // PASSO 1: Contexto
       const ctx = new URLSearchParams()
       ctx.append('action', 'chat_update_context')
       ctx.append('key', CHATGURU_KEY)
@@ -81,20 +115,19 @@ serve(async (req) => {
       ctx.append('phone_id', CHATGURU_PHONE_ID)
       ctx.append('chat_number', chat_number)
       ctx.append('var__1', String(resultado.gols_casa))
-      ctx.append('var_1', String(resultado.gols_casa))
       ctx.append('1', String(resultado.gols_casa))
       ctx.append('var__2', String(resultado.gols_fora))
-      ctx.append('var_2', String(resultado.gols_fora))
       ctx.append('2', String(resultado.gols_fora))
       ctx.append('var__3', adversario || 'Adversário')
-      ctx.append('var_3', adversario || 'Adversário')
       ctx.append('3', adversario || 'Adversário')
       ctx.append('var__4', cupom)
-      ctx.append('var_4', cupom)
       ctx.append('4', cupom)
-      await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: ctx })
+      const ctxR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: ctx })
+      const ctxD = await ctxR.json()
+      console.log(`📬 contexto:`, JSON.stringify(ctxD))
+      if (ctxD.result === 'error') { console.warn(`⚠️ contexto falhou:`, ctxD.description) }
 
-      // Diálogo (template vencedor)
+      // PASSO 2: Dialogo
       const d = new URLSearchParams()
       d.append('action', 'dialog_execute')
       d.append('dialog_id', DIALOGO_VENCEDOR)
@@ -102,7 +135,10 @@ serve(async (req) => {
       d.append('account_id', CHATGURU_ACCOUNT_ID)
       d.append('phone_id', CHATGURU_PHONE_ID)
       d.append('chat_number', chat_number)
-      await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: d })
+      const dR = await fetch(CHATGURU_API, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: d })
+      const dD = await dR.json()
+      console.log(`📬 dialogo:`, JSON.stringify(dD))
+      if (dD.result === 'error') { console.warn(`⚠️ dialogo falhou:`, dD.description) }
     }
 
     const notificados: any[] = []
