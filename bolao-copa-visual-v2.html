@@ -1291,9 +1291,9 @@
                         <div class="jogo-palpite">
                             <label>Seu palpite:</label>
                             <div class="jogo-inputs">
-                                <input type="number" id="palpiteLiberado" class="palpite-input" min="0" max="20" placeholder="0">
+                                <input type="number" id="palpiteLiberado" class="palpite-input" min="0" max="20" placeholder="--">
                                 <span class="jogo-x">X</span>
-                                <input type="number" id="palpiteLiberadoFora" class="palpite-input" min="0" max="20" placeholder="0">
+                                <input type="number" id="palpiteLiberadoFora" class="palpite-input" min="0" max="20" placeholder="--">
                             </div>
                         </div>
                         <div class="jogo-info">
@@ -1499,6 +1499,17 @@
             for (var i = 0; i < val.length; i++) { if (i === 0) m += '('; if (i === 2) m += ') '; if (i === 7) m += '-'; m += val[i]; }
             this.value = m;
         });
+        // Máscara no campo de confirmação de telefone
+        var telRepetir = document.getElementById('telefoneRepetir');
+        if (telRepetir) {
+            telRepetir.addEventListener('input', function() {
+                var val = this.value.replace(/\D/g, '');
+                if (val.length > 11) val = val.slice(0, 11);
+                var m = '';
+                for (var i = 0; i < val.length; i++) { if (i === 0) m += '('; if (i === 2) m += ') '; if (i === 7) m += '-'; m += val[i]; }
+                this.value = m;
+            });
+        }
     }
 
     function setupValidacao() {
