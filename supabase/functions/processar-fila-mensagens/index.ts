@@ -103,21 +103,14 @@ serve(async (req) => {
     let erros = 0
 
     for (let i = 0; i < 3; i++) {
-      const { data: msgs } = await supabase
-        .from('mensagens_queue')
-        .select('*')
-        .eq('status', 'pendente')
-        .order('created_at', { ascending: true })
-        .limit(1)
+      // UPDATE atomico: pega e marca como enviando em 1 operacao
+      const { data: msgs, error: lockErr } = await supabase
+        .rpc('processar_proxima_mensagem')
 
+      if (lockErr) { console.error('lock error:', lockErr); break }
       if (!msgs || msgs.length === 0) break
 
       const msg = msgs[0]
-
-      await supabase
-        .from('mensagens_queue')
-        .update({ status: 'enviando', updated_at: new Date().toISOString() })
-        .eq('id', msg.id)
 
       console.log(`📨 Processando #${msg.id}: ${msg.tipo_mensagem}`)
 

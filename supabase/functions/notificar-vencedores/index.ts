@@ -70,7 +70,7 @@ serve(async (req) => {
     }
 
     // Enfileira notificacao de vencedor (na fila, processado assincronamente)
-    async function enfileirarVencedor(vencedor: any, cupom: string, adversario: string) {
+    async function enfileirarVencedor(vencedor: any, adversario: string) {
       try {
         await supabase.from('mensagens_queue').insert({
           telefone: (vencedor.telefone || '').replace(/\D/g, ''),
@@ -79,8 +79,7 @@ serve(async (req) => {
             nome: vencedor.nome || 'Vencedor',
             gols_casa: resultado.gols_casa,
             gols_fora: resultado.gols_fora,
-            adversario: adversario || 'Adversário',
-            cupom: cupom || ''
+            adversario: adversario || 'Adversário'
           }
         })
         console.log(`✅ ${vencedor.nome} enfileirado`)
@@ -106,7 +105,7 @@ serve(async (req) => {
           console.log(`📨 ${v.nome} já tem cupom, reenviando WhatsApp...`)
           const cupomExistente = existing.cupom_codigo || `BOLAO-BRASIL-20-${Date.now()}-${v.id}`
           const adversario = resultado.adversario || 'Adversário'
-          enfileirarVencedor(v, cupomExistente, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
+          enfileirarVencedor(v, adversario)
           notificados.push({ id: v.id, nome: v.nome, cupom: cupomExistente })
           continue
         }
@@ -131,8 +130,8 @@ serve(async (req) => {
 
         if (iErr) { erros.push({ nome: v.nome, erro: iErr.message }); continue }
 
-        // Enviar WhatsApp (assíncrono, não bloqueia)
-        enfileirarVencedor(v, cupom, adversario).catch(e => console.warn(`WhatsApp ${v.nome}:`, e.message))
+        // Enfileirar notificacao (nao bloqueia)
+        enfileirarVencedor(v, adversario)
         notificados.push({ id: v.id, nome: v.nome, cupom })
         console.log(`✅ ${v.nome} → ${cupom}`)
       } catch (e: any) {
@@ -145,7 +144,7 @@ serve(async (req) => {
       vencedores_notificados: notificados,
       erros: erros,
       total: notificados.length,
-      mensagem: `${notificados.length} vencedor(es) notificado(s) com sucesso!`
+      mensagem: `${notificados.length} vencedor(es) enfileirado(s) para notificação via WhatsApp`
     })
 
   } catch (e: any) {
