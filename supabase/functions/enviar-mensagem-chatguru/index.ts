@@ -96,11 +96,31 @@ serve(async (req) => {
     ctxParams.append('chat_number', chat_number)
 
     if (dados) {
-      if (dados.gols_casa !== undefined) ctxParams.append('var__1', String(dados.gols_casa))
-      if (dados.gols_fora !== undefined) ctxParams.append('var__2', String(dados.gols_fora))
-      if (dados.adversario) ctxParams.append('var__3', dados.adversario)
-      if (dados.nome) ctxParams.append('var__4', dados.nome)
-      if (dados.cupom) ctxParams.append('var__5', dados.cupom)
+      if (dados.gols_casa !== undefined) {
+        ctxParams.append('var__1', String(dados.gols_casa))
+        ctxParams.append('var_1', String(dados.gols_casa))
+        ctxParams.append('1', String(dados.gols_casa))
+      }
+      if (dados.gols_fora !== undefined) {
+        ctxParams.append('var__2', String(dados.gols_fora))
+        ctxParams.append('var_2', String(dados.gols_fora))
+        ctxParams.append('2', String(dados.gols_fora))
+      }
+      if (dados.adversario) {
+        ctxParams.append('var__3', dados.adversario)
+        ctxParams.append('var_3', dados.adversario)
+        ctxParams.append('3', dados.adversario)
+      }
+      if (dados.nome) {
+        ctxParams.append('var__4', dados.nome)
+        ctxParams.append('var_4', dados.nome)
+        ctxParams.append('4', dados.nome)
+      }
+      if (dados.cupom) {
+        ctxParams.append('var__5', dados.cupom)
+        ctxParams.append('var_5', dados.cupom)
+        ctxParams.append('5', dados.cupom)
+      }
     }
 
     console.log(`📤 Atualizando contexto para ${chat_number}...`)
