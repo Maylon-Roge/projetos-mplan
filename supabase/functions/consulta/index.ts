@@ -77,10 +77,8 @@ serve(async (req) => {
       data: {
         nome: p.nome,
         documento: docMask,
-        documento_raw: p.documento,
         tipo_documento: p.tipo_documento || 'cpf',
         empresa: p.empresa || '',
-        telefone: p.telefone || '',
         created_at: p.created_at || null,
         palpites: p.palpites || [],
         pontos: p.pontos || 0,

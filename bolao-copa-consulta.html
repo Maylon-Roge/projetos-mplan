@@ -379,12 +379,9 @@
         }
 
         async function mostrarDados(p) {
-            var docMascarado = p.documento_raw.length === 11
-                ? p.documento_raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.***.***-**')
-                : p.documento_raw.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.***.***/****-$5');
             var tipoDoc = p.tipo_documento || 'cpf';
             var dataReg = p.created_at ? new Date(p.created_at).toLocaleDateString('pt-BR') : 'N/A';
-            document.getElementById('participantInfo').innerHTML = '<h2>👤 ' + p.nome + '</h2><div class="meta">📄 ' + tipoDoc.toUpperCase() + ': ' + docMascarado + (p.empresa ? ' | 🏢 ' + p.empresa : '') + ' | 📅 ' + dataReg + '</div>';
+            document.getElementById('participantInfo').innerHTML = '<h2>👤 ' + p.nome + '</h2><div class="meta">📄 ' + tipoDoc.toUpperCase() + ': ' + p.documento + (p.empresa ? ' | 🏢 ' + p.empresa : '') + ' | 📅 ' + dataReg + '</div>';
 
             var resultados = resultadosCache;
             var totalAcertos = 0, totalPontos = 0, totalJogos = 0;

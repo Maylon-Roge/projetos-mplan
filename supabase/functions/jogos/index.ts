@@ -29,20 +29,23 @@ serve(async (req) => {
   try {
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
 
-    // Rate limit
+    // Rate limit (sem .select() para evitar EDGE_FUNCTION_ERROR)
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
     const windowStart = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
-    const { count } = await supabase
-      .from('rate_limits').select('*', { count: 'exact', head: true })
-      .eq('ip', ip).eq('endpoint', RATE_LIMIT.name).gte('created_at', windowStart)
+    try {
+      const { count } = await supabase
+        .from('rate_limits').select('*', { count: 'exact', head: true })
+        .eq('ip', ip).eq('endpoint', RATE_LIMIT.name).gte('created_at', windowStart)
 
-    if (count !== null && count >= RATE_LIMIT.max) {
-      return new Response(JSON.stringify({ success: false, error: 'Muitas requisições' }), {
-        status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
-      })
+      if (count !== null && count >= RATE_LIMIT.max) {
+        return new Response(JSON.stringify({ success: false, error: 'Muitas requisições' }), {
+          status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+        })
+      }
+      await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name })
+    } catch (e) {
+      console.error('rate_limits error:', e)
     }
-    await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name }).select()
-      .catch(e => console.error('rate_limits error:', e))
 
     // Buscar resultados
     const { data: resultados } = await supabase

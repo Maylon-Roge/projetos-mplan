@@ -5,7 +5,12 @@
 // ============================================
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.6'
-import { verifyJWT } from '../_shared/jwt-helper.ts'
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
 
 interface ClearResponse {
   success: boolean
@@ -39,7 +44,11 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   try {
-    // Verify JWT (admin only)
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
+    const supabaseKey = Deno.env.get('SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Verify JWT (admin only) via Supabase Auth
     const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return new Response(
@@ -52,9 +61,9 @@ serve(async (req: Request): Promise<Response> => {
     }
 
     const token = authHeader.replace('Bearer ', '')
-    const payload = await verifyJWT(token)
+    const { data: { user }, error: authErr } = await supabase.auth.getUser(token)
 
-    if (!payload || !payload.sub) {
+    if (authErr || !user) {
       return new Response(
         JSON.stringify({
           code: 'UNAUTHORIZED_INVALID_TOKEN',
@@ -63,11 +72,6 @@ serve(async (req: Request): Promise<Response> => {
         { status: 401, headers }
       )
     }
-
-    // Create Supabase client with service_role for admin operations
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_KEY') || ''
-    const supabase = createClient(supabaseUrl, supabaseKey)
 
     // Step 1: Clear all resultados (set scores to NULL)
     const { data: resultadosData, error: resultadosError } = await supabase

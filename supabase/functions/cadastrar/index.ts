@@ -100,7 +100,9 @@ serve(async (req) => {
     else if (!['cpf', 'cnpj'].includes(body.tipo_documento || '')) errors.push('tipo_documento deve ser "cpf" ou "cnpj"')
 
     if (body.tipo_documento === 'cnpj' && (!body.empresa || !body.empresa.trim())) errors.push('Empresa é obrigatória para CNPJ')
-    if (!body.telefone || body.telefone.replace(/\D/g, '').length < 10) errors.push('Telefone inválido (mínimo 10 dígitos)')
+    const telDigits = body.telefone.replace(/\D/g, '')
+    if (!body.telefone || telDigits.length < 10) errors.push('Telefone inválido (mínimo 10 dígitos)')
+    else if (telDigits.length > 15) errors.push('Telefone inválido (máximo 15 dígitos)')
 
     if (!body.palpites || !Array.isArray(body.palpites) || body.palpites.length === 0) {
       errors.push('Palpites são obrigatórios')
