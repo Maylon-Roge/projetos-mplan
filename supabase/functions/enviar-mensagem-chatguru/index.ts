@@ -1,12 +1,17 @@
 // POST /enviar-mensagem-chatguru — Envia mensagens WhatsApp via ChatGuru API
 // Usa dialog_execute com template aprovado pela Meta
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'content-type, authorization',
 }
+
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || ''
+const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+const RATE_LIMIT = { max: 10, windowMinutes: 60, name: 'enviar-mensagem' }
 
 // Credenciais ChatGuru (APENAS env vars — sem fallback hardcoded por segurança)
 const CHATGURU_API = Deno.env.get('CHATGURU_API') || 'https://app3.zap.guru/api/v1'
@@ -39,6 +44,18 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Método não permitido' }), { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 
   try {
+    // Rate limit
+    const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    try {
+      const ws = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
+      const { count } = await supabase.from('rate_limits').select('*', { count: 'exact', head: true }).eq('ip', ip).eq('endpoint', RATE_LIMIT.name).gte('created_at', ws)
+      if (count !== null && count >= RATE_LIMIT.max) {
+        return new Response(JSON.stringify({ success: false, error: 'Muitas requisições. Aguarde.' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      }
+      await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name })
+    } catch (e) { console.error('rate limit error:', e) }
+
     const { telefone, tipo_mensagem, dados } = await req.json()
     if (!telefone || !tipo_mensagem)
       return new Response(JSON.stringify({ error: 'telefone e tipo_mensagem obrigatórios' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
