@@ -1368,6 +1368,25 @@
         { id: 8,  rodada: 'Final',               paisCasa: 'Brasil',   paisFora: 'A definir',   flagCasa: 'br', flagFora: '', data: '19/07/2026 19:00', local: 'A definir' },
     ];
 
+    // Apply saved edits from admin (localStorage shared between pages)
+    (function() {
+        var saved = localStorage.getItem('jogosEditados');
+        if (saved) {
+            try {
+                var edits = JSON.parse(saved);
+                Object.keys(edits).forEach(function(id) {
+                    var jogo = JOGOS.find(function(j) { return j.id === parseInt(id); });
+                    if (jogo && edits[id]) {
+                        jogo.paisFora = edits[id].paisFora || jogo.paisFora;
+                        jogo.data = edits[id].data || jogo.data;
+                        jogo.local = edits[id].local || jogo.local;
+                        jogo.flagFora = edits[id].flagFora || jogo.flagFora;
+                    }
+                });
+            } catch(e) {}
+        }
+    })();
+
     // ============================================
     // INIT
     // ============================================
