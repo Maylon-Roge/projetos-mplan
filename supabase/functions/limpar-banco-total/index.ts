@@ -7,6 +7,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+const RATE_LIMIT = { max: 10, windowMinutes: 60, name: 'limpar-banco-total' }
+
 function res(status: number, data: any) {
   return new Response(JSON.stringify(data), {
     status, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -20,16 +24,26 @@ serve(async (req) => {
     return res(405, { error: 'Método não permitido' })
 
   try {
+    // Rate limit
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    try {
+      const ws = new Date(Date.now() - RATE_LIMIT.windowMinutes * 60 * 1000).toISOString()
+      const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
+      const { count } = await supabase
+        .from('rate_limits').select('*', { count: 'exact', head: true })
+        .eq('ip', ip).eq('endpoint', RATE_LIMIT.name).gte('created_at', ws)
+      if (count !== null && count >= RATE_LIMIT.max)
+        return res(429, { success: false, error: 'Muitas requisições. Aguarde.' })
+      await supabase.from('rate_limits').insert({ ip, endpoint: RATE_LIMIT.name })
+    } catch (e) { console.error('rate limit error:', e) }
+
     const auth = req.headers.get('Authorization')
     if (!auth || !auth.startsWith('Bearer '))
       return res(401, { error: 'Token não fornecido' })
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
 
-    // Verifica JWT usando Supabase Auth (mesmo método do admin-operations)
+    // Verifica JWT usando Supabase Auth
     const token = auth.slice(7)
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
     if (authError || !user)
@@ -53,6 +67,6 @@ serve(async (req) => {
     })
   } catch (err) {
     console.error('Erro geral:', err)
-    return res(500, { error: 'Erro interno: ' + String(err) })
+    return res(500, { success: false, error: 'Erro interno do servidor' })
   }
 })
