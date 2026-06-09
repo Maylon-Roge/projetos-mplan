@@ -95,16 +95,17 @@ serve(async (req) => {
     ctxParams.append('phone_id', CHATGURU_PHONE_ID)
     ctxParams.append('chat_number', chat_number)
 
+    const wrap0 = (v: number) => v === 0 ? '​0' : String(v)
     if (dados) {
       if (dados.gols_casa !== undefined) {
-        ctxParams.append('var__1', String(dados.gols_casa))
-        ctxParams.append('var_1', String(dados.gols_casa))
-        ctxParams.append('1', String(dados.gols_casa))
+        ctxParams.append('var__1', wrap0(dados.gols_casa))
+        ctxParams.append('var_1', wrap0(dados.gols_casa))
+        ctxParams.append('1', wrap0(dados.gols_casa))
       }
       if (dados.gols_fora !== undefined) {
-        ctxParams.append('var__2', String(dados.gols_fora))
-        ctxParams.append('var_2', String(dados.gols_fora))
-        ctxParams.append('2', String(dados.gols_fora))
+        ctxParams.append('var__2', wrap0(dados.gols_fora))
+        ctxParams.append('var_2', wrap0(dados.gols_fora))
+        ctxParams.append('2', wrap0(dados.gols_fora))
       }
       if (dados.adversario) {
         ctxParams.append('var__3', dados.adversario)
