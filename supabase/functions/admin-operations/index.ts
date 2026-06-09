@@ -173,7 +173,7 @@ serve(async (req) => {
 
       await supabase.from('audit_logs').insert({
         admin_email: adminEmail, operacao: 'listar_participantes', status: 'sucesso',
-      }).select())
+      })
 
       return new Response(JSON.stringify({
         success: true, data: { participantes: participantes || [] }
@@ -215,7 +215,7 @@ serve(async (req) => {
         admin_email: adminEmail, operacao: 'salvar_resultado', jogo_id: body.jogo_id,
         dados_antigos: oldData ? { gols_casa: oldData.gols_casa, gols_fora: oldData.gols_fora } : null,
         dados_novos: { gols_casa: body.gols_casa, gols_fora: body.gols_fora }, status: 'sucesso',
-      }).select())
+      })
 
       // Processa vencedores — quem acertou placar exato ganha 20% de desconto
       const vencedores = await processarVencedores(
@@ -365,7 +365,7 @@ serve(async (req) => {
         admin_email: adminEmail, operacao: 'liberar_jogo', jogo_id: body.jogo_id,
         dados_antigos: oldData ? { liberado: oldData.liberado } : null,
         dados_novos: { liberado: body.liberado }, status: 'sucesso',
-      }).select())
+      })
 
       return new Response(JSON.stringify({
         success: true, data: { jogo_id: body.jogo_id, liberado: body.liberado }
