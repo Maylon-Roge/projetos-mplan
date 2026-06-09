@@ -63,8 +63,10 @@ async function processarVencedores(
       const palpite = p.palpites.find((pp: any) => (pp.jogo_id ?? pp.jogoId) === jogoId)
       if (!palpite) continue
 
-      // 4. Verifica se acertou placar exato
-      if (palpite.gols_casa !== golsCasa || palpite.gols_fora !== golsFora) continue
+      // 4. Verifica se acertou placar exato (suporta gols_casa/casa e gols_fora/fora)
+      const gc = palpite.gols_casa ?? palpite.casa
+      const gf = palpite.gols_fora ?? palpite.fora
+      if (gc !== golsCasa || gf !== golsFora) continue
 
       // 5. ACERTOU! Gera cupom
       const cupomCodigo = gerarCupom(jogoId, p.id)
@@ -97,7 +99,7 @@ async function processarVencedores(
 
     return vencedores
   } catch (err) {
-    console.error('Erro ao processar vencedores:', err)
+    console.error('❌ processarVencedores ERRO:', err)
     return []
   }
 }
