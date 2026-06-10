@@ -157,23 +157,28 @@
         }
         .header-inner {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 20px;
         }
-        .logo {
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .header-left img {
+            height: 52px;
+            width: auto;
+        }
+        .header-center {
             display: flex;
             align-items: center;
             gap: 10px;
+            justify-content: center;
             flex: 1;
         }
-        .logo img {
-            height: 46px;
-            width: auto;
-        }
         .logo-icon {
-            width: 46px;
-            height: 46px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, var(--yellow), var(--gold));
             border-radius: 50%;
             display: flex;
@@ -1051,8 +1056,10 @@
 <!-- ═══════════════════════════════════════ -->
 <header>
     <div class="container header-inner">
-        <div class="logo">
+        <div class="header-left">
             <img src="https://cdn.vnda.com.br/planetaenergia/2024/07/26/12_7_2_272_Designsemnome.svg?v=1776953111" alt="Planeta Energia">
+        </div>
+        <div class="header-center">
             <div class="logo-icon">🏆</div>
             <div class="logo-text">
                 BOLÃO DA COPA
