@@ -5,7 +5,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const RATE_LIMIT = { max: 60, windowMinutes: 60, name: 'admin' }
+const RATE_LIMIT = { max: 300, windowMinutes: 60, name: 'admin' }
 
 // Mapeamento de jogo_id → rodada
 const RODADA_POR_JOGO: Record<number, string> = {
