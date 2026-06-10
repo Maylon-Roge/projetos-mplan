@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/bolao-copa-visual-v2.html" },
+    { "source": "/admin", "destination": "/bolao-copa-backoffice-secret-2024.html" },
+    { "source": "/consulta", "destination": "/bolao-copa-consulta.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    }
+  ]
+}
