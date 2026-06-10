@@ -1024,7 +1024,6 @@
             .benefits-grid { grid-template-columns: 1fr; }
             .rules-grid { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
-            .form-grid { grid-template-columns: 1fr; }
             .form-card { padding: 24px; }
             .games-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; text-align: center; }
@@ -1032,6 +1031,19 @@
             .section-title { font-size: 1.5rem; }
             .section-padding { padding: 50px 0; }
             .toast { bottom: 15px; right: 15px; left: 15px; text-align: center; max-width: none; }
+
+            /* Mobile form improvements */
+            .form-grid .info-col,
+            .form-grid .game-col { grid-column: 1; }
+            .game-card { padding: 16px; }
+            .game-teams { gap: 8px; }
+            .game-team .flag img { width: 32px; }
+            .palpite-input { width: 60px; height: 52px; font-size: 1.1rem; }
+            .header-left img { height: 48px; }
+            .header-center { gap: 6px; }
+            .logo-icon { width: 36px; height: 36px; font-size: 1rem; }
+            .logo-text { font-size: 1rem; }
+            .logo-text small { font-size: 0.4rem; letter-spacing: 1.5px; }
         }
 
         @media (max-width: 480px) {
@@ -1039,6 +1051,16 @@
             .hero-stat-value { font-size: 1.2rem; }
             .game-team .flag img { width: 28px; }
             .game-inputs input { width: 50px; font-size: 1rem; }
+
+            .game-card { padding: 12px; }
+            .game-team-name { font-size: 0.75rem; }
+            .palpite-input { width: 50px; height: 44px; font-size: 1rem; }
+            .jogo-x { font-size: 1rem; }
+            .header-left img { height: 36px; }
+            .logo-icon { width: 30px; height: 30px; font-size: 0.85rem; }
+            .logo-text { font-size: 0.85rem; }
+            .logo-text small { font-size: 0.35rem; letter-spacing: 1px; }
+            .form-card { padding: 16px; }
         }
     </style>
 </head>
